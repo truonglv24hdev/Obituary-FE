@@ -1,10 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-const Heading = () => {
+const Heading = ({className}:{className?:string}) => {
   return (
-    <header className="bg-[#699D99] h-[80px] justify-between px-[100px] flex items-center">
+    <header className={cn(" h-[80px] justify-between px-[100px] flex items-center",className)}>
       <div className="flex items-center gap-3">
         <div className="rounded p-2 text-[#6ea09e] font-bold text-lg flex items-center gap-2">
           <Image src="/img/image.png" alt="Logo" width={142} height={57} />

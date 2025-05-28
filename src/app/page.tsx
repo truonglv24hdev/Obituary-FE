@@ -1,16 +1,17 @@
 import Image from "next/image";
 import React from "react";
-import { IconSearch } from "./components/icons";
-import Heading from "./components/ui/Heading";
-import HowItWorks from "./components/ui/HowItWorks";
-import Heartwarming from "./components/ui/Heartwarming";
-import HeroSection from "./components/ui/HeroSection";
-import PricingSection from "@/components/ui/PricingSection";
+import { IconSearch } from "../components/icons";
+import Heading from "../components/layout/Heading";
+import HowItWorks from "../components/layout/HowItWorks";
+import Heartwarming from "../components/layout/Heartwarming";
+import HeroSection from "../components/layout/HeroSection";
+import PricingSection from "../components/layout/PricingSection";
+import Footer from "../components/layout/Footer";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <Heading />
+      <Heading className="bg-[#699D99]" />
       <main className="flex-1 flex justify-center items-center p-6">
         <div className="relative w-7xl h-[680px] rounded-xl  shadow-lg overflow-hidden flex">
           <div className="absolute inset-0 z-0">
@@ -88,6 +89,7 @@ export default function Home() {
       <Heartwarming />
       <HeroSection />
       <PricingSection/>
+      <Footer/>
     </div>
   );
 }

@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import React from "react";
 
 const HeroSection = () => {
   return (
     <section className="relative bg-black h-[440px] flex items-center">
       <div className="absolute inset-0 bg-black/70 z-10"></div>
-      <img
+      <Image
         src="/img/7.jpg"
         alt="Candle and flowers"
         className="absolute inset-0 w-full h-full object-cover z-0"

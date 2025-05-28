@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { plans } from "@/constants/pricing";
-import { IconBook, IconQR } from "@/app/components/icons";
+import { IconBook, IconQR } from "@/components/icons";
 
 const addons = [
   {
@@ -26,7 +26,6 @@ const addons = [
 const PricingSection = () => {
   return (
     <div className="h-[1305px] bg-white flex items-center justify-center">
-      <div className="absolute bottom-0 left-0 w-100 h-100 bg-gradient-to-tr from-green-100 to-transparent" />
       <div className="w-[892px] h-[1145px] tracking-normal ">
         <div className=" w-[716px] h-30 mx-auto flex flex-col gap-4 mb-10">
           <h2 className=" h-12 font-medium text-[40px] leading-12 text-center">
@@ -38,7 +37,7 @@ const PricingSection = () => {
           </ul>
         </div>
         <div className="flex md:flex-row justify-center items-center mx-auto gap-5 w-[684px] h-[547px]">
-          {plans.map((plan, index) => (
+          {plans.map((plan,) => (
             <Card
               className={`w-[332px] h-[547px] rounded-2xl shadow-md flex flex-col relative ${
                 plan.highlight
