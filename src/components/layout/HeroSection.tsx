@@ -9,6 +9,7 @@ const HeroSection = () => {
       <Image
         src="/img/7.jpg"
         alt="Candle and flowers"
+        fill
         className="absolute inset-0 w-full h-full object-cover z-0"
       />
       <div className="relative z-20 w-[615px] flex flex-col h-53 ml-16 tracking-normal gap-12">

@@ -12,24 +12,24 @@ const Heading = ({className}:{className?:string}) => {
         </div>
       </div>
       <nav className="flex items-center text-white font-medium py-3 px-7 gap-10 rounded-lg bg-white/10 h-[60px]">
-        <a href="#" className="h-6 font-semibold text-[18px] leading-[24px]">
+        <Link href="/" className="h-6 font-semibold text-[18px] leading-[24px]">
           Home
-        </a>
-        <a href="#" className="h-6 font-light text-[18px] leading-[24px]">
+        </Link>
+        <Link href="/resources" className="h-6 font-light text-[18px] leading-[24px]">
           Resources
-        </a>
-        <a href="#" className="h-6 font-light text-[18px] leading-[24px]">
+        </Link>
+        <Link href="/example" className="h-6 font-light text-[18px] leading-[24px]">
           Example
-        </a>
-        <a href="#" className="h-6 font-light text-[18px] leading-[24px]">
+        </Link>
+        <Link href="/pricing" className="h-6 font-light text-[18px] leading-[24px]">
           Pricing
-        </a>
-        <a href="#" className="h-6 font-light text-[18px] leading-[24px]">
+        </Link>
+        <Link href="/faqs" className="h-6 font-light text-[18px] leading-[24px]">
           FAQs
-        </a>
-        <a href="#" className="h-6 font-light text-[18px] leading-[24px]">
+        </Link>
+        <Link href="/contactUs" className="h-6 font-light text-[18px] leading-[24px]">
           Contact us
-        </a>
+        </Link>
       </nav>
       <div className="flex items-center gap-5 w-[242px] h-11">
         <Link
