@@ -39,7 +39,7 @@ const SignUp = () => {
       const token = await signUp(first_name, email, password);
       if (token) {
         localStorage.setItem("token", token);
-        router.push("/");
+        router.push("/sign-in");
       } else {
         setErrorMessage("Đăng ý thất bại. Vui lòng kiểm tra lại.");
       }

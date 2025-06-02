@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { IconClock, IconEmail, IconWeb } from "@/components/icons";
-import Footer from "@/components/layout/Footer";
 import Heading from "@/components/layout/Heading";
 import Image from "next/image";
 
@@ -258,7 +257,6 @@ const Page = () => {
           </Form>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IconFuneral, IconShop } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Footer from "@/components/layout/Footer";
 import Heading from "@/components/layout/Heading";
 
 const articles = [
@@ -67,11 +66,9 @@ const page = () => {
         <Heading className="absolute inset-0 z-10" />
       </div>
       <div className="flex flex-col items-center px-62 py-20 gap-17 bg-white h-[828px]">
-        <div className="w-[944px] h-30 gap-15 flex flex-col md:flex-row md:justify-between items-start mb-10">
-          <h1 className="w-[406px] h-[96px] font-medium text-[40px] text-gray-900 mb-4 md:mb-0">
-            A space for the heart,
-            <br />
-            mind, and spirit.
+        <div className="w-[944px] h-30 gap-10 flex flex-row mb-10">
+          <h1 className="w-[415px] h-[96px] font-medium text-[37px] text-gray-900 ">
+            A space for the heart, mind, and spirit.
           </h1>
           <p className="text-gray-600 w-[478px] font-light text-[18px] md:ml-8">
             Explore a thoughtful collection of blogs and articles created to
@@ -157,7 +154,7 @@ const page = () => {
                     className="rounded-md h-[282px] object-cover"
                   />
                   <div className="flex flex-col gap-6">
-                    <span className="w-[110px] h-10 rounded-sm px-3 py-2 font-light text-base bg-[#C2DBD4] ">
+                    <span className="w-[120px] h-10 rounded-sm px-3 py-2 font-light text-base bg-[#C2DBD4] ">
                       {a.date}
                     </span>
                     <div className="h-[132px] gap-4 mb-2">
@@ -180,7 +177,6 @@ const page = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

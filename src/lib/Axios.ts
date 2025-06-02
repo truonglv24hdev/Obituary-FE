@@ -1,7 +1,6 @@
 import axios from "axios";
-
 declare module "axios" {
-  interface InternalAxiosRequestConfig {
+  export interface AxiosRequestConfig {
     requiresAuth?: boolean;
   }
 }
