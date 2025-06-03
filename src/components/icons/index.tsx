@@ -6,3 +6,4 @@ export { default as IconWeb } from "./IconWeb";
 export { default as IconEmail } from "./IconEMail";
 export { default as IconShop } from "./IconShop";
 export { default as IconFuneral } from "./IconFuneral";
+export { default as IconSetting } from "./IconSetting";

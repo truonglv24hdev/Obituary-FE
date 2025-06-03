@@ -1,10 +1,30 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import HeaderAccount from "../HeaderAccount";
 import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { getMemorialByUser } from "@/lib/memorialAPI";
+import { useRouter } from "next/navigation";
+import { TMemorial } from "@/types/type";
+import HaveMemorials from "./MyMemorials/HaveMemorials";
+import NoMemorials from "./MyMemorials/NoMemorials";
 
 const Memorials = () => {
+  const [memorials, setMemorials] = useState<TMemorial[] | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    getMemorialByUser()
+      .then((memorials) => {
+        setMemorials(memorials);
+        console.log(memorials);
+      })
+      .catch((err) => {
+        console.error("Lỗi khi lấy profile:", err);
+        localStorage.removeItem("token");
+        router.replace("/sign-in");
+      });
+  }, []);
+
   return (
     <div>
       <div className="h-[1094px] flex flex-col gap-10 px-[229px] py-20 ml-40 ">
@@ -26,38 +46,11 @@ const Memorials = () => {
             </Link>
           </nav>
         </div>
-        <div className="flex flex-col j items-center gap-10 w-[519px] h-[596px] ml-65">
-          <div>
-            <Image
-              src={"/img/memorial.png"}
-              alt="memorial"
-              width={391}
-              height={397}
-              className="items-center"
-            />
-            <p className="w-[520px] h-14 text-2xl font-light text-center ">
-              <strong className="text-2xl font-semibold">
-                Create a memorial
-              </strong>{" "}
-              by adding basic or detailed information
-            </p>
-          </div>
-          <div className="flex w-[333px] h-11 gap-6">
-            <Link
-              href={"/memorial"}
-              className="h-11 w-[154px] inline-flex items-center justify-center text-center border text-base font-light rounded text-black bg-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-              type="submit"
-            >
-              Get Started
-            </Link>
-            <Button
-              className="h-11 w-[154px] inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-              type="submit"
-            >
-              Upgrade plane
-            </Button>
-          </div>
-        </div>
+        {memorials && memorials.length > 0 ? (
+          <HaveMemorials memorials={memorials} />
+        ) : (
+          <NoMemorials />
+        )}
       </div>
     </div>
   );

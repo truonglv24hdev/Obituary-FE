@@ -7,3 +7,15 @@ export type TUser = {
   country: string;
   code: string;
 };
+
+export type TMemorial = {
+  _id: string;
+  picture: string;
+  first_name: string;
+  middle_name: string;
+  last_name: string;
+  gender: string;
+  born: string;
+  death: string;
+  slug: string;
+};

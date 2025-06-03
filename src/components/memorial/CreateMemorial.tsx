@@ -1,5 +1,4 @@
 "use client";
-import Heading from "@/components/layout/Heading";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +14,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import HeaderMemorial from "./HeaderMemorial";
+import { postMemorial } from "@/lib/memorialAPI";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   first_name: z
@@ -22,82 +24,66 @@ const formSchema = z.object({
     .min(2, { message: "First name must be at least 2 characters." }),
   middle_name: z
     .string()
-    .min(2, { message: "First name must be at least 2 characters." }),
+    .min(2, { message: "Middle name must be at least 2 characters." })
+    .optional(),
   last_name: z
     .string()
     .min(2, { message: "Last name must be at least 2 characters." }),
-  gender: z.string().email({ message: "Invalid email address." }),
-  born: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters." }),
-  death: z.string().optional(),
-  country: z.string().optional(),
-  code: z.string().optional(),
+  gender: z.enum(["MALE", "FEMALE"]).optional(),
+  born: z.string().min(8),
+  death: z.string().min(8),
+  slug: z.string().optional(),
 });
 
 const CreateMemorial = () => {
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       first_name: "",
       middle_name: "",
       last_name: "",
-      gender: "",
-      born: "********",
+      gender: undefined,
+      born: "",
       death: "",
-      country: "",
-      code: "",
+      slug: "",
     },
   });
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    try {
+      const formData = new FormData();
+      formData.append("first_name", values.first_name);
+      formData.append("middle_name", values.middle_name || "");
+      formData.append("last_name", values.last_name);
+      formData.append("gender", values.gender || "");
+      formData.append("born", values.born);
+      formData.append("death", values.death);
+      if (values.slug) formData.append("slug", values.slug);
+      if (selectedFile) formData.append("picture", selectedFile);
+
+      const res = await postMemorial(formData);
+
+      if (res) {
+        router.push("/memorial/plan");
+      }
+    } catch (err) {
+      console.error("Submit failed:", err);
+    }
   }
 
   return (
     <div>
-      <Heading className="bg-[#699D99]" />
       <div className="w-[1500px] h-[1587px] px-[229px] py-20 flex flex-col gap-13">
-        <div className="w-[540px] h-28 flex flex-col gap-4">
-          <h1 className="h-12 text-[40px] font-medium">
-            Create memorial website
-          </h1>
-          <p className="font-light text-2xl">
-            It only takes a few moments to create a Tribute. <br />
-            Please tell us...
-          </p>
-        </div>
-
-        {/* Stepper */}
-        <div className="relative mt-6 mb-10">
-          {/* Line + Circles */}
-          <div className="flex items-center justify-between w-full">
-            {/* Step 1 */}
-            <div className="relative flex flex-col items-center">
-              <div className="w-6 h-6 rounded-full border-4 border-gray-400 bg-white z-10" />
-              <div className="absolute top-10">
-                <div className="bg-[#1E293B] text-white text-sm px-3 py-1 rounded shadow relative">
-                  About
-                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#1E293B] rotate-45" />
-                </div>
-              </div>
-            </div>
-
-            {/* Line */}
-            <div className="flex-1 h-3 bg-gray-200" />
-
-            {/* Step 2 */}
-            <div className="relative flex flex-col items-center">
-              <div className="w-6 h-6 rounded-full border-4 border-gray-400 bg-white z-10" />
-              <div className="absolute top-10">
-                <div className="bg-gray-200 text-black text-sm px-3 py-1 rounded shadow relative">
-                  Payment
-                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-200 rotate-45" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <HeaderMemorial />
 
         {/* Form Box */}
         <div className="bg-green-50 p-8 rounded-lg shadow-sm">
@@ -109,10 +95,24 @@ const CreateMemorial = () => {
           <div className="flex gap-45 mb-2">
             <p>Picture</p>
             <div className="relative w-32 h-40 rounded shadow-md overflow-hidden bg-white">
-              <Image src={"/img/1.jpg"} alt="" width={160} height={160} className="px-1 py-2 h-40" />
-              <Button className="absolute bottom-1 right-1 bg-[#133C4C] rounded shadow h-5 w-2 hover:bg-gray-400">
+              {selectedFile && (
+                <Image
+                  src={URL.createObjectURL(selectedFile)}
+                  alt="Preview"
+                  width={160}
+                  height={160}
+                  className="px-1 py-2 h-40 object-cover"
+                />
+              )}
+              <label className="absolute bottom-1 right-1 bg-[#133C4C] text-white rounded shadow h-6 w-6 flex items-center justify-center cursor-pointer hover:bg-gray-400">
                 ✏️
-              </Button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden" // 👈 ẩn input đi
+                />
+              </label>
             </div>
           </div>
 
@@ -195,8 +195,8 @@ const CreateMemorial = () => {
                         <label className="flex items-center gap-1">
                           <input
                             type="radio"
-                            value="male"
-                            checked={field.value === "male"}
+                            value="MALE"
+                            checked={field.value === "MALE"}
                             onChange={field.onChange}
                           />
                           Male
@@ -204,8 +204,8 @@ const CreateMemorial = () => {
                         <label className="flex items-center gap-1">
                           <input
                             type="radio"
-                            value="female"
-                            checked={field.value === "female"}
+                            value="FEMALE"
+                            checked={field.value === "FEMALE"}
                             onChange={field.onChange}
                           />
                           Female
@@ -263,7 +263,7 @@ const CreateMemorial = () => {
 
               <FormField
                 control={form.control}
-                name="death"
+                name="slug"
                 render={({ field }) => (
                   <FormItem className="flex gap-37 h-12 items-center">
                     <FormLabel className="w-21 font-light text-base">
@@ -285,9 +285,9 @@ const CreateMemorial = () => {
               <div className="text-sm text-gray-600 ml-58 mt-2 mb-6">
                 <p className="font-medium mb-1">Suggestions:</p>
                 <ul className="list-disc list-inside ml-2">
-                  <li>Tributechapters.com.sg/John-doe29</li>
-                  <li>Tributechapters.com.sg/JohnDoe</li>
-                  <li>Tributechapters.com.sg/John-doe1980</li>
+                  <li>Tributechapters.com.sg.sg/John-doe29</li>
+                  <li>Tributechapters.com.sg.sg/JohnDoe</li>
+                  <li>Tributechapters.com.sg.sg/John-doe1980</li>
                 </ul>
               </div>
 

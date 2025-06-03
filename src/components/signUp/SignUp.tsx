@@ -15,17 +15,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useRouter } from "next/navigation";
 import { signUp } from "@/lib/authAPI";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type LoginFormValues = {
-  first_name: string;
-  email: string;
-  password: string;
-};
+const formSchema = z.object({
+  first_name: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters." }),
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(6)
+    .max(20)
+    .refine((val) => val.length >= 6 && val.length <= 20, {
+      message: "Password must be between 6 and 20 characters",
+    }),
+});
 
 const SignUp = () => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
-  const form = useForm<LoginFormValues>({
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       first_name: "",
       email: "",
@@ -33,7 +44,7 @@ const SignUp = () => {
     },
   });
 
-  async function onSubmit(data: LoginFormValues) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     const { first_name, email, password } = data;
     try {
       const token = await signUp(first_name, email, password);

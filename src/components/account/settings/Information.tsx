@@ -1,9 +1,26 @@
 import React from "react";
 import Link from "next/link";
-import { useUserProfile } from "../hook/getInFo";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getProfile } from "@/lib/accountAPI";
+import { TUser } from "@/types/type";
 
 const Information = () => {
-  const user = useUserProfile();
+  const [user, setUser] = useState<TUser | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    getProfile()
+      .then((user) => {
+        setUser(user);
+      })
+      .catch((err) => {
+        console.error("Lỗi khi lấy profile:", err);
+        localStorage.removeItem("token");
+        router.replace("/sign-in");
+      });
+  }, []);
+
   if (!user) return <div>Loading...</div>;
   return (
     <div className="bg-green-50 p-6 rounded-lg shadow-sm w-[982px] h-[694px] flex flex-col gap-10">
@@ -91,7 +108,7 @@ const Information = () => {
       <div className="mt-6 text-right">
         <Link
           href="/account/edit"
-          className="h-11 w-21 inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+          className="h-11 w-21 inline-flex items-center justify-center text-center border text-base font-light rounded-lg text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
         >
           Edit
         </Link>

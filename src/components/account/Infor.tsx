@@ -1,15 +1,10 @@
 "use client";
 import Link from "next/link";
 
-import { useUserProfile } from "./hook/getInFo";
 import Information from "./settings/Information";
 import HeaderAccount from "./HeaderAccount";
 
 const Infor = () => {
-  const user = useUserProfile();
-
-  if (!user) return <div>Loading...</div>;
-
   return (
     <div>
       <div className="h-[1094px] flex flex-col gap-10 px-[229px] py-20 ml-40 ">

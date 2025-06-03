@@ -1,12 +1,12 @@
 import Heading from "@/components/layout/Heading";
-import CreateMemorial from "@/components/memorial/CreateMemorial";
+import PaymentMemorial from "@/components/memorial/PaymentMemorial";
 import React from "react";
 
 const page = () => {
   return (
     <>
       <Heading className="bg-[#699D99]" />
-      <CreateMemorial />
+      <PaymentMemorial />
     </>
   );
 };

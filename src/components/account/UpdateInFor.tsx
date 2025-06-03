@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,29 +15,37 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useUserProfile } from "./hook/getInFo";
-import { updateProfile } from "@/lib/accountAPI";
 import { useRouter } from "next/navigation";
+
+import { updateProfile, getProfile } from "@/lib/accountAPI";
 import HeaderAccount from "./HeaderAccount";
+import { TUser } from "@/types/type";
 
 const formSchema = z.object({
   first_name: z
     .string()
     .min(2, { message: "First name must be at least 2 characters." }),
-  last_name: z
-    .string()
-    .min(2, { message: "Last name must be at least 2 characters." }),
+  last_name: z.string().optional(),
   email: z.string().email({ message: "Invalid email address." }),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters." }),
+    .min(6)
+    .max(20)
+    .refine((val) => val !== "", {
+      message: "Password must be between 6 and 20 characters",
+    }),
   address: z.string().optional(),
   country: z.string().optional(),
-  code: z.string().optional(),
+  code: z
+    .string()
+    .optional()
+    .refine((val) => !val || val.length > 5, {
+      message: "Post code must be longer than 6 characters",
+    }),
 });
 
-const UpdateInfor = ({}) => {
-  const user = useUserProfile();
+const UpdateInfor = () => {
+  const [user, setUser] = useState<TUser | null>(null);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,6 +62,15 @@ const UpdateInfor = ({}) => {
   });
 
   useEffect(() => {
+    getProfile()
+      .then(setUser)
+      .catch(() => {
+        localStorage.removeItem("token");
+        router.replace("/sign-in");
+      });
+  }, [router]);
+
+  useEffect(() => {
     if (user) {
       form.reset({
         first_name: user.first_name ?? "",
@@ -67,208 +84,102 @@ const UpdateInfor = ({}) => {
     }
   }, [user, form]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { first_name, last_name, email, address, country, code } = values;
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const updatedPassword =
       values.password === "********" ? undefined : values.password;
+
     try {
-      const user = await updateProfile(
-        first_name,
-        last_name,
-        email,
+      const updatedUser = await updateProfile(
+        values.first_name,
+        values.last_name,
+        values.email,
         updatedPassword,
-        address,
-        country,
-        code
+        values.address,
+        values.country,
+        values.code
       );
-      if (user) {
-        router.push("/account");
-      } else {
-      }
+      if (updatedUser) router.push("/account");
       // eslint-disable-next-line
-    } catch (error) {}
-  }
+    } catch (error) {
+      alert("Failed to update profile. Please try again.");
+    }
+  };
 
   return (
-    <div>
-      <div className="h-[1094px] flex flex-col gap-10 px-[229px] py-20 ml-40">
-        <HeaderAccount />
+    <div className="px-6 py-10 max-w-4xl mx-auto">
+      <HeaderAccount />
 
-        <div className="w-[982px] h-12 border-b border-gray-200 mb-6">
-          <nav className="h-12 flex gap-15">
-            <Link
-              href="/account"
-              className=" border-b-1 border-black py-4 px-1 text-xl font-semibold text-black"
-            >
-              Basic Information
-            </Link>
-            <Link
-              href="/account/memorials"
-              className="border-b-1 border-transparent py-4 px-1 text-xl font-semibold text-gray-500 hover:border-gray-300 hover:text-gray-700"
-            >
-              My Memorials
-            </Link>
-          </nav>
-        </div>
+      <nav className="mt-8 border-b border-gray-200 mb-8 flex gap-8 text-xl font-semibold">
+        <Link
+          href="/account"
+          className="pb-2 border-b-2 border-black text-black"
+        >
+          Basic Information
+        </Link>
+        <Link
+          href="/account/memorials"
+          className="pb-2 border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+        >
+          My Memorials
+        </Link>
+      </nav>
 
-        <div className="bg-[#E5F6EC66] p-6 rounded-lg shadow-sm w-[982px] h-[694px] flex flex-col gap-10">
-          <h2 className="text-xl font-semibold ">Basic Information</h2>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-7 w-[918px]"
-            >
+      <div className="bg-[#E5F6EC66] p-6 rounded-lg shadow-sm">
+        <h2 className="text-xl font-semibold mb-6">Basic Information</h2>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {[
+              {
+                name: "first_name",
+                label: "First Name",
+                placeholder: "First Name",
+              },
+              {
+                name: "last_name",
+                label: "Last Name",
+                placeholder: "Last Name",
+              },
+              { name: "email", label: "Email", placeholder: "Email" },
+              { name: "password", label: "Password", placeholder: "Password" },
+              { name: "address", label: "Address", placeholder: "Address" },
+              { name: "country", label: "Country", placeholder: "Country" },
+              { name: "code", label: "Post Code", placeholder: "Post Code" },
+            ].map((field) => (
               <FormField
+                key={field.name}
                 control={form.control}
-                name="first_name"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
-                      First Name
+                name={field.name as keyof z.infer<typeof formSchema>}
+                render={({ field: fieldProps }) => (
+                  <FormItem className="flex items-center justify-between">
+                    <FormLabel className="w-[120px] font-light text-base">
+                      {field.label}
                     </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[688px] bg-white rounded"
-                        placeholder="First Name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
+                    <div className="flex-1">
+                      <FormControl>
+                        <Input
+                          className="w-full bg-white rounded"
+                          placeholder={field.placeholder}
+                          {...fieldProps}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />
+            ))}
 
-              <FormField
-                control={form.control}
-                name="last_name"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
-                      Last Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[688px] bg-white rounded"
-                        placeholder="Last Name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
-                      Email
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[688px] bg-white rounded"
-                        placeholder="Email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
-                      Password
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[688px] bg-white rounded"
-                        placeholder="Password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
-                      Address
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[688px] bg-white rounded"
-                        placeholder="Address"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="country"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
-                      Country
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[688px] bg-white rounded"
-                        placeholder="Country"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="code"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
-                      Post Code
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[688px] bg-white rounded"
-                        placeholder="Post Code"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="col-span-2 text-right">
-                <Button
-                  className="h-11 w-21 inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-                  type="submit"
-                >
-                  Save
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
+            <div className="text-right">
+              <Button
+                type="submit"
+                className="h-11 px-6 bg-teal-600 hover:bg-teal-700 text-white"
+              >
+                Save
+              </Button>
+            </div>
+          </form>
+        </Form>
       </div>
     </div>
   );
