@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { plans } from "@/constants/pricing";
+import Link from "next/link";
 
 const PaymentPlan = () => {
   return (
@@ -67,7 +68,7 @@ const PaymentPlan = () => {
                   : "bg-[#6ea09e] text-white hover:bg-[#5a8e8c]"
               }`}
             >
-              {plan.button}
+              <Link href={plan.href}>{plan.button}</Link>
             </Button>
           </CardFooter>
         </Card>

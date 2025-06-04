@@ -6,6 +6,7 @@ import HowItWorks from "../components/layout/HowItWorks";
 import Heartwarming from "../components/layout/Heartwarming";
 import HeroSection from "../components/layout/HeroSection";
 import PricingSection from "../components/layout/PricingSection";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   return (
@@ -88,6 +89,7 @@ export default function Home() {
       <Heartwarming />
       <HeroSection />
       <PricingSection/>
+      <Footer/>
     </div>
   );
 }

@@ -14,6 +14,7 @@ export const plans = [
     ],
     button: "Sample memorial",
     highlight: false,
+    href:"/"
   },
   {
     title: "Premium",
@@ -32,6 +33,7 @@ export const plans = [
     button: "Sample Memorial",
     highlight: true,
     tag: "Most Popular",
+    href:"/payment"
   },
 ];
 

@@ -1,4 +1,5 @@
 import Faqs from "@/components/layout/Faqs";
+import Footer from "@/components/layout/Footer";
 import Heading from "@/components/layout/Heading";
 import Image from "next/image";
 import React from "react";
@@ -23,6 +24,7 @@ const page = () => {
         <Heading className="absolute inset-0 z-10" />
       </div>
       <Faqs />
+      <Footer/>
     </>
   );
 };

@@ -31,7 +31,7 @@ const NoMemorials = () => {
           className="h-11 w-[154px] inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
           type="submit"
         >
-          Upgrade plane
+          <Link href={"/payment"}>Upgrade plan</Link>
         </Button>
       </div>
     </div>

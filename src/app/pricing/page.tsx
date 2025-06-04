@@ -2,6 +2,7 @@ import React from "react";
 import PricingSection from "../../components/layout/PricingSection";
 import Heading from "../../components/layout/Heading";
 import Image from "next/image";
+import Footer from "@/components/layout/Footer";
 
 const page = () => {
   return (
@@ -21,6 +22,7 @@ const page = () => {
         <Heading className="absolute inset-0 z-10" />
       </div>
       <PricingSection />
+      <Footer/>
     </>
   );
 };

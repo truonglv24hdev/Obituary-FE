@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import HeaderAccount from "../HeaderAccount";
 import Link from "next/link";
 import { getMemorialByUser } from "@/lib/memorialAPI";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { TMemorial } from "@/types/type";
 import HaveMemorials from "./MyMemorials/HaveMemorials";
 import NoMemorials from "./MyMemorials/NoMemorials";
@@ -11,12 +11,13 @@ import NoMemorials from "./MyMemorials/NoMemorials";
 const Memorials = () => {
   const [memorials, setMemorials] = useState<TMemorial[] | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  const isActive = pathname === "/account/memorials";
 
   useEffect(() => {
     getMemorialByUser()
       .then((memorials) => {
         setMemorials(memorials);
-        console.log(memorials);
       })
       .catch((err) => {
         console.error("Lỗi khi lấy profile:", err);
@@ -28,7 +29,7 @@ const Memorials = () => {
   return (
     <div>
       <div className="h-[1094px] flex flex-col gap-10 px-[229px] py-20 ml-40 ">
-        <HeaderAccount />
+        <HeaderAccount showUpgrade={isActive && (memorials?.length ?? 0) > 0} />
 
         <div className="w-[982px] h-12 border-b border-gray-200 mb-6">
           <nav className="h-12 flex gap-15">

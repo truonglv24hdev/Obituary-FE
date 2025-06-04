@@ -5,6 +5,7 @@ import { IconFuneral, IconShop } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Heading from "@/components/layout/Heading";
+import Footer from "@/components/layout/Footer";
 
 const articles = [
   {
@@ -177,6 +178,7 @@ const page = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

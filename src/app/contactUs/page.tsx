@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { IconClock, IconEmail, IconWeb } from "@/components/icons";
 import Heading from "@/components/layout/Heading";
 import Image from "next/image";
+import Footer from "@/components/layout/Footer";
 
 const Page = () => {
   const form = useForm({
@@ -257,6 +258,7 @@ const Page = () => {
           </Form>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };
