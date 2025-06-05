@@ -5,25 +5,21 @@ export async function getProfile() {
   return res.data;
 }
 
-export async function updateProfile(
-  first_name?: string,
-  last_name?: string,
-  email?: string,
-  password?: string,
-  address?: string,
-  country?: string,
-  code?: string
-) {
+export async function updateProfile(data: {
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  password?: string;
+  address?: string;
+  country?: string;
+  code?: string;
+  premium?: boolean;
+}) {
   const res = await axios.put(
     "/api/user",
     {
-      first_name,
-      last_name,
-      email,
-      ...(password !== undefined && { password }),
-      address,
-      country,
-      code,
+      ...data,
+      ...(data.password !== undefined && { password: data.password }),
     },
     {
       requiresAuth: true,

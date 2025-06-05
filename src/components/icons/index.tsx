@@ -8,3 +8,8 @@ export { default as IconShop } from "./IconShop";
 export { default as IconFuneral } from "./IconFuneral";
 export { default as IconSetting } from "./IconSetting";
 export { default as IconLeft } from "./IconLeft";
+export { default as IconPencil } from "./IconPencil";
+export { default as IconPlus } from "./IconPlus";
+export { default as IconTrash } from "./IconTrash";
+export { default as IconCalendar } from "./IconCalendar";
+export { default as IconFilter } from "./IconFilter";

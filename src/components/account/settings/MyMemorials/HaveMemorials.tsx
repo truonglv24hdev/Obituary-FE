@@ -6,6 +6,23 @@ import Link from "next/link";
 import React from "react";
 
 const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
+  
+  const formatDateRange = (start: string, end: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+
+    const startDate = new Date(start.split("/").reverse().join("-"));
+    const endDate = new Date(end.split("/").reverse().join("-"));
+
+    return `${startDate.toLocaleDateString(
+      "en-US",
+      options
+    )} - ${endDate.toLocaleDateString("en-US", options)}`;
+  };
+
   return (
     <div className="w-[982px] ">
       {/* Header */}
@@ -43,7 +60,7 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
               </h2>
               <p className="text-sm text-gray-600">Brother</p>
               <p className="text-sm text-gray-500 mt-2">
-                Jun 15, 2000 - Jan 1, 2025
+                {formatDateRange(memorial.born, memorial.death)}
               </p>
             </div>
           </div>

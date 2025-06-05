@@ -12,8 +12,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { postPayment } from "@/lib/paymentAPI";
+import { updateProfile } from "@/lib/accountAPI";
+import { useRouter } from "next/navigation";
 
 export default function StripeCardForm({ amount }: { amount: number }) {
+  const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
   const [formData, setFormData] = useState({
@@ -46,6 +49,18 @@ export default function StripeCardForm({ amount }: { amount: number }) {
           },
         },
       });
+
+      if (result.paymentIntent?.status) {
+        try {
+          const updatedUser = await updateProfile({
+            premium: true,
+          });
+          if (updatedUser) router.push("/account");
+        }// eslint-disable-next-line 
+        catch (error) {
+          alert("Failed to update profile. Please try again.");
+        }
+      }
 
       if (result.error) {
         throw new Error(result.error.message || "Payment failed");

@@ -89,15 +89,15 @@ const UpdateInfor = () => {
       values.password === "********" ? undefined : values.password;
 
     try {
-      const updatedUser = await updateProfile(
-        values.first_name,
-        values.last_name,
-        values.email,
-        updatedPassword,
-        values.address,
-        values.country,
-        values.code
-      );
+      const updatedUser = await updateProfile({
+        first_name: values.first_name,
+        last_name: values.last_name,
+        email: values.email,
+        password: updatedPassword,
+        address: values.address,
+        country: values.country,
+        code: values.code,
+      });
       if (updatedUser) router.push("/account");
       // eslint-disable-next-line
     } catch (error) {

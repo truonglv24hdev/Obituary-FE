@@ -5,18 +5,33 @@ import { Button } from "@/components/ui/button";
 import { addons } from "@/constants/optional";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import StripeCardForm from "@/components/payment/StripeCardForm";
+import Link from "next/link";
 
 const Page = () => {
   const router = useRouter();
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
-   useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       router.replace("/sign-in");
     }
   }, []);
+
+  const toggleAddon = (id: string) => {
+    setSelectedAddons((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const basePrice = 120;
+  const totalPrice =
+    basePrice +
+    addons.reduce((sum, addon) => {
+      return selectedAddons.includes(addon.id) ? sum + addon.price : sum;
+    }, 0);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 font-sans">
@@ -25,32 +40,35 @@ const Page = () => {
         <div className="flex items-center space-x-2 mb-6">
           <Button
             onClick={() => router.back()}
-            className="text-white text-2xl rounded-[0px] h-10 w-10 bg-[#FFFFFF1A] hover:bg-[#5a8e8c]"
+            className="text-white text-2xl rounded-[0px] h-6 w-10 bg-[#FFFFFF1A] hover:bg-[#5a8e8c]"
           >
             <IconLeft />
           </Button>
-          <Image src={"/img/image.png"} alt="logo" width={142} height={57} />
+          <Link href={"/"}>
+            <Image src={"/img/image.png"} alt="logo" width={142} height={57} />
+          </Link>
         </div>
 
         <div className="flex flex-col gap-10">
           <h2 className="text-lg font-semibold">Order Summary</h2>
           <div className="space-y-5 text-base font-light">
             <div className="flex justify-between">
-              <span>Original price:</span>
-              <span>$54.00</span>
+              <span>Premium price:</span>
+              <span>$120.00</span>
             </div>
-            <div className="flex justify-between">
-              <span>Hard cover book:</span>
-              <span>$10.50</span>
-            </div>
-            <div className="flex justify-between">
-              <span>QR Code:</span>
-              <span>$5.50</span>
-            </div>
+            {addons.map(
+              (addon) =>
+                selectedAddons.includes(addon.id) && (
+                  <div className="flex justify-between" key={addon.id}>
+                    <span>{addon.title}:</span>
+                    <span>${addon.price.toFixed(2)}</span>
+                  </div>
+                )
+            )}
             <hr className="border-white/30 my-2" />
             <div className="flex justify-between text-base font-light">
               <span>Total</span>
-              <span>$70.00</span>
+              <span>${totalPrice.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -61,11 +79,11 @@ const Page = () => {
         <div className="flex flex-col md:flex-row">
           {addons.map((addon, idx) => (
             <div
-              key={idx}
+              key={addon.id}
               className="flex-1 flex justify-center relative items-start"
             >
               <div className="w-[194px] h-[240px] rounded-xl p-5 flex flex-col justify-between ">
-                <div className="flex flex-col ">
+                <div className="flex flex-col">
                   <div className="mb-2">{addon.icon()}</div>
                   <div className="whitespace-pre-line w-50 text-xl font-light leading-tight">
                     {addon.title}
@@ -74,8 +92,9 @@ const Page = () => {
                 <Button
                   variant="ghost"
                   className="h-11 border border-white text-white px-5 font-bold hover:bg-teal-50 transition"
+                  onClick={() => toggleAddon(addon.id)}
                 >
-                  {addon.payment}
+                  {selectedAddons.includes(addon.id) ? "Remove" : addon.payment}
                 </Button>
               </div>
               {idx !== addons.length - 1 && (
@@ -115,7 +134,7 @@ const Page = () => {
           </div>
 
           <StripeCardWrapper>
-            <StripeCardForm amount={70.0} />
+            <StripeCardForm amount={totalPrice} />
           </StripeCardWrapper>
         </div>
       </div>

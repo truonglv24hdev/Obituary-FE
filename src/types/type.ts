@@ -19,3 +19,17 @@ export type TMemorial = {
   death: string;
   slug: string;
 };
+
+export type TFavorite = {
+  id: string;
+  icon: React.ReactNode;
+  question: string;
+  answer: string;
+  type: string; 
+};
+
+export type TFavoriteType = {
+  id: string;
+  icon: React.ReactNode;
+  label: string;
+};
