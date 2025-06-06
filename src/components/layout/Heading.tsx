@@ -11,58 +11,58 @@ import { menuItems } from "@/constants/header";
 const Heading = ({ className }: { className?: string }) => {
   const { isAuthenticated, logout } = useAuth();
   return (
-    <header
-      className={cn(
-        " h-[80px] justify-between px-[100px] flex items-center",
-        className
-      )}
-    >
-      <div className="flex items-center gap-3">
-        <div className="rounded p-2 text-[#6ea09e] font-bold text-lg flex items-center gap-2">
-          <Link href={"/"} className="h-27 flex items-center ml-10">
-            <Image src={"/img/image.png"} width={141} height={60} alt="logo" />
+    <div className={cn("h-[80px] w-full px-[100px] py-2", className)}>
+      <div className="max-w-[1240px]  flex items-center justify-between mx-auto  max-h-[60px]">
+        {/* Logo */}
+        <div className="flex items-center gap-3 h-[60px]">
+          <Link href={"/"} className="flex items-center">
+            <Image src={"/img/image.png"} width={142} height={60} className="w-[142px] h-[60px]" alt="logo" />
           </Link>
         </div>
+
+        {/* Navigation */}
+        <nav className="flex items-center text-white font-medium museo py-3 px-7 gap-10 rounded-lg bg-white/10 h-[60px]">
+          {menuItems.map((menu) => (
+            <MenuItem key={menu.url} url={menu.url} title={menu.title} />
+          ))}
+        </nav>
+
+        {/* Auth buttons */}
+        <div className="flex  gap-5 max-w[242] h-11">
+          {isAuthenticated ? (
+            <>
+              <Button
+                onClick={logout}
+                className="bg-[#E5F6EC] w-[115px] museo h-11 text-[#222222] flex items-center justify-center rounded-sm font-light text-[18px] leading-[24px] hover:bg-[#E5F6EC]"
+              >
+                Logout
+              </Button>
+              <Link
+                href="/account"
+                className="bg-[#E5F6EC] w-[115px] museo h-11 text-[#222222] flex items-center justify-center rounded-sm font-light text-[18px] leading-[24px] "
+              >
+                My account
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-up"
+                className="bg-[#E5F6EC] w-[115px] museo h-11 text-[#222222] flex items-center justify-center rounded-sm font-light text-[18px] leading-[24px]"
+              >
+                Register
+              </Link>
+              <Link
+                href="/sign-in"
+                className="bg-[#E5F6EC] w-[115px] museo h-11 text-[#222222] flex items-center justify-center rounded-sm font-light text-[18px] leading-[24px]"
+              >
+                Sign In
+              </Link>
+            </>
+          )}
+        </div>
       </div>
-      <nav className="flex items-center text-white font-medium py-3 px-7 gap-10 rounded-lg bg-white/10 h-[60px]">
-        {menuItems.map((menu) => (
-          <MenuItem key={menu.url} url={menu.url} title={menu.title}></MenuItem>
-        ))}
-      </nav>
-      <div className="flex items-center gap-5 w-[300px] h-11">
-        {isAuthenticated ? (
-          <>
-            <Button
-              onClick={logout}
-              className="bg-[#E5F6EC] h-10 text-[#222222] px-7 py-2 rounded-sm font-light text-[18px] leading-[24px] hover:bg-[#E5F6EC]"
-            >
-              Logout
-            </Button>
-            <Link
-              href="/account"
-              className="bg-[#E5F6EC] w-[150px] text-[#222222] px-5 py-2 rounded-sm font-light text-[18px] leading-[24px]"
-            >
-              My account
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link
-              href="/sign-up"
-              className="bg-[#E5F6EC] text-[#222222] px-7 py-2 rounded-sm font-light text-[18px] leading-[24px]"
-            >
-              Register
-            </Link>
-            <Link
-              href="/sign-in"
-              className="bg-[#E5F6EC] text-[#222222] px-5 py-2 rounded-sm font-light text-[18px] leading-[24px]"
-            >
-              Sign In
-            </Link>
-          </>
-        )}
-      </div>
-    </header>
+    </div>
   );
 };
 

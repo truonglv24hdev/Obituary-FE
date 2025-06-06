@@ -18,3 +18,13 @@ export const favoriteTypes = [
   { id: "fact", label: "Fun Fact", icon: "💡" },
   { id: "custom", label: "Custom Question", icon: "❓" },
 ];
+
+export const menuItemsObituary = [
+  { id: "information", label: "Information" },
+  { id: "words", label: "Words from family" },
+  { id: "life-story", label: "Life story" },
+  { id: "family-tree", label: "Family tree" },
+  { id: "favorites", label: "Favorites" },
+  { id: "gallery", label: "Gallery" },
+  { id: "guest-book", label: "Guest book" },
+];

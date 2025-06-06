@@ -26,9 +26,11 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import FormRSVP from "@/components/obituary/FormRSVP";
 import FormObituary from "@/components/obituary/FormObituary";
-import { favoriteTypes } from "@/constants/favorites";
+import { favoriteTypes } from "@/constants/obituary";
 import FavoritesObituary from "@/components/obituary/FavoritesObituary";
 import { TFavorite } from "@/types/type";
+import TimelineObituary from "@/components/obituary/TimelineObituary";
+import SidebarObituary from "@/components/obituary/SidebarObituary";
 
 interface ObituaryForm {
   firstName: string;
@@ -110,6 +112,7 @@ export default function page() {
     setFamilyMembers([...familyMembers, newMember]);
   };
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showQuote, setShowQuote] = useState(true);
   const [showWords, setShowWords] = useState(true);
   const [showLifeStory, setShowLifeStory] = useState(true);
@@ -133,6 +136,13 @@ export default function page() {
   >("all");
   const [showGuestBookSettings, setShowGuestBookSettings] = useState(false);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
   const addFavorite = (type: string) => {
     const favoriteType = favoriteTypes.find((t) => t.id === type);
     if (!favoriteType) return;
@@ -146,16 +156,6 @@ export default function page() {
     };
     setFavorites([...favorites, newFavorite]);
   };
-
-  const menuItems = [
-    { id: "information", label: "Information" },
-    { id: "words", label: "Words from family" },
-    { id: "life-story", label: "Life story" },
-    { id: "family-tree", label: "Family tree" },
-    { id: "favorites", label: "Favorites" },
-    { id: "gallery", label: "Gallery" },
-    { id: "guest-book", label: "Guest book" },
-  ];
 
   const addTimelineEvent = () => {
     const newEvent: TimelineEvent = {
@@ -202,70 +202,74 @@ export default function page() {
         </Button>
       </div>
 
-      <div className="flex">
+      <div className="flex flex-row gap-10">
         {/* Left Sidebar */}
-        <div className="w-64 bg-[#699D99] text-white min-h-screen p-4">
-          <h2 className="text-xl font-semibold mb-6">Edit Memorial</h2>
-          <nav>
-            {menuItems.map((item) => (
-              <Button
-                key={item.id}
-                className="flex items-center space-x-2 w-full py-3 px-4 hover:bg-white/10 rounded-lg"
-              >
-                <span>{item.label}</span>
-              </Button>
-            ))}
-          </nav>
-        </div>
+        <SidebarObituary />
 
         {/* Main Content */}
         <div className="flex-1 p-8 max-w-4xl">
           <div className="space-y-8">
             {/* Basic Information */}
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  First Name
-                </label>
-                <Input
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  placeholder="Enter first name"
-                />
+            <div className="flex gap-15 w-[867px] h-[248px]">
+              <div className="flex gap-45 mb-2">
+                <div className="relative w-[248px] h-[248px] rounded shadow-md overflow-hidden bg-white">
+                  {selectedFile && (
+                    <Image
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Preview"
+                      width={260}
+                      height={600}
+                      className="px-2 py-3 h-60 object-cover"
+                    />
+                  )}
+                  <label className="absolute bottom-1 right-1 bg-[#133C4C] text-white rounded shadow h-6 w-6 flex items-center justify-center cursor-pointer hover:bg-gray-400">
+                    ✏️
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Last Name
-                </label>
-                <Input
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  placeholder="Enter last name"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Birth Date
-                </label>
-                <Input
-                  type="date"
-                  name="birthDate"
-                  value={formData.birthDate}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Death Date
-                </label>
-                <Input
-                  type="date"
-                  name="deathDate"
-                  value={formData.deathDate}
-                  onChange={handleInputChange}
-                />
+              <div className="grid grid-cols-2 gap-4 gap-y-1">
+                <div className="py-10">
+                  <Input
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    placeholder="Enter first name"
+                  />
+                </div>
+                <div className="py-10">
+                  <Input
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    placeholder="Enter last name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Born</label>
+                  <Input
+                    type="date"
+                    name="birthDate"
+                    value={formData.birthDate}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Death
+                  </label>
+                  <Input
+                    type="date"
+                    name="deathDate"
+                    value={formData.deathDate}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
             </div>
 
@@ -425,110 +429,13 @@ export default function page() {
             />
 
             {/* Timeline Section */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium">Timeline</h3>
-                <Switch
-                  checked={showTimeline}
-                  onCheckedChange={setShowTimeline}
-                />
-              </div>
-              {showTimeline && (
-                <div className="space-y-6">
-                  {timelineEvents.map((event, index) => (
-                    <div key={event.id} className="relative">
-                      {index !== 0 && (
-                        <div className="absolute left-[23px] -top-6 h-6 w-[2px] bg-[#699D99]" />
-                      )}
-                      {index !== timelineEvents.length - 1 && (
-                        <div className="absolute left-[23px] top-12 bottom-0 w-[2px] bg-[#699D99]" />
-                      )}
-                      <div className="flex gap-4">
-                        <div className="flex flex-col items-center">
-                          <div className="w-12 h-12 rounded-full bg-[#699D99] flex items-center justify-center text-white">
-                            <IconCalendar className="w-6 h-6" />
-                          </div>
-                        </div>
-                        <div className="flex-1 space-y-4">
-                          <Input
-                            value={event.title}
-                            onChange={(e) => {
-                              const newEvents = timelineEvents.map((ev) =>
-                                ev.id === event.id
-                                  ? { ...ev, title: e.target.value }
-                                  : ev
-                              );
-                              setTimelineEvents(newEvents);
-                            }}
-                            placeholder="Title"
-                            className="font-medium"
-                          />
-                          <div className="flex gap-4">
-                            <Input
-                              type="date"
-                              value={event.date}
-                              onChange={(e) => {
-                                const newEvents = timelineEvents.map((ev) =>
-                                  ev.id === event.id
-                                    ? { ...ev, date: e.target.value }
-                                    : ev
-                                );
-                                setTimelineEvents(newEvents);
-                              }}
-                              className="w-40"
-                            />
-                            <Input
-                              value={event.location}
-                              onChange={(e) => {
-                                const newEvents = timelineEvents.map((ev) =>
-                                  ev.id === event.id
-                                    ? { ...ev, location: e.target.value }
-                                    : ev
-                                );
-                                setTimelineEvents(newEvents);
-                              }}
-                              placeholder="Location"
-                            />
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => {
-                                setTimelineEvents(
-                                  timelineEvents.filter(
-                                    (ev) => ev.id !== event.id
-                                  )
-                                );
-                              }}
-                            >
-                              <IconTrash className="w-4 h-4" />
-                            </Button>
-                          </div>
-                          <Textarea
-                            value={event.description}
-                            onChange={(e) => {
-                              const newEvents = timelineEvents.map((ev) =>
-                                ev.id === event.id
-                                  ? { ...ev, description: e.target.value }
-                                  : ev
-                              );
-                              setTimelineEvents(newEvents);
-                            }}
-                            placeholder="Description of event"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <Button
-                    onClick={addTimelineEvent}
-                    className="w-full bg-teal-600 hover:bg-teal-700 text-white"
-                  >
-                    Add Event
-                  </Button>
-                </div>
-              )}
-            </div>
+            <TimelineObituary
+              showTimeline={showTimeline}
+              setShowTimeline={setShowTimeline}
+              timelineEvents={timelineEvents}
+              setTimelineEvents={setTimelineEvents}
+              addTimelineEvent={addTimelineEvent}
+            />
 
             {/* Quote Event Section */}
             <FormObituary

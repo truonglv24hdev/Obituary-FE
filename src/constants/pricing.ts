@@ -1,5 +1,4 @@
 
-
 export const plans = [
   {
     title: "Basic",
@@ -14,7 +13,8 @@ export const plans = [
     ],
     button: "Sample memorial",
     highlight: false,
-    href:"/"
+    href:"/",
+    className: "mt-10"
   },
   {
     title: "Premium",
@@ -33,7 +33,8 @@ export const plans = [
     button: "Sample Memorial",
     highlight: true,
     tag: "Most Popular",
-    href:"/payment"
+    href:"/payment",
+    className: "mt-20"
   },
 ];
 

@@ -25,11 +25,19 @@ export type TFavorite = {
   icon: React.ReactNode;
   question: string;
   answer: string;
-  type: string; 
+  type: string;
 };
 
 export type TFavoriteType = {
   id: string;
   icon: React.ReactNode;
   label: string;
+};
+
+export type TTimelineEvent = {
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+  description: string;
 };

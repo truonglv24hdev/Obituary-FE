@@ -12,10 +12,10 @@ import Link from "next/link";
 
 const PaymentPlan = () => {
   return (
-    <div className="flex md:flex-row justify-center items-center mx-auto gap-5 w-[684px] h-[547px]">
+    <div className="flex museo md:flex-row justify-center items-center mx-auto gap-5 w-[684px] h-[547px]">
       {plans.map((plan) => (
         <Card
-          className={`w-[332px] h-[547px] rounded-2xl shadow-md flex flex-col relative ${
+          className={`w-[332px] h-[547px] rounded-2xl shadow-md flex flex-col relative gap-5 ${
             plan.highlight
               ? "bg-[#6ea09e] text-white"
               : "bg-[#e6f4ea] text-gray-900"
@@ -24,12 +24,12 @@ const PaymentPlan = () => {
         >
           {" "}
           {plan.highlight && (
-            <div className="w-[121px] bg-white text-[#6ea09e] text-[10px] px-3 rounded-full font-semibold shadow-sm uppercase tracking-wider">
+            <div className="absolute top-4 left-4 w-[121px] h-[27px] flex justify-center items-center bg-gradient-to-r from-[#92c4c2] to-[#4f7f7e] text-white text-[10px] rounded-full museo font-semibold uppercase tracking-wider">
               {plan.tag}
             </div>
           )}
           <CardHeader className={plan.highlight ? "" : "my-10"}>
-            <CardTitle className="text-3xl font-bold mb-1 mt-2">
+            <CardTitle className={`text-3xl font-bold mb-1 ${plan.className}`}>
               {plan.price}
             </CardTitle>
             <CardTitle className="text-2xl font-bold mb-4">
@@ -62,7 +62,7 @@ const PaymentPlan = () => {
           </CardContent>
           <CardFooter>
             <Button
-              className={`w-full py-2 rounded-lg font-semibold text-base mt-auto transition-all duration-200 ${
+              className={`w-[268px] h-11 mb-5 rounded-sm font-semibold text-base mx-auto transition-all duration-200 ${
                 plan.highlight
                   ? "bg-white text-[#6ea09e] hover:bg-gray-100"
                   : "bg-[#6ea09e] text-white hover:bg-[#5a8e8c]"

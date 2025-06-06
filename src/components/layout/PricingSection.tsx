@@ -18,51 +18,53 @@ const addons = [
 
 const PricingSection = () => {
   return (
-    <div className="h-[1305px] bg-white flex items-center justify-center">
+    <div className="h-[1305px] w-full bg-white flex items-center justify-center">
       <div className="w-[892px] h-[1145px] tracking-normal ">
         <div className=" w-[716px] h-30 mx-auto flex flex-col gap-4 mb-10">
           <h2 className=" h-12 font-medium text-[40px] leading-12 text-center">
             Pricing
           </h2>
-          <ul className="list-disc list-inside space-y-2 text-base leading-5 font-light text-center">
+          <ul className="list-disc museo list-inside space-y-2 text-base leading-5 font-light text-center">
             <li>Start now for free. No credit card required</li>
             <li>Upgrade to premium plan at anytime</li>
           </ul>
         </div>
         <PaymentPlan />
-        <h3 className="text-xl font-semibold mb-6 mt-8 text-center">
-          Optional Add-ons
-        </h3>
-        <div className="flex flex-col md:flex-row justify-center mb-20">
-          {addons.map((addon, idx) => (
-            <div
-              key={idx}
-              className="flex-1 flex justify-center relative items-start"
-            >
-              <div className="w-[194px] h-[240px] bg-white rounded-xl p-5 flex flex-col justify-between ">
-                <div className="flex flex-col ">
-                  <div className="text-[20px] font-bold mb-2">
-                    {addon.price}
+        <div className="w-[554px] h-[358px] flex flex-col gap-2 mx-auto">
+          <h3 className="text-xl museo font-semibold mb-6 mt-8 text-center">
+            Optional Add-ons
+          </h3>
+          <div className="h-[214px] flex  md:flex-row justify-center gap-[83px]">
+            {addons.map((addon, idx) => (
+              <div
+                key={idx}
+                className="w-[194px] flex-1 flex justify-center relative items-start"
+              >
+                <div className="w-[230px] h-[214px] bg-white rounded-xl p-5 flex flex-col justify-between">
+                  <div className="flex flex-col flex-1">
+                    <div className="text-[32px] font-bold mb-2">
+                      {addon.price}
+                    </div>
+                    <div className="mb-2">{addon.icon}</div>
+                    <div className="whitespace-pre-line museo text-[20px] mb-2 font-light leading-tight min-h-[60px]">
+                      {addon.title}
+                    </div>
                   </div>
-                  <div className="mb-2">{addon.icon}</div>
-                  <div className="whitespace-pre-line text-[16px] font-light leading-tight">
-                    {addon.title}
-                  </div>
+                  <Button className="w-[168px] h-10 border museo border-[#699D99] text-[#699D99] rounded-sm bg-white px-5 font-bold hover:bg-teal-50 transition">
+                    See example
+                  </Button>
                 </div>
-                <Button className="border border-[#699D99] text-[#699D99] bg-white px-5 font-bold hover:bg-teal-50 transition mt-4">
-                  See example
-                </Button>
+                {idx !== addons.length - 1 && (
+                  <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-[1px] h-[70%] bg-black" />
+                )}
               </div>
-              {idx !== addons.length - 1 && (
-                <div className="absolute right-0 w-[1px] h-[70%] top-[15%] bg-black" />
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-center">
-          <Button className="bg-teal-600 text-white px-8 rounded-md font-semibold  hover:bg-teal-700 ">
-            Get Started
-          </Button>
+            ))}
+          </div>
+          <div className="flex justify-center">
+            <Button className="w-[134px] h-11 bg-teal-600 museo text-base text-white px-8 rounded-sm font-semibold mt-10 hover:bg-teal-700 ">
+              Get Started
+            </Button>
+          </div>
         </div>
       </div>
     </div>

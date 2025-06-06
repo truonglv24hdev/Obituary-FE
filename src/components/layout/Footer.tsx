@@ -10,8 +10,8 @@ import {
 
 const Footer = () => {
   return (
-    <div className="bg-[#699D99] h-[432px] text-white flex flex-col py-10 px-25 gap-11">
-      <div className="h-[287px] flex flex-row gap-60 ">
+    <div className="w-full bg-[#699D99] h-[432px] text-white flex flex-col py-10 px-25 gap-11">
+      <div className="w-[1240px] h-[287px] museo flex flex-row gap-60 ">
         {/* Logo & Description */}
         <div className="w-[360px] flex flex-col gap-8">
           <div className="w-[253px] h-[107px]">
@@ -24,16 +24,16 @@ const Footer = () => {
           </p>
           <div className="flex space-x-4">
             <a href="#">
-              <FontAwesomeIcon icon={faFacebookF} className="w-7 h-7" />
+              <FontAwesomeIcon icon={faFacebookF} className="w-8 h-8" />
             </a>
             <a href="#">
-              <FontAwesomeIcon icon={faTwitter} className="w-7 h-7" />
+              <FontAwesomeIcon icon={faTwitter} className="w-8 h-8" />
             </a>
             <a href="#">
-              <FontAwesomeIcon icon={faYoutube} className="w-7 h-7" />
+              <FontAwesomeIcon icon={faYoutube} className="w-8 h-8" />
             </a>
             <a href="#">
-              <FontAwesomeIcon icon={faInstagram} className="w-7 h-7" />
+              <FontAwesomeIcon icon={faInstagram} className="w-8 h-8" />
             </a>
           </div>
         </div>
