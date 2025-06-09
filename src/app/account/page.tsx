@@ -9,8 +9,6 @@ const page = () => {
     <div>
       <Heading className="bg-[#699D99]" />
       <Infor />
-      <Faqs />
-      <Footer/>
     </div>
   );
 };

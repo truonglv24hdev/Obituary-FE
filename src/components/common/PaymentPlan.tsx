@@ -15,7 +15,7 @@ const PaymentPlan = () => {
     <div className="flex museo md:flex-row justify-center items-center mx-auto gap-5 w-[684px] h-[547px]">
       {plans.map((plan) => (
         <Card
-          className={`w-[332px] h-[547px] rounded-2xl shadow-md flex flex-col relative gap-5 ${
+          className={`w-[332px] h-[547px] rounded-2xl shadow-md flex flex-col relative ${
             plan.highlight
               ? "bg-[#6ea09e] text-white"
               : "bg-[#e6f4ea] text-gray-900"
@@ -29,40 +29,44 @@ const PaymentPlan = () => {
             </div>
           )}
           <CardHeader className={plan.highlight ? "" : "my-10"}>
-            <CardTitle className={`text-3xl font-bold mb-1 ${plan.className}`}>
+            <CardTitle className={`text-3xl font-bold ${plan.className}`}>
               {plan.price}
             </CardTitle>
-            <CardTitle className="text-2xl font-bold mb-4">
-              {plan.title}
-            </CardTitle>
+            <CardTitle className="text-2xl font-bold">{plan.title}</CardTitle>
           </CardHeader>
-          <CardContent className="flex-1">
-            <ul className={`mb-8 text-base ${plan.highlight ? "" : ""}`}>
+          <CardContent className="">
+            <ul className={` text-base ${plan.highlight ? "" : "mb-30 mt-[-40px]"}`}>
               {plan.features.map((f, i) => (
-                <li key={i} className="flex items-center gap-2">
-                  <svg
-                    className={`w-5 h-5 ${
-                      plan.highlight ? "text-white" : "text-[#7ba7a1]"
-                    } `}
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
+                <li key={i} className="flex items-center gap-3 mb-2">
+                  <div
+                    className={`w-5 h-5 flex items-center justify-center rounded-full shrink-0 ${
+                      plan.highlight ? "bg-white" : "bg-white"
+                    }`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  <span>{f}</span>
+                    <svg
+                      className={`w-4 h-4 ${
+                        plan.highlight ? "text-[#6ea09e]" : "text-[#6ea09e]"
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span className="leading-snug museo">{f}</span>
                 </li>
               ))}
             </ul>
           </CardContent>
           <CardFooter>
             <Button
-              className={`w-[268px] h-11 mb-5 rounded-sm font-semibold text-base mx-auto transition-all duration-200 ${
+              className={`w-[268px] h-11 rounded-sm font-semibold text-base mx-auto transition-all duration-200 ${
                 plan.highlight
                   ? "bg-white text-[#6ea09e] hover:bg-gray-100"
                   : "bg-[#6ea09e] text-white hover:bg-[#5a8e8c]"

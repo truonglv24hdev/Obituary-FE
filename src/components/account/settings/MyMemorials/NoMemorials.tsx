@@ -15,20 +15,20 @@ const NoMemorials = () => {
           className="items-center"
         />
         <p className="w-[520px] h-14 text-2xl font-light text-center ">
-          <strong className="text-2xl font-semibold">Create a memorial</strong>{" "}
+          <strong className="text-2xl font-semibold museo">Create a memorial</strong>{" "}
           by adding basic or detailed information
         </p>
       </div>
       <div className="flex w-[333px] h-11 gap-6">
         <Link
           href={"/memorial"}
-          className="h-11 w-[154px] inline-flex items-center justify-center text-center border text-base font-light rounded text-black bg-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+          className="h-11 w-[154px] museo inline-flex items-center justify-center text-center border text-base font-light rounded text-black bg-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
           type="submit"
         >
           Get Started
         </Link>
         <Button
-          className="h-11 w-[154px] inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+          className="h-11 w-[154px] museo inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
           type="submit"
         >
           <Link href={"/payment"}>Upgrade plan</Link>

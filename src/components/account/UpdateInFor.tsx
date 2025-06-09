@@ -106,7 +106,7 @@ const UpdateInfor = () => {
   };
 
   return (
-    <div className="px-6 py-10 max-w-4xl mx-auto">
+    <div className="px-6 flex flex-col py-10 max-w-[982px] mx-auto gap-13">
       <HeaderAccount />
 
       <nav className="mt-8 border-b border-gray-200 mb-8 flex gap-8 text-xl font-semibold">
@@ -133,18 +133,16 @@ const UpdateInfor = () => {
               {
                 name: "first_name",
                 label: "First Name",
-                placeholder: "First Name",
               },
               {
                 name: "last_name",
                 label: "Last Name",
-                placeholder: "Last Name",
               },
-              { name: "email", label: "Email", placeholder: "Email" },
-              { name: "password", label: "Password", placeholder: "Password" },
-              { name: "address", label: "Address", placeholder: "Address" },
-              { name: "country", label: "Country", placeholder: "Country" },
-              { name: "code", label: "Post Code", placeholder: "Post Code" },
+              { name: "email", label: "Email" },
+              { name: "password", label: "Password" },
+              { name: "address", label: "Address" },
+              { name: "country", label: "Country" },
+              { name: "code", label: "Post Code" },
             ].map((field) => (
               <FormField
                 key={field.name}
@@ -159,7 +157,6 @@ const UpdateInfor = () => {
                       <FormControl>
                         <Input
                           className="w-full bg-white rounded"
-                          placeholder={field.placeholder}
                           {...fieldProps}
                         />
                       </FormControl>

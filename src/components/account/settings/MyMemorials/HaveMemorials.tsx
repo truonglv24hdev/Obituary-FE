@@ -27,11 +27,11 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
     <div className="w-[982px] ">
       {/* Header */}
       <div className="bg-[#E5F6EC80] p-4 rounded-t-lg flex justify-between items-center">
-        <h1 className="text-2xl font-light text-gray-800">My Memorials</h1>
+        <h1 className="text-2xl font-light text-gray-800 museo">My Memorials</h1>
         <div className="text-base font-light text-gray-600 flex items-center gap-2">
-          <button className="hover:underline">&lt; Previous</button>
+          <button className="hover:underline museo">&lt; Previous</button>
           <span className="text-gray-400">|</span>
-          <button className="hover:underline">Next &gt;</button>
+          <button className="hover:underline museo">Next &gt;</button>
         </div>
       </div>
 
@@ -89,7 +89,7 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
                   />
                 </svg>
               </Link>
-              <p className="mt-2">New Memorial page</p>
+              <p className="mt-2 museo">New Memorial page</p>
             </div>
           )
         )}

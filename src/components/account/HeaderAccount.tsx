@@ -11,12 +11,12 @@ const HeaderAccount = ({ showUpgrade = false }: Props) => {
     <div className="w-[982px] flex flex-col gap-4">
       <h1 className="font-medium text-[40px]">My Account</h1>
       <div className="w-full flex justify-between items-center">
-        <p className="font-light text-xl flex-1">
+        <p className="font-light text-xl flex-1 museo">
           You can change your account settings here
         </p>
         {showUpgrade && (
           <Button>
-            <Link href={"/payment"}>Upgrade to Premium</Link>
+            <Link className="museo" href={"/payment"}>Upgrade to Premium</Link>
           </Button>
         )}
       </div>

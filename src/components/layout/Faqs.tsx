@@ -1,14 +1,24 @@
 "use client";
 import { useState } from "react";
 import { leftMenu, rightContent } from "@/constants/faqs";
+import { IconRight } from "../icons";
 
-export default function Faqs() {
+export default function Faqs({
+  className,
+  children,
+  bg
+}: {
+  className?: string;
+  bg?: string;
+  children?: React.ReactNode;
+}) {
   const [selected, setSelected] = useState(0);
   const [open, setOpen] = useState(0);
 
   return (
-    <div className="w-full flex h-[950px] top-[488px] px-50 py-20 gap-1">
-      <div className="w-[1240px] h-[712px] flex justify-between">
+    <div className={`w-full h-[1000px] top-[488px] py-15 ${className}`}>
+      <div className="text-center text-[40px] museo font-semibold mb-5">{children}</div>
+      <div className="max-w-[1240px] mx-auto h-[712px] flex justify-between">
         {/* Left Menu */}
         <div className="w-99 flex flex-col gap-2">
           {leftMenu.map((item, idx) => (
@@ -24,11 +34,13 @@ export default function Faqs() {
             >
               <div className="w-[266px] h-8 flex gap-3 items-center">
                 <span className="w-7 h-7">{item.icon}</span>
-                <span className="text-xl font-semibold leading-8">
+                <span className="text-xl museo font-semibold leading-8">
                   {item.title}
                 </span>
               </div>
-              <span className="w-6 h-6">{">"}</span>
+              <span className="w-6 h-6">
+                <IconRight />
+              </span>
             </div>
           ))}
         </div>
@@ -38,11 +50,11 @@ export default function Faqs() {
           {rightContent.map((item, idx) => (
             <div
               key={idx}
-              className={` rounded-lg bg-[#f4fbf7] transition
+              className={` rounded-lg bg-[#f4fbf7] transition ${bg}
               ${open === idx ? "h-[140px] flex flex-col  shadow" : "h-18"}`}
             >
               <div className="flex  justify-between">
-                <span className="w-[220px] h-8 font-semibold text-xl mt-6 ml-6">
+                <span className="w-[220px] museo h-8 font-semibold text-xl mt-6 ml-6">
                   {item.question}
                 </span>
                 <div className="mt-6 w-6 h-6">
@@ -54,7 +66,7 @@ export default function Faqs() {
                 </div>
               </div>
               {item.answer && open === idx && (
-                <p className="w-[744px] h-12 mt-2 ml-6 text-base font-light">
+                <p className="w-[744px] museo h-12 mt-2 ml-6 text-base font-light">
                   {item.answer}
                 </p>
               )}

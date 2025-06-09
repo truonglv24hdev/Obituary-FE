@@ -27,21 +27,21 @@ const Memorials = () => {
   }, []);
 
   return (
-    <div>
-      <div className="h-[1094px] flex flex-col gap-10 px-[229px] py-20 ml-40 ">
+    <div className="w-full h[-735px] flex px-[229px] py-20 gap-10 justify-center">
+      <div className="w-[982px] flex flex-col">
         <HeaderAccount showUpgrade={isActive && (memorials?.length ?? 0) > 0} />
 
-        <div className="w-[982px] h-12 border-b border-gray-200 mb-6">
+        <div className=" h-12 border-b border-gray-200 mb-6">
           <nav className="h-12 flex gap-15">
             <Link
               href="/account"
-              className=" border-b-1 border-transparent py-4 px-1 text-xl font-semibold text-gray-500 hover:border-gray-300 hover:text-gray-700"
+              className="museo border-b-1 border-transparent py-4 px-1 text-xl font-semibold text-gray-500 hover:border-gray-300 hover:text-gray-700"
             >
               Basic Information
             </Link>
             <Link
               href="/account/memorials"
-              className="border-b-1 border-black py-4 px-1 text-xl font-semibold text-black"
+              className="museo border-b-1 border-black py-4 px-1 text-xl font-semibold text-black"
             >
               My Memorials
             </Link>

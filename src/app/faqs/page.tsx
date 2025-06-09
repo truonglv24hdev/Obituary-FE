@@ -14,7 +14,7 @@ const page = () => {
           <div className="absolute inset-0 z-10 flex items-center justify-center">
             <div className="h-32 w-[400px] flex flex-col items-center justify-center text-center text-white">
               <div className="font-medium text-[64px] ">Pricing</div>
-              <p className="h-[21px] font-light text-xl">
+              <p className="h-[21px] font-light museo text-xl">
                 Create the tribute they would have loved
               </p>
             </div>
@@ -24,7 +24,7 @@ const page = () => {
         <Heading className="absolute inset-0 z-10" />
       </div>
       <Faqs />
-      <Footer/>
+      <Footer />
     </>
   );
 };

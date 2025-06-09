@@ -31,6 +31,7 @@ import FavoritesObituary from "@/components/obituary/FavoritesObituary";
 import { TFavorite } from "@/types/type";
 import TimelineObituary from "@/components/obituary/TimelineObituary";
 import SidebarObituary from "@/components/obituary/SidebarObituary";
+import WakeDetails from "@/components/obituary/WakeDetails";
 
 interface ObituaryForm {
   firstName: string;
@@ -130,6 +131,7 @@ export default function page() {
   const [moderationType, setModerationType] = useState<"pre" | "post">("pre");
   const [requireEmail, setRequireEmail] = useState(false);
   const [showGuestBook, setShowGuestBook] = useState(true);
+  const [showWakeDetails, setShowWakeDetails] = useState(true);
 
   const [filterStatus, setFilterStatus] = useState<
     "all" | "approved" | "rejected" | "pending"
@@ -207,7 +209,7 @@ export default function page() {
         <SidebarObituary />
 
         {/* Main Content */}
-        <div className="flex-1 p-8 max-w-4xl">
+        <div className="flex-1 p-8 max-w-[1000px]">
           <div className="space-y-8">
             {/* Basic Information */}
             <div className="flex gap-15 w-[867px] h-[248px]">
@@ -437,6 +439,31 @@ export default function page() {
               addTimelineEvent={addTimelineEvent}
             />
 
+            {/* WakeDetails */}
+            <WakeDetails
+              showWakeDetails={showWakeDetails}
+              setShowWakeDetails={setShowWakeDetails}
+              time={false}
+              title="Wake Details"
+              height="1000"
+            />
+
+            <WakeDetails
+              showWakeDetails={showWakeDetails}
+              setShowWakeDetails={setShowWakeDetails}
+              time={true}
+              title="Cortege Departure"
+              height="704"
+            />
+
+            <WakeDetails
+              showWakeDetails={showWakeDetails}
+              setShowWakeDetails={setShowWakeDetails}
+              time={true}
+              title="Cremation"
+              height="704"
+            />
+
             {/* Quote Event Section */}
             <FormObituary
               title="Quote"
@@ -645,6 +672,19 @@ export default function page() {
                   )}
                 </div>
               )}
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex justify-center mt-10">
+              <Button
+                type="submit"
+                className="bg-[#133C4C] hover:bg-[#0f2f3c] museo text-white px-6 py-2"
+                onClick={() => {
+                  console.log("Submit form", formData);
+                }}
+              >
+                Publish page
+              </Button>
             </div>
           </div>
         </div>
