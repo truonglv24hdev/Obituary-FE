@@ -1,27 +1,12 @@
 import { IconSetting } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {formatDateRange} from "@/constants/formatDateRange";
 import { TMemorial } from "@/types/type";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
-  
-  const formatDateRange = (start: string, end: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    };
-
-    const startDate = new Date(start.split("/").reverse().join("-"));
-    const endDate = new Date(end.split("/").reverse().join("-"));
-
-    return `${startDate.toLocaleDateString(
-      "en-US",
-      options
-    )} - ${endDate.toLocaleDateString("en-US", options)}`;
-  };
 
   return (
     <div className="w-[982px] ">
@@ -50,9 +35,9 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
                 height={110}
                 className="mx-auto my-2 w-[120px] h-[110px] object-cover"
               />
-              <Button className="absolute bottom-1 right-1 bg-white text-black rounded shadow h-8 w-8 flex items-center justify-center cursor-pointer hover:bg-gray-400">
+              <Link href={`/obituary/${memorial._id}`} className="absolute bottom-1 right-1 bg-white text-black rounded shadow h-8 w-8 flex items-center justify-center cursor-pointer hover:bg-gray-400">
                 <IconSetting />
-              </Button>
+              </Link>
             </div>
             <div className="p-3 flex-col flex items-center">
               <h2 className="text-lg font-semibold">

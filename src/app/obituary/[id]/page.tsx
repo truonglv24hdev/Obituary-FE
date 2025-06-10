@@ -1,11 +1,10 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   IconCalendar,
   IconPencil,
@@ -28,22 +27,12 @@ import FormRSVP from "@/components/obituary/FormRSVP";
 import FormObituary from "@/components/obituary/FormObituary";
 import { favoriteTypes } from "@/constants/obituary";
 import FavoritesObituary from "@/components/obituary/FavoritesObituary";
-import { TFavorite } from "@/types/type";
+import { TFavorite, TMemorial, TObituary } from "@/types/type";
 import TimelineObituary from "@/components/obituary/TimelineObituary";
 import SidebarObituary from "@/components/obituary/SidebarObituary";
 import WakeDetails from "@/components/obituary/WakeDetails";
-
-interface ObituaryForm {
-  firstName: string;
-  lastName: string;
-  birthDate: string;
-  deathDate: string;
-  quote: string;
-  wordsFromFamily: string;
-  lifeStory: string;
-  image: string;
-  quoteEvent: string;
-}
+import { getObituaryById } from "@/lib/obituaryAPI";
+import {formatDate} from "@/constants/formatDateRange";
 
 interface FamilyMember {
   id: string;
@@ -53,8 +42,6 @@ interface FamilyMember {
 }
 
 interface ObituaryForm {
-  firstName: string;
-  lastName: string;
   birthDate: string;
   deathDate: string;
   quote: string;
@@ -84,17 +71,33 @@ interface GalleryImage {
   caption: string;
 }
 
-interface GuestBookEntry {
-  id: string;
-  content: string;
-  status: "approved" | "rejected" | "pending";
-}
+export default function page({ params }: { params: Promise<{ id: string }> }) {
+  const [obituary, setObituary] = useState<TObituary | null>(null);
+  const { id } = use(params);
 
-export default function page() {
+  useEffect(() => {
+    getObituaryById(id)
+      .then((data) => {
+        setObituary(data);
+        if (data) {
+          setFormData({
+            birthDate: data.birth_date || "",
+            deathDate: data.death_date || "",
+            quote: data.quote || "",
+            wordsFromFamily: data.words_from_family || "",
+            lifeStory: data.life_story || "",
+            image: data.image || "/img/default-memorial.jpg",
+            quoteEvent: data.quote_event || "",
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Lỗi khi lấy obituary:", err);
+      });
+  }, []);
+
   const [formData, setFormData] = useState<ObituaryForm>({
-    firstName: "",
-    lastName: "",
-    birthDate: "",
+    birthDate: formatDate(obituary?.memorial.born ?? ""),
     deathDate: "",
     quote: "",
     wordsFromFamily: "",
@@ -235,22 +238,12 @@ export default function page() {
                   </label>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 gap-y-1">
-                <div className="py-10">
-                  <Input
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    placeholder="Enter first name"
-                  />
+              <div className="grid grid-cols-2 gap-4 gap-y-4 pt-10">
+                <div className="border-2 border-black border-dashed flex justify-center h-12 w-[177px] text-[32px] museo font-medium">
+                  {obituary?.memorial.first_name}
                 </div>
-                <div className="py-10">
-                  <Input
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    placeholder="Enter last name"
-                  />
+                <div className="border-2 border-black border-dashed flex justify-center h-12 w-[177px] text-[32px] museo font-medium">
+                  {obituary?.memorial.last_name}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Born</label>

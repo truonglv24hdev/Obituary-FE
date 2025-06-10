@@ -20,6 +20,15 @@ export type TMemorial = {
   slug: string;
 };
 
+export type TObituary = {
+  _id: string;
+  memorial:TMemorial
+  familyTree: object
+  favorites: TFavorite
+  timeLine:TTimelineEvent
+  
+};
+
 export type TFavorite = {
   id: string;
   icon: React.ReactNode;

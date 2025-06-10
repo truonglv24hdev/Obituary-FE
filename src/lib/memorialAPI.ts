@@ -14,3 +14,12 @@ export async function getMemorialByUser() {
   const res = await axios.get("/api/memorial", { requiresAuth: true });
   return res.data;
 }
+
+export async function putMemorial(premium?: boolean) {
+  const res = await axios.put(
+    "/api/memorial",
+    { premium },
+    { requiresAuth: true }
+  );
+  return res.data;
+}
