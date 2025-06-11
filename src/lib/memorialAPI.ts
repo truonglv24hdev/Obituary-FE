@@ -15,11 +15,12 @@ export async function getMemorialByUser() {
   return res.data;
 }
 
-export async function putMemorial(premium?: boolean) {
-  const res = await axios.put(
-    "/api/memorial",
-    { premium },
-    { requiresAuth: true }
-  );
+export async function putMemorial(id: string, formData: FormData) {
+  const res = await axios.put(`/api/memorial/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    requiresAuth: true,
+  });
   return res.data;
 }

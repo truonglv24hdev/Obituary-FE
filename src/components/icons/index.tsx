@@ -14,3 +14,4 @@ export { default as IconTrash } from "./IconTrash";
 export { default as IconCalendar } from "./IconCalendar";
 export { default as IconFilter } from "./IconFilter";
 export { default as IconRight } from "./IconRight";
+export { default as IconPicture } from "./IconPicture";

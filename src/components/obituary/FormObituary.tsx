@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { UseFormReturn } from "react-hook-form";
 
-interface ObituaryForm {
+interface ObituaryFormProps {
   title: string;
   subtitleButtonLabel?: string;
   onSubtitleClick?: () => void;
   show: boolean;
   setShow: (value: boolean) => void;
   name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  form: UseFormReturn<any>; // Add form prop
   placeholder?: string;
-  minHeight?: string;
 }
 
 const FormObituary = ({
@@ -23,21 +28,19 @@ const FormObituary = ({
   show,
   setShow,
   name,
-  value,
-  onChange,
+  form,
   placeholder,
-  minHeight = "200px",
-}: ObituaryForm) => {
+}: ObituaryFormProps) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-7 h-[328px]">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h3 className="text-lg font-medium">{title}</h3>
+        <div className="h-10 flex items-center gap-8">
+          <h3 className="text-[32px] font-medium">{title}</h3>
           {subtitleButtonLabel && (
             <Button
               variant="outline"
               size="sm"
-              className="text-xs"
+              className="h-10 museo text-base"
               onClick={onSubtitleClick}
             >
               {subtitleButtonLabel}
@@ -47,12 +50,21 @@ const FormObituary = ({
         <Switch checked={show} onCheckedChange={setShow} />
       </div>
       {show && (
-        <Textarea
+        <FormField
+          control={form.control}
           name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          className={`min-h-[${minHeight}] border-dashed`}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder={placeholder}
+                  className="border-dashed h-[260px]"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
       )}
     </div>
