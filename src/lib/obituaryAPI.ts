@@ -9,6 +9,9 @@ export async function getObituaryById(id: string) {
 
 export async function putObituary(id: string, formData: FormData) {
   const res = await axios.put(`/api/obituary/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     requiresAuth: true,
   });
   return res.data;

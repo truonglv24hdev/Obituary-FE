@@ -32,10 +32,14 @@ const FormObituary = ({
   placeholder,
 }: ObituaryFormProps) => {
   return (
-    <div className="space-y-7 h-[328px]">
+    <div
+      className={`space-y-7 transition-all duration-300 overflow-hidden ${
+        show ? "min-h-[328px]" : "h-[60px]"
+      }`}
+    >
       <div className="flex items-center justify-between">
         <div className="h-10 flex items-center gap-8">
-          <h3 className="text-[32px] font-medium">{title}</h3>
+          <h3 className="text-[32px] museo font-medium">{title}</h3>
           {subtitleButtonLabel && (
             <Button
               variant="outline"

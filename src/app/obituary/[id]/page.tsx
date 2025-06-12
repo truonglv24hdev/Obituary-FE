@@ -1,56 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
 import { use, useEffect, useState } from "react";
 import {
-  IconCalendar,
   IconPencil,
   IconPlus,
-  IconTrash,
-  IconSetting,
-  IconFilter,
   IconPicture,
+  IconCalendar,
 } from "@/components/icons";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "@/components/ui/checkbox";
-import FormRSVP from "@/components/obituary/FormRSVP";
-import FormObituary from "@/components/obituary/FormObituary";
-import { favoriteTypes } from "@/constants/obituary";
-import FavoritesObituary from "@/components/obituary/FavoritesObituary";
-import {
-  FamilyMember,
-  GalleryFolder,
-  ObituaryForm,
-  TFavorite,
-  TimelineEvent,
-  TMemorial,
-  TObituary,
-} from "@/types/type";
-import TimelineObituary from "@/components/obituary/TimelineObituary";
+import { Category, GalleryFolder, TObituary } from "@/types/type";
 import SidebarObituary from "@/components/obituary/SidebarObituary";
-import WakeDetails from "@/components/obituary/WakeDetails";
 import { getObituaryById, putObituary } from "@/lib/obituaryAPI";
-import { formatDate } from "@/constants/formatDateRange";
-import { Calendar } from "@/components/ui/calendar";
 import { format, parse } from "date-fns";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { putMemorial } from "@/lib/memorialAPI";
 import {
   Form,
@@ -61,14 +27,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import FormObituary from "@/components/obituary/FormObituary";
 
 const formSchema = z.object({
   picture: z.any().optional(),
   headerImage: z.any().optional(),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  birthDate: z.date().nullable(),
-  deathDate: z.date().nullable(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  birthDate: z.date().nullable().optional(),
+  deathDate: z.date().nullable().optional(),
   quote: z.string().optional(),
   wordsFromFamily: z.string().optional(),
   lifeStory: z.string().optional(),
@@ -97,6 +71,79 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [showQuote, setShowQuote] = useState(true);
   const [showWords, setShowWords] = useState(true);
   const [showLifeStory, setShowLifeStory] = useState(true);
+  const [showFamilyTree, setShowFamilyTree] = useState(true);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  console.log(categories);
+
+  const handleMemberImageChange = (
+    categoryId: string,
+    memberId: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCategories(
+        categories.map((cat) => {
+          if (cat.id === categoryId) {
+            return {
+              ...cat,
+              members: cat.members.map((m) =>
+                m.id === memberId
+                  ? { ...m, image: URL.createObjectURL(file) }
+                  : m
+              ),
+            };
+          }
+          return cat;
+        })
+      );
+    }
+  };
+
+  const handleMemberNameChange = (
+    categoryId: string,
+    memberId: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCategories(
+      categories.map((cat) => {
+        if (cat.id === categoryId) {
+          return {
+            ...cat,
+            members: cat.members.map((m) =>
+              m.id === memberId ? { ...m, name: e.target.value } : m
+            ),
+          };
+        }
+        return cat;
+      })
+    );
+  };
+
+  const addFamilyMember = (categoryId: string) => {
+    setCategories(
+      categories.map((cat) => {
+        if (cat.id === categoryId) {
+          return {
+            ...cat,
+            members: [
+              ...cat.members,
+              {
+                id: Math.random().toString(36).substr(2, 9),
+                name: "",
+                image: "/img/default-avatar.png",
+              },
+            ],
+          };
+        }
+        return cat;
+      })
+    );
+  };
+
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
 
   const { id } = use(params);
 
@@ -112,24 +159,16 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
             deathDate: parse(data.memorial.death, "dd/MM/yyyy", new Date()),
             quote: data.quote,
             wordsFromFamily: data.wordsFromFamily,
-            lifeStory:data.lifeStory
+            lifeStory: data.lifeStory,
           });
+          setCategories(data.familyTree ?? []);
         }
+        console.log(data);
       })
       .catch((err) => {
         console.error("Lỗi khi lấy obituary:", err);
       });
   }, []);
-
-  const addFamilyMember = (relationship: "sibling" | "parent") => {
-    const newMember: FamilyMember = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: "",
-      image: "/img/default-avatar.png",
-      relationship,
-    };
-    setFamilyMembers([...familyMembers, newMember]);
-  };
 
   const [selectedHeaderFile, setSelectedHeaderFile] = useState<File | null>(
     null
@@ -138,7 +177,6 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
     null
   );
 
-  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [galleryFolders, setGalleryFolders] = useState<GalleryFolder[]>([]);
 
   const handleHeaderFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,7 +207,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
         formMemorial.append("picture", selectedAvatarFile);
       }
       if (selectedHeaderFile) {
-        formObituary.append("header_image", selectedHeaderFile);
+        formObituary.append("headerImage", selectedHeaderFile);
       }
 
       // Format dates
@@ -181,13 +219,16 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
         : undefined;
 
       // Append other data
-      formMemorial.append("first_name", values.firstName);
-      formMemorial.append("last_name", values.lastName);
+      formMemorial.append("first_name", values.firstName || "");
+      formMemorial.append("last_name", values.lastName || "");
       formMemorial.append("born", formattedBorn || "");
       formMemorial.append("death", formattedDeath || "");
       formObituary.append("quote", values.quote || "");
       formObituary.append("wordsFromFamily", values.wordsFromFamily || "");
       formObituary.append("lifeStory", values.lifeStory || "");
+      formObituary.append("familyTree", JSON.stringify(categories));
+
+      console.log(JSON.stringify(categories));
 
       // Send request with FormData
       const updateMemorial = await putMemorial(id, formMemorial);
@@ -203,7 +244,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   return (
     <div className="min-h-screen bg-gray-50">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* Header Image Section */}
           <div className="relative h-[400px] w-full">
             <FormField
@@ -224,7 +265,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                       ) : (
                         obituary?.memorial.picture && (
                           <Image
-                            src={`http://localhost:5000${obituary.memorial.picture}`}
+                            src={`http://localhost:5000${obituary.headerImage}`}
                             alt="Memorial"
                             width={1440}
                             height={400}
@@ -461,6 +502,163 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                   form={form} // Pass the form instance
                   placeholder="Quote/Saying"
                 />
+
+                {/* Family Tree Section */}
+                <div className="space-y-7">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-[32px] museo font-medium">
+                        Family tree
+                      </h3>
+                      <span className="text-[32px] museo text-gray-500">
+                        (Max 4 categories)
+                      </span>
+                    </div>
+                    <Switch
+                      checked={showFamilyTree}
+                      onCheckedChange={setShowFamilyTree}
+                    />
+                  </div>
+                  {showFamilyTree && (
+                    <div className="space-y-8">
+                      {/* Existing Categories */}
+                      {categories.map((category) => (
+                        <div key={category.id} className="flex flex-col gap-10">
+                          <div className="flex items-center justify-between">
+                            <h4 className="flex border-2 border-gray-300 border-dashed h-15 w-[121px] items-center justify-center font-medium text-[20px] museo">
+                              {category.category}
+                            </h4>
+                          </div>
+                          <div className="flex flex-wrap gap-10">
+                            {category.members.map((member) => (
+                              <div
+                                key={member.id}
+                                className="text-center flex flex-col gap-4"
+                              >
+                                <div className="relative w-[140px] h-[140px] bg-gray-100 rounded-2xl overflow-hidden">
+                                  <Image
+                                    src={member.image}
+                                    alt={member.name || "Member"}
+                                    width={120}
+                                    height={120}
+                                    className="object-cover"
+                                  />
+                                  <label className="absolute bottom-1 right-1 bg-[#699D99] text-white rounded-md h-7 w-7 flex items-center justify-center cursor-pointer">
+                                    <IconPencil className="w-4 h-4" />
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={(e) =>
+                                        handleMemberImageChange(
+                                          category.id,
+                                          member.id,
+                                          e
+                                        )
+                                      }
+                                      className="hidden"
+                                    />
+                                  </label>
+                                </div>
+                                <Input
+                                  value={member.name}
+                                  onChange={(e) =>
+                                    handleMemberNameChange(
+                                      category.id,
+                                      member.id,
+                                      e
+                                    )
+                                  }
+                                  placeholder="Name"
+                                  className="mx-auto mt-2 border-gray-300 border-1 border-dashed rounded-none text-center w-[66px] h-[30px]"
+                                />
+                              </div>
+                            ))}
+                            {category.members.length < 5 && (
+                              <button
+                                type="button"
+                                onClick={() => addFamilyMember(category.id)}
+                                className="relative w-[140px] h-[140px] flex items-center justify-center group"
+                              >
+                                <svg
+                                  width="140"
+                                  height="140"
+                                  viewBox="0 0 140 140"
+                                  className="absolute top-0 left-0 pointer-events-none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <polygon
+                                    points="12,0 128,0 140,12 140,128 128,140 12,140 0,128 0,12"
+                                    fill="#E5F6EC80"
+                                    stroke="#0000004D"
+                                    strokeWidth="1"
+                                  />
+                                </svg>
+                                <IconPlus className="w-10 h-10 text-black relative z-10" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      {/* Add Category Button */}
+                      {categories.length < 4 && (
+                        <div className="space-y-4">
+                          {isAddingCategory ? (
+                            <div className="flex items-center gap-4">
+                              <Input
+                                value={newCategoryName}
+                                onChange={(e) =>
+                                  setNewCategoryName(e.target.value)
+                                }
+                                placeholder="Category name"
+                                className="max-w-[300px]"
+                              />
+                              <Button
+                                type="button"
+                                onClick={() => {
+                                  if (newCategoryName.trim()) {
+                                    setCategories([
+                                      ...categories,
+                                      {
+                                        id: Math.random()
+                                          .toString(36)
+                                          .substr(2, 9),
+                                        category: newCategoryName,
+                                        members: [],
+                                      },
+                                    ]);
+                                    setNewCategoryName("");
+                                    setIsAddingCategory(false);
+                                  }
+                                }}
+                                variant="secondary"
+                              >
+                                Add
+                              </Button>
+                              <Button
+                                type="button"
+                                onClick={() => {
+                                  setNewCategoryName("");
+                                  setIsAddingCategory(false);
+                                }}
+                                variant="outline"
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button
+                              type="button"
+                              onClick={() => setIsAddingCategory(true)}
+                              className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                            >
+                              Add Individual
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

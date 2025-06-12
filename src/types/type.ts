@@ -22,8 +22,9 @@ export type TMemorial = {
 
 export type TObituary = {
   _id: string;
+  headerImage: string;
   memorial: TMemorial;
-  familyTree: object;
+  familyTree: Category[];
   favorites: TFavorite;
   timeLine: TTimelineEvent;
 };
@@ -50,12 +51,11 @@ export type TTimelineEvent = {
   description: string;
 };
 
-export interface FamilyMember {
-  id: string;
-  name: string;
-  image: string;
-  relationship: "sibling" | "parent";
-}
+// export interface FamilyMember {
+//   id: string;
+//   name: string;
+//   image: File;
+// }
 
 export interface ObituaryForm {
   birthDate: Date | null;
@@ -85,4 +85,15 @@ export interface GalleryImage {
   id: string;
   url: string;
   caption: string;
+}
+
+
+export interface Category {
+  id: string;
+  category: string;
+  members: {
+    id: string;
+    name: string;
+    image: string;
+  }[];
 }
