@@ -1,19 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
 import { use, useEffect, useState } from "react";
-import {
-  IconPencil,
-  IconPlus,
-  IconPicture,
-  IconCalendar,
-} from "@/components/icons";
+import { IconPencil, IconPicture, IconCalendar } from "@/components/icons";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Category, GalleryFolder, TObituary } from "@/types/type";
+import {
+  Category,
+  GalleryFolder,
+  TimelineEvent,
+  TObituary,
+} from "@/types/type";
 import SidebarObituary from "@/components/obituary/SidebarObituary";
 import { getObituaryById, putObituary } from "@/lib/obituaryAPI";
 import { format, parse } from "date-fns";
@@ -35,6 +34,9 @@ import {
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import FormObituary from "@/components/obituary/FormObituary";
+import TimelineObituary from "@/components/obituary/TimelineObituary";
+import FamilyTreeSection from "@/components/obituary/FamilyTree";
+import WakeDetails from "@/components/obituary/WakeDetails";
 
 const formSchema = z.object({
   picture: z.any().optional(),
@@ -73,77 +75,20 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [showLifeStory, setShowLifeStory] = useState(true);
   const [showFamilyTree, setShowFamilyTree] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [showTimeline, setShowTimeline] = useState(true);
+  const [timeLine, setTimeline] = useState<TimelineEvent[]>([]);
+  const [showWakeDetails, setShowWakeDetails] = useState(true);
 
-  console.log(categories);
-
-  const handleMemberImageChange = (
-    categoryId: string,
-    memberId: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setCategories(
-        categories.map((cat) => {
-          if (cat.id === categoryId) {
-            return {
-              ...cat,
-              members: cat.members.map((m) =>
-                m.id === memberId
-                  ? { ...m, image: URL.createObjectURL(file) }
-                  : m
-              ),
-            };
-          }
-          return cat;
-        })
-      );
-    }
+  const addTimelineEvent = () => {
+    const newEvent: TimelineEvent = {
+      id: Math.random().toString(36).substr(2, 9),
+      title: "",
+      description: "",
+      date: "",
+      location: "",
+    };
+    setTimeline([...timeLine, newEvent]);
   };
-
-  const handleMemberNameChange = (
-    categoryId: string,
-    memberId: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCategories(
-      categories.map((cat) => {
-        if (cat.id === categoryId) {
-          return {
-            ...cat,
-            members: cat.members.map((m) =>
-              m.id === memberId ? { ...m, name: e.target.value } : m
-            ),
-          };
-        }
-        return cat;
-      })
-    );
-  };
-
-  const addFamilyMember = (categoryId: string) => {
-    setCategories(
-      categories.map((cat) => {
-        if (cat.id === categoryId) {
-          return {
-            ...cat,
-            members: [
-              ...cat.members,
-              {
-                id: Math.random().toString(36).substr(2, 9),
-                name: "",
-                image: "/img/default-avatar.png",
-              },
-            ],
-          };
-        }
-        return cat;
-      })
-    );
-  };
-
-  const [isAddingCategory, setIsAddingCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState("");
 
   const { id } = use(params);
 
@@ -162,8 +107,8 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
             lifeStory: data.lifeStory,
           });
           setCategories(data.familyTree ?? []);
+          setTimeline(data.timeLine);
         }
-        console.log(data);
       })
       .catch((err) => {
         console.error("Lỗi khi lấy obituary:", err);
@@ -227,8 +172,9 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       formObituary.append("wordsFromFamily", values.wordsFromFamily || "");
       formObituary.append("lifeStory", values.lifeStory || "");
       formObituary.append("familyTree", JSON.stringify(categories));
+      formObituary.append("timeLine", JSON.stringify(timeLine));
 
-      console.log(JSON.stringify(categories));
+      console.log(JSON.stringify(timeLine));
 
       // Send request with FormData
       const updateMemorial = await putMemorial(id, formMemorial);
@@ -242,7 +188,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
     }
   };
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* Header Image Section */}
@@ -397,10 +343,10 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                                       !field.value && "text-muted-foreground"
                                     )}
                                   >
-                                    <IconCalendar className="mr-2 h-4 w-4" />
                                     {field.value
                                       ? format(field.value, "MMMM d, yyyy")
                                       : "Pick a date"}
+                                    <IconCalendar className="ml-auto h-6 w-6" />
                                   </Button>
                                 </FormControl>
                               </PopoverTrigger>
@@ -429,7 +375,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                         control={form.control}
                         name="deathDate"
                         render={({ field }) => (
-                          <FormItem className="flex flex-col gap-2 w-[266px]">
+                          <FormItem className="flex flex-col gap-2 w-[266px] h-14">
                             <FormLabel className="text-base font-light">
                               Death
                             </FormLabel>
@@ -439,14 +385,14 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                                   <Button
                                     variant={"outline"}
                                     className={cn(
-                                      "w-full justify-start text-left font-normal h-14",
+                                      "w-full justify-between text-left font-normal h-14",
                                       !field.value && "text-muted-foreground"
                                     )}
                                   >
-                                    <IconCalendar className="mr-2 h-4 w-4" />
                                     {field.value
                                       ? format(field.value, "MMMM d, yyyy")
                                       : "Pick a date"}
+                                    <IconCalendar className="ml-auto h-6 w-6" />
                                   </Button>
                                 </FormControl>
                               </PopoverTrigger>
@@ -504,161 +450,32 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                 />
 
                 {/* Family Tree Section */}
-                <div className="space-y-7">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <h3 className="text-[32px] museo font-medium">
-                        Family tree
-                      </h3>
-                      <span className="text-[32px] museo text-gray-500">
-                        (Max 4 categories)
-                      </span>
-                    </div>
-                    <Switch
-                      checked={showFamilyTree}
-                      onCheckedChange={setShowFamilyTree}
-                    />
-                  </div>
-                  {showFamilyTree && (
-                    <div className="space-y-8">
-                      {/* Existing Categories */}
-                      {categories.map((category) => (
-                        <div key={category.id} className="flex flex-col gap-10">
-                          <div className="flex items-center justify-between">
-                            <h4 className="flex border-2 border-gray-300 border-dashed h-15 w-[121px] items-center justify-center font-medium text-[20px] museo">
-                              {category.category}
-                            </h4>
-                          </div>
-                          <div className="flex flex-wrap gap-10">
-                            {category.members.map((member) => (
-                              <div
-                                key={member.id}
-                                className="text-center flex flex-col gap-4"
-                              >
-                                <div className="relative w-[140px] h-[140px] bg-gray-100 rounded-2xl overflow-hidden">
-                                  <Image
-                                    src={member.image}
-                                    alt={member.name || "Member"}
-                                    width={120}
-                                    height={120}
-                                    className="object-cover"
-                                  />
-                                  <label className="absolute bottom-1 right-1 bg-[#699D99] text-white rounded-md h-7 w-7 flex items-center justify-center cursor-pointer">
-                                    <IconPencil className="w-4 h-4" />
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      onChange={(e) =>
-                                        handleMemberImageChange(
-                                          category.id,
-                                          member.id,
-                                          e
-                                        )
-                                      }
-                                      className="hidden"
-                                    />
-                                  </label>
-                                </div>
-                                <Input
-                                  value={member.name}
-                                  onChange={(e) =>
-                                    handleMemberNameChange(
-                                      category.id,
-                                      member.id,
-                                      e
-                                    )
-                                  }
-                                  placeholder="Name"
-                                  className="mx-auto mt-2 border-gray-300 border-1 border-dashed rounded-none text-center w-[66px] h-[30px]"
-                                />
-                              </div>
-                            ))}
-                            {category.members.length < 5 && (
-                              <button
-                                type="button"
-                                onClick={() => addFamilyMember(category.id)}
-                                className="relative w-[140px] h-[140px] flex items-center justify-center group"
-                              >
-                                <svg
-                                  width="140"
-                                  height="140"
-                                  viewBox="0 0 140 140"
-                                  className="absolute top-0 left-0 pointer-events-none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <polygon
-                                    points="12,0 128,0 140,12 140,128 128,140 12,140 0,128 0,12"
-                                    fill="#E5F6EC80"
-                                    stroke="#0000004D"
-                                    strokeWidth="1"
-                                  />
-                                </svg>
-                                <IconPlus className="w-10 h-10 text-black relative z-10" />
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                      {/* Add Category Button */}
-                      {categories.length < 4 && (
-                        <div className="space-y-4">
-                          {isAddingCategory ? (
-                            <div className="flex items-center gap-4">
-                              <Input
-                                value={newCategoryName}
-                                onChange={(e) =>
-                                  setNewCategoryName(e.target.value)
-                                }
-                                placeholder="Category name"
-                                className="max-w-[300px]"
-                              />
-                              <Button
-                                type="button"
-                                onClick={() => {
-                                  if (newCategoryName.trim()) {
-                                    setCategories([
-                                      ...categories,
-                                      {
-                                        id: Math.random()
-                                          .toString(36)
-                                          .substr(2, 9),
-                                        category: newCategoryName,
-                                        members: [],
-                                      },
-                                    ]);
-                                    setNewCategoryName("");
-                                    setIsAddingCategory(false);
-                                  }
-                                }}
-                                variant="secondary"
-                              >
-                                Add
-                              </Button>
-                              <Button
-                                type="button"
-                                onClick={() => {
-                                  setNewCategoryName("");
-                                  setIsAddingCategory(false);
-                                }}
-                                variant="outline"
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          ) : (
-                            <Button
-                              type="button"
-                              onClick={() => setIsAddingCategory(true)}
-                              className="w-full bg-teal-600 hover:bg-teal-700 text-white"
-                            >
-                              Add Individual
-                            </Button>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
+                <FamilyTreeSection
+                  showFamilyTree={showFamilyTree}
+                  setShowFamilyTree={setShowFamilyTree}
+                  categories={categories}
+                  setCategories={setCategories}
+                />
+
+                {/* Time Line */}
+                <TimelineObituary
+                  showTimeline={showTimeline}
+                  setShowTimeline={setShowTimeline}
+                  timelineEvents={timeLine}
+                  setTimelineEvents={setTimeline}
+                  addTimelineEvent={addTimelineEvent}
+                />
+
+                {/* Event */}
+                <h3 className="text-[32px] font-medium museo">Event</h3>
+                <WakeDetails
+                  showWakeDetails={showWakeDetails}
+                  setShowWakeDetails={setShowWakeDetails}
+                  time={true}
+                  title="Cortege Departure"
+                  height="704"
+                />
+
               </div>
             </div>
           </div>

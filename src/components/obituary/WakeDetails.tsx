@@ -12,16 +12,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import ButtonLocation from "./ButtonLocation";
 
 type Props = {
   showWakeDetails: boolean;
   setShowWakeDetails: (value: boolean) => void;
   time: boolean;
-  title:string
-  height:string
+  title: string;
+  height: string;
 };
 
 const formSchema = z.object({
+  title: z.string(),
   description: z.string(),
   location: z.string().min(1, "Location is required"),
   date: z.string().min(1, "Date is required"),
@@ -34,12 +36,12 @@ const WakeDetails: React.FC<Props> = ({
   showWakeDetails,
   setShowWakeDetails,
   time,
-  title,
-  height
+  height,
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      title: "",
       description: "",
       location: "",
       date: "",
@@ -56,7 +58,21 @@ const WakeDetails: React.FC<Props> = ({
   return (
     <div className={`max-w-[1000px] h-[${height}] flex flex-col gap-7`}>
       <div className="h-10 flex items-center justify-between">
-        <h3 className="text-lg font-medium">{title}</h3>
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Event Title"
+                  className="text-[32px] w-[231px] h-[64px] font-medium rounded-none border-2 border-dashed border-[#00000080]/50 "
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <Switch
           checked={showWakeDetails}
           onCheckedChange={setShowWakeDetails}
@@ -83,14 +99,11 @@ const WakeDetails: React.FC<Props> = ({
             />
 
             {/* Button Location */}
-            <div className="flex justify-end mt-8">
-              <Button
-                type="button"
-                size="sm"
-                className="bg-white hover:bg-[#5c8e8a] text-black"
-              >
-                Location
-              </Button>
+            <div className="flex justify-end">
+              <ButtonLocation
+                className={"w-[122px] border h-[38px]"}
+                onLocationRetrieved={(address) => {}}
+              />
             </div>
 
             <div className="bg-[#E5F6EC4D] p-8">
@@ -139,9 +152,7 @@ const WakeDetails: React.FC<Props> = ({
                       name="time"
                       render={({ field }) => (
                         <FormItem className="flex items-start gap-[166px]">
-                          <FormLabel className="w-[100px] pt-2">
-                            Time
-                          </FormLabel>
+                          <FormLabel className="w-[100px] pt-2">Time</FormLabel>
                           <FormControl>
                             <Input
                               className="w-[402px] border-0 border-b border-gray-400 rounded-none"
@@ -225,6 +236,14 @@ const WakeDetails: React.FC<Props> = ({
           </form>
         </Form>
       )}
+      <div className="flex justify-end mt-8">
+        <Button
+          type="button"
+          className="bg-[#699D99] w-[195px] text-base font-light museo h-11 hover:bg-[#5c8e8a] text-white"
+        >
+          Add Another Event
+        </Button>
+      </div>
     </div>
   );
 };

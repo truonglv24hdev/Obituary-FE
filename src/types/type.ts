@@ -51,12 +51,6 @@ export type TTimelineEvent = {
   description: string;
 };
 
-// export interface FamilyMember {
-//   id: string;
-//   name: string;
-//   image: File;
-// }
-
 export interface ObituaryForm {
   birthDate: Date | null;
   deathDate: Date | null;
