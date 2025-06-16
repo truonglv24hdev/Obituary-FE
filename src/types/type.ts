@@ -81,7 +81,6 @@ export interface GalleryImage {
   caption: string;
 }
 
-
 export interface Category {
   id: string;
   category: string;
@@ -90,4 +89,15 @@ export interface Category {
     name: string;
     image: string;
   }[];
+}
+
+export interface IEvent {
+  id: string;
+  eventTitle: string;
+  description: string;
+  location: string;
+  show: boolean;
+  date: string;
+  timeFrom: string;
+  timeTo: string;
 }

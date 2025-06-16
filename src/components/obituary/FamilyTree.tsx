@@ -103,8 +103,8 @@ export default function FamilyTreeSection({
 
       {showFamilyTree && (
         <div className="space-y-8">
-          {categories.map((category) => (
-            <div key={category.id} className="flex flex-col gap-10">
+          {categories.map((category,index) => (
+            <div key={index} className="flex flex-col gap-10">
               <div className="flex items-center justify-between">
                 <Input
                   value={category.category}
@@ -122,9 +122,9 @@ export default function FamilyTreeSection({
                 />
               </div>
               <div className="flex flex-wrap gap-10">
-                {category.members.map((member) => (
+                {category.members.map((member,index) => (
                   <div
-                    key={member.id}
+                    key={index}
                     className="text-center flex flex-col gap-4"
                   >
                     <div className="relative w-[140px] h-[140px] bg-gray-100 rounded-2xl overflow-hidden">

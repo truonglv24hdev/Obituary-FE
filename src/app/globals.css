@@ -59,6 +59,11 @@ body {
   font-family: "Museo", Arial, sans-serif;
 }
 
+.hide-icon::-webkit-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

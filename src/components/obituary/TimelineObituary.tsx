@@ -41,7 +41,7 @@ const TimelineObituary: React.FC<Props> = ({
               const isLast = index === timelineEvents.length - 1;
 
               return (
-                <React.Fragment key={event.id}>
+                <React.Fragment key={index}>
                   <div className="relative">
                     {/* Circle ở giữa */}
                     <div className="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-[#A6BF98] z-10 top-5 -translate-y-1/2" />

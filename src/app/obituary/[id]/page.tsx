@@ -5,11 +5,12 @@ import Image from "next/image";
 import { use, useEffect, useState } from "react";
 import { IconPencil, IconPicture, IconCalendar } from "@/components/icons";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Category,
   GalleryFolder,
+  IEvent,
   TimelineEvent,
   TObituary,
 } from "@/types/type";
@@ -36,7 +37,7 @@ import { Calendar } from "@/components/ui/calendar";
 import FormObituary from "@/components/obituary/FormObituary";
 import TimelineObituary from "@/components/obituary/TimelineObituary";
 import FamilyTreeSection from "@/components/obituary/FamilyTree";
-import WakeDetails from "@/components/obituary/WakeDetails";
+import Event from "@/components/obituary/Event";
 
 const formSchema = z.object({
   picture: z.any().optional(),
@@ -77,7 +78,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [showTimeline, setShowTimeline] = useState(true);
   const [timeLine, setTimeline] = useState<TimelineEvent[]>([]);
-  const [showWakeDetails, setShowWakeDetails] = useState(true);
+  const [events, setEvents] = useState<IEvent[]>([]);
 
   const addTimelineEvent = () => {
     const newEvent: TimelineEvent = {
@@ -343,7 +344,8 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                                       !field.value && "text-muted-foreground"
                                     )}
                                   >
-                                    {field.value
+                                    {field.value instanceof Date &&
+                                    !isNaN(field.value.getTime())
                                       ? format(field.value, "MMMM d, yyyy")
                                       : "Pick a date"}
                                     <IconCalendar className="ml-auto h-6 w-6" />
@@ -389,7 +391,8 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                                       !field.value && "text-muted-foreground"
                                     )}
                                   >
-                                    {field.value
+                                    {field.value instanceof Date &&
+                                    !isNaN(field.value.getTime())
                                       ? format(field.value, "MMMM d, yyyy")
                                       : "Pick a date"}
                                     <IconCalendar className="ml-auto h-6 w-6" />
@@ -466,16 +469,10 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                   addTimelineEvent={addTimelineEvent}
                 />
 
-                {/* Event */}
                 <h3 className="text-[32px] font-medium museo">Event</h3>
-                <WakeDetails
-                  showWakeDetails={showWakeDetails}
-                  setShowWakeDetails={setShowWakeDetails}
-                  time={true}
-                  title="Cortege Departure"
-                  height="704"
-                />
-
+                <FormProvider {...form}>
+                  <Event height="auto" setEvents={setEvents} events={events} />
+                </FormProvider>
               </div>
             </div>
           </div>
