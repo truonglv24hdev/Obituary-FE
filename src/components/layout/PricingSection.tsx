@@ -50,7 +50,7 @@ const PricingSection = () => {
                       {addon.title}
                     </div>
                   </div>
-                  <Button className="w-[168px] h-10 border museo border-[#699D99] text-[#699D99] rounded-sm bg-white px-5 font-bold hover:bg-teal-50 transition">
+                  <Button className="w-[168px] h-10 cursor-pointer border museo border-[#699D99] text-[#699D99] rounded-sm bg-white px-5 font-bold hover:bg-teal-50 transition">
                     See example
                   </Button>
                 </div>
@@ -61,7 +61,7 @@ const PricingSection = () => {
             ))}
           </div>
           <div className="flex justify-center">
-            <Button className="w-[134px] h-11 bg-teal-600 museo text-base text-white px-8 rounded-sm font-semibold mt-10 hover:bg-teal-700 ">
+            <Button className="w-[134px] h-11 cursor-pointer bg-teal-600 museo text-base text-white px-8 rounded-sm font-semibold mt-10 hover:bg-teal-700 ">
               Get Started
             </Button>
           </div>

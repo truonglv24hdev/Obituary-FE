@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch } from "../ui/switch";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { TFavorite, TFavoriteType } from "@/types/type";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 interface FavoritesSectionProps {
   show: boolean;
@@ -21,56 +22,76 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
   favoriteTypes,
   addFavorite,
 }) => {
+  const [showFavoriteOptions, setShowFavoriteOptions] = useState(false);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative min-h-[344px] flex flex-col">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium">Favorites</h3>
+        <h3 className="text-[32px] font-medium">Favorites</h3>
         <Switch checked={show} onCheckedChange={setShow} />
       </div>
 
       {show && (
-        <div className="space-y-6">
-          {/* Existing Favorites */}
-          {favorites.map((favorite) => (
-            <div key={favorite.id} className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span>{favorite.icon}</span>
-                <span>{favorite.question}</span>
+        <div className="relative flex-1 flex flex-col space-y-6">
+          {/* Overlay Favorite Options */}
+          {showFavoriteOptions && (
+            <div className="absolute w-[723px] h-[240px] bg-[#FAFAFA] z-50 py-5 px-7 right-0 bottom-8 flex flex-col gap-6 shadow-lg">
+              <div className="grid grid-cols-3 gap-4">
+                {favoriteTypes.map((type) => (
+                  <Button
+                    type="button"
+                    key={type.id}
+                    onClick={() => {
+                      addFavorite(type.id);
+                      setShowFavoriteOptions(false);
+                    }}
+                    className="flex border-none rounded-none shadow-none bg-[#FAFAFA] justify-start transition-colors w-[224px] h-5 gap-4"
+                  >
+                    <i className={`${type.icon} text-black`}></i>
+                    <span className="text-sm text-black">{type.label}</span>
+                  </Button>
+                ))}
               </div>
-              <Input
-                value={favorite.answer}
-                onChange={(e) => {
-                  const newFavorites = favorites.map((f) =>
-                    f.id === favorite.id ? { ...f, answer: e.target.value } : f
-                  );
-                  setFavorites(newFavorites);
-                }}
-                placeholder="Your response"
-                className="w-full"
-              />
             </div>
-          ))}
+          )}
 
-          {/* Add New Favorite Options */}
-          <div className="grid grid-cols-3 gap-4">
-            {favoriteTypes.map((type) => (
-              <Button
-                key={type.id}
-                onClick={() => addFavorite(type.id)}
-                className="flex items-center gap-2 p-3 rounded-lg border hover:bg-gray-50 transition-colors"
-              >
-                <span>{type.icon}</span>
-                <span className="text-sm">{type.label}</span>
-              </Button>
+          {/* Existing Favorites */}
+          <div
+            className={`flex flex-col border-blue overflow-auto shadow-xl rounded border p-5 gap-10`}
+          >
+            {favorites.map((favorite) => (
+              <div key={favorite.id} className="flex flex-col gap-3 w-[950px] h-14">
+                <div className="flex items-center gap-2 text-base museo font-light">
+                  <i className={favorite.icon}></i>
+                  <span>{favorite.question}</span>
+                </div>
+                <Input
+                  value={favorite.answer}
+                  onChange={(e) => {
+                    const newFavorites = favorites.map((f) =>
+                      f.id === favorite.id
+                        ? { ...f, answer: e.target.value }
+                        : f
+                    );
+                    setFavorites(newFavorites);
+                  }}
+                  placeholder="Your response"
+                  className="w-[156px] h-6 border-dashed border-[#00000080] rounded-none"
+                />
+              </div>
             ))}
           </div>
 
-          <Button
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white"
-            onClick={() => addFavorite("custom")}
-          >
-            Add Favorite
-          </Button>
+          {/* Add Favorite Button at Bottom Right */}
+          <div className="mt-auto flex justify-end">
+            <Button
+              type="button"
+              className="w-[157px] h-11 bg-teal-600 rounded font-light hover:bg-teal-700 text-white"
+              onClick={() => setShowFavoriteOptions((prev) => !prev)}
+            >
+              Add Favorite
+            </Button>
+          </div>
         </div>
       )}
     </div>

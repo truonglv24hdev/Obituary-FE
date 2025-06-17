@@ -66,7 +66,7 @@ const PaymentPlan = () => {
           </CardContent>
           <CardFooter>
             <Button
-              className={`w-[268px] h-11 rounded-sm font-semibold text-base mx-auto transition-all duration-200 ${
+              className={`w-[268px] cursor-pointer h-11 rounded-sm font-semibold text-base mx-auto transition-all duration-200 ${
                 plan.highlight
                   ? "bg-white text-[#6ea09e] hover:bg-gray-100"
                   : "bg-[#6ea09e] text-white hover:bg-[#5a8e8c]"

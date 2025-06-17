@@ -25,7 +25,9 @@ const formSchema = z.object({
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  attending: z.enum(["attending", "not-attending", "maybe"]),
+  wakeServiceRSVP: z.enum(["attending", "not-attending"]),
+  cortegeDepartureRSVP: z.enum(["attending", "not-attending"]),
+  cremationRSVP: z.enum(["attending", "not-attending"]),
   location: z.string().min(1, "Location is required"),
   date: z.string().min(1, "Date is required"),
   time: z.string().min(1, "Time is required"),
@@ -39,7 +41,9 @@ const FormRSVP = () => {
       lastName: "",
       email: "",
       phone: "",
-      attending: "attending",
+      wakeServiceRSVP: "attending",
+      cortegeDepartureRSVP: "attending",
+      cremationRSVP: "attending",
       location: "",
       date: "",
       time: "",
@@ -51,53 +55,118 @@ const FormRSVP = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
+    <div className="max-w-[1000px]">
       <h1 className="text-3xl font-semibold mb-8">RSVP</h1>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="John" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Doe" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-10 bg-[#E5F6EC4D] h-[696px] p-8"
+        >
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem className="flex w-[632px] h-12 gap-[151px]">
+                <FormLabel className="w-[200px]">First Name</FormLabel>
+                <FormControl>
+                  <Input
+                    className="w-full bg-white rounded border-none shadow-none"
+                    placeholder="John"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
-            name="attending"
+            name="lastName"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Will you attend?</FormLabel>
+              <FormItem className="flex w-[632px] h-12 gap-[151px]">
+                <FormLabel className="w-[200px]">Last Name</FormLabel>
+                <FormControl>
+                  <Input
+                    className="w-full bg-white rounded border-none shadow-none"
+                    placeholder="Doe"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="wakeServiceRSVP"
+            render={({ field }) => (
+              <FormItem className="flex w-[632px] h-12 gap-14">
+                <FormLabel className="w-[230px] text-base museo">
+                  Wake Service RSVP
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-[402px] bg-white rounded border-none shadow-none">
+                      <SelectValue placeholder="Select your attendance" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="attending">Attending</SelectItem>
+                    <SelectItem value="not-attending">Not Attending</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="cortegeDepartureRSVP"
+            render={({ field }) => (
+              <FormItem className="flex w-[632px] h-12 gap-14">
+                <FormLabel className="w-[230px] text-base museo">
+                  Cortege Departure RSVP
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-[402px] bg-white rounded border-none shadow-none">
+                      <SelectValue placeholder="Select your attendance" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="attending">Attending</SelectItem>
+                    <SelectItem value="not-attending">Not Attending</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="cremationRSVP"
+            render={({ field }) => (
+              <FormItem className="flex w-[632px] h-12 gap-14">
+                <FormLabel className="w-[230px] text-base museo">
+                  Cremation RSVP
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-[402px] bg-white rounded border-none shadow-none">
                       <SelectValue placeholder="Select your attendance" />
                     </SelectTrigger>
                   </FormControl>
@@ -115,10 +184,14 @@ const FormRSVP = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
+              <FormItem className="flex w-[632px] h-12 gap-[151px]">
+                <FormLabel className="w-[200px]">Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="example@gmail.com" {...field} />
+                  <Input
+                    className="w-full bg-white rounded border-none shadow-none"
+                    placeholder="example@gmail.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -129,25 +202,12 @@ const FormRSVP = () => {
             control={form.control}
             name="phone"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mobile/Phone</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your phone number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Location</FormLabel>
+              <FormItem className="flex w-[632px] h-12 gap-[151px]">
+                <FormLabel className="w-[200px]">Mobile/Phone</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="47 Windmere Lane, Silverbrook, East Alderwyn"
+                    className="w-full bg-white rounded border-none shadow-none"
+                    placeholder="Your phone number"
                     {...field}
                   />
                 </FormControl>
@@ -156,42 +216,14 @@ const FormRSVP = () => {
             )}
           />
 
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="time"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Time</FormLabel>
-                  <FormControl>
-                    <Input type="time" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="flex justify-end mt-8">
+            <Button
+              type="submit"
+              className="w-[150px] h-11 bg-teal-600 rounded hover:bg-teal-700 text-white"
+            >
+              Submit RSVP
+            </Button>
           </div>
-
-          <Button
-            type="submit"
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white"
-          >
-            Submit RSVP
-          </Button>
         </form>
       </Form>
     </div>

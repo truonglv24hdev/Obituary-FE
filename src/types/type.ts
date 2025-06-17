@@ -31,7 +31,7 @@ export type TObituary = {
 
 export type TFavorite = {
   id: string;
-  icon: React.ReactNode;
+  icon: string;
   question: string;
   answer: string;
   type: string;
@@ -39,7 +39,7 @@ export type TFavorite = {
 
 export type TFavoriteType = {
   id: string;
-  icon: React.ReactNode;
+  icon: string;
   label: string;
 };
 

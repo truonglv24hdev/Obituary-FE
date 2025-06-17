@@ -7,6 +7,7 @@ import Heartwarming from "../components/layout/Heartwarming";
 import HeroSection from "../components/layout/HeroSection";
 import PricingSection from "../components/layout/PricingSection";
 import Footer from "@/components/layout/Footer";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export default function Home() {
   return (
@@ -46,7 +47,7 @@ export default function Home() {
                     />
                     <button
                       type="submit"
-                      className="w-[45px] h-13 bg-[#6ea09e] text-white py-2 rounded-r-md font-bold"
+                      className="w-[45px] h-13 cursor-pointer bg-[#6ea09e] text-white py-2 rounded-r-md font-bold"
                     >
                       <IconSearch className="w-6 h-6 mx-auto" />
                     </button>
@@ -77,7 +78,7 @@ export default function Home() {
                   </div>
                   <button
                     type="submit"
-                    className="w-full museo bg-[#6ea09e] text-white py-2 rounded-md font-semibold"
+                    className="w-full museo cursor-pointer bg-[#6ea09e] text-white py-2 rounded-md font-semibold"
                   >
                     Start for Free
                   </button>

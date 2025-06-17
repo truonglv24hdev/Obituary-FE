@@ -12,7 +12,7 @@ const HeroSection = () => {
         fill
         className="absolute inset-0 w-full h-full object-cover z-0"
       />
-      <div className="absolute z-20 w-[615px] flex flex-col h-53 top-[114px] left-[115px] gap-12">
+      <div className="absolute z-20 w-[615px] flex flex-col h-53 top-[100px] left-[115px] gap-7">
         <h1 className="h-14 font-medium text-[40px] museo leading-14 text-white">
           Celebrate a Life. Share a Memory.
         </h1>
@@ -20,7 +20,7 @@ const HeroSection = () => {
           Honor your loved ones by creating a lasting tribute. Share stories,
           photos, and memories that keep their legacy alive.
         </p>
-        <Button className="w-[169px] museo h-11 rounded-lg px-7 py-2 bg-[#E5F6EC] text-[#293548] font-light text-[16px]">
+        <Button className="w-[169px] museo cursor-pointer h-11 rounded-lg px-7 py-2 bg-[#E5F6EC] text-[#293548] font-light text-[16px] hover:bg-[#E5F6EC]">
           Get started free
         </Button>
       </div>

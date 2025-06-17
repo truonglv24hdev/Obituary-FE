@@ -11,6 +11,7 @@ import {
   Category,
   GalleryFolder,
   IEvent,
+  TFavorite,
   TimelineEvent,
   TObituary,
 } from "@/types/type";
@@ -38,6 +39,9 @@ import FormObituary from "@/components/obituary/FormObituary";
 import TimelineObituary from "@/components/obituary/TimelineObituary";
 import FamilyTreeSection from "@/components/obituary/FamilyTree";
 import Event from "@/components/obituary/Event";
+import FavoritesObituary from "@/components/obituary/FavoritesObituary";
+import { favoriteTypes } from "@/constants/obituary";
+import FormRSVP from "@/components/obituary/FormRSVP";
 
 const formSchema = z.object({
   picture: z.any().optional(),
@@ -79,6 +83,8 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [showTimeline, setShowTimeline] = useState(true);
   const [timeLine, setTimeline] = useState<TimelineEvent[]>([]);
   const [events, setEvents] = useState<IEvent[]>([]);
+  const [showFavorites, setShowFavorites] = useState(true);
+  const [favorites, setFavorites] = useState<TFavorite[]>([]);
 
   const addTimelineEvent = () => {
     const newEvent: TimelineEvent = {
@@ -109,12 +115,13 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
           });
           setCategories(data.familyTree ?? []);
           setTimeline(data.timeLine);
+          setFavorites(data.favorites);
         }
       })
       .catch((err) => {
         console.error("Lỗi khi lấy obituary:", err);
       });
-  }, []);
+  }, [id]);
 
   const [selectedHeaderFile, setSelectedHeaderFile] = useState<File | null>(
     null
@@ -142,6 +149,20 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       images: [],
     };
     setGalleryFolders([...galleryFolders, newFolder]);
+  };
+
+  const addFavorite = (type: string) => {
+    const favoriteType = favoriteTypes.find((t) => t.id === type);
+    if (!favoriteType) return;
+
+    const newFavorite: TFavorite = {
+      id: Math.random().toString(36).substr(2, 9),
+      type,
+      question: `What was ${obituary?.memorial.first_name} ${obituary?.memorial.last_name} favorite ${favoriteType.id}?`,
+      answer: "",
+      icon: favoriteType.icon,
+    };
+    setFavorites([...favorites, newFavorite]);
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -173,6 +194,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       formObituary.append("wordsFromFamily", values.wordsFromFamily || "");
       formObituary.append("lifeStory", values.lifeStory || "");
       formObituary.append("familyTree", JSON.stringify(categories));
+      formObituary.append("favorites", JSON.stringify(favorites));
       formObituary.append("timeLine", JSON.stringify(timeLine));
 
       console.log(JSON.stringify(timeLine));
@@ -460,6 +482,16 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                   setCategories={setCategories}
                 />
 
+                {/* */}
+                <FavoritesObituary
+                  show={showFavorites}
+                  setShow={setShowFavorites}
+                  favorites={favorites}
+                  setFavorites={setFavorites}
+                  favoriteTypes={favoriteTypes}
+                  addFavorite={addFavorite}
+                />
+
                 {/* Time Line */}
                 <TimelineObituary
                   showTimeline={showTimeline}
@@ -469,10 +501,14 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                   addTimelineEvent={addTimelineEvent}
                 />
 
+                {/* Event */}
                 <h3 className="text-[32px] font-medium museo">Event</h3>
                 <FormProvider {...form}>
                   <Event height="auto" setEvents={setEvents} events={events} />
                 </FormProvider>
+
+                {/*Form RSVP */}
+                <FormRSVP />
               </div>
             </div>
           </div>
