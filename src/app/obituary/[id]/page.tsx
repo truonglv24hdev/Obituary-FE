@@ -197,8 +197,6 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       formObituary.append("favorites", JSON.stringify(favorites));
       formObituary.append("timeLine", JSON.stringify(timeLine));
 
-      console.log(JSON.stringify(timeLine));
-
       // Send request with FormData
       const updateMemorial = await putMemorial(id, formMemorial);
       const updateObituary = await putObituary(id, formObituary);
@@ -508,7 +506,9 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                 </FormProvider>
 
                 {/*Form RSVP */}
-                <FormRSVP />
+                <FormRSVP
+                obituaryId={obituary?._id || ""}
+                />
               </div>
             </div>
           </div>

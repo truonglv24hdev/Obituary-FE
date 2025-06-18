@@ -45,7 +45,7 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
                       addFavorite(type.id);
                       setShowFavoriteOptions(false);
                     }}
-                    className="flex border-none rounded-none shadow-none bg-[#FAFAFA] justify-start transition-colors w-[224px] h-5 gap-4"
+                    className="flex border-none rounded-none shadow-none hover:bg-gray-300 bg-[#FAFAFA] justify-start transition-colors w-[224px] h-5 gap-4"
                   >
                     <i className={`${type.icon} text-black`}></i>
                     <span className="text-sm text-black">{type.label}</span>
@@ -57,7 +57,7 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
 
           {/* Existing Favorites */}
           <div
-            className={`flex flex-col border-blue overflow-auto shadow-xl rounded border p-5 gap-10`}
+            className={`flex flex-col border-blue overflow-auto rounded border p-5 gap-10`}
           >
             {favorites.map((favorite) => (
               <div key={favorite.id} className="flex flex-col gap-3 w-[950px] h-14">
