@@ -42,6 +42,8 @@ import Event from "@/components/obituary/Event";
 import FavoritesObituary from "@/components/obituary/FavoritesObituary";
 import { favoriteTypes } from "@/constants/obituary";
 import FormRSVP from "@/components/obituary/FormRSVP";
+import { Switch } from "@/components/ui/switch";
+import Gallery from "@/components/obituary/Gallery";
 
 const formSchema = z.object({
   picture: z.any().optional(),
@@ -85,6 +87,20 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [showFavorites, setShowFavorites] = useState(true);
   const [favorites, setFavorites] = useState<TFavorite[]>([]);
+  const [showGallery, setShowGallery] = useState(true);
+  const [allowVisitorPhotos, setAllowVisitorPhotos] = useState(false);
+  const [moderationType, setModerationType] = useState<"pre" | "post">("pre");
+  const [requireEmail, setRequireEmail] = useState(false);
+  const [selectedHeaderFile, setSelectedHeaderFile] = useState<File | null>(
+    null
+  );
+  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(
+    null
+  );
+  const [galleryImages, setGalleryImages] = useState<File[]>([]);
+  const [galleryOldImages, setGalleryOldImages] = useState<string[]>([]);
+  const [galleryFolders, setGalleryFolders] = useState<GalleryFolder[]>([]);
+  const [showVideos, setShowVideos] = useState(true);
 
   const addTimelineEvent = () => {
     const newEvent: TimelineEvent = {
@@ -116,21 +132,13 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
           setCategories(data.familyTree ?? []);
           setTimeline(data.timeLine);
           setFavorites(data.favorites);
+          setGalleryOldImages(data.gallery || []);
         }
       })
       .catch((err) => {
         console.error("Lỗi khi lấy obituary:", err);
       });
-  }, [id]);
-
-  const [selectedHeaderFile, setSelectedHeaderFile] = useState<File | null>(
-    null
-  );
-  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(
-    null
-  );
-
-  const [galleryFolders, setGalleryFolders] = useState<GalleryFolder[]>([]);
+  }, []);
 
   const handleHeaderFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -140,6 +148,26 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) setSelectedAvatarFile(file);
+  };
+
+  const handleGalleryFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      const totalImages = galleryOldImages.length + galleryImages.length;
+      const availableSlots = 5 - totalImages;
+      if (availableSlots <= 0) return;
+
+      const filesToAdd = filesArray.slice(0, availableSlots);
+      setGalleryImages([...galleryImages, ...filesToAdd]);
+    }
+  };
+
+  const handleRemoveGalleryImage = (type: "old" | "new", idx: number) => {
+    if (type === "old") {
+      setGalleryOldImages((prev) => prev.filter((_, i) => i !== idx));
+    } else {
+      setGalleryImages((prev) => prev.filter((_, i) => i !== idx));
+    }
   };
 
   const addGalleryFolder = () => {
@@ -176,6 +204,13 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       if (selectedHeaderFile) {
         formObituary.append("headerImage", selectedHeaderFile);
       }
+      if (galleryImages) {
+        galleryImages.forEach((file) => {
+          formObituary.append("gallery", file);
+        });
+      }
+
+      formObituary.append("galleryOld", JSON.stringify(galleryOldImages));
 
       // Format dates
       const formattedBorn = values.birthDate
@@ -506,9 +541,55 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                 </FormProvider>
 
                 {/*Form RSVP */}
-                <FormRSVP
-                obituaryId={obituary?._id || ""}
+                <FormRSVP obituaryId={obituary?._id || ""} />
+
+                {/* Gallery Section */}
+                <Gallery
+                  showGallery={showGallery}
+                  setShowGallery={setShowGallery}
+                  allowVisitorPhotos={allowVisitorPhotos}
+                  setAllowVisitorPhotos={setAllowVisitorPhotos}
+                  moderationType={moderationType}
+                  setModerationType={setModerationType}
+                  requireEmail={requireEmail}
+                  setRequireEmail={setRequireEmail}
+                  galleryOldImages={galleryOldImages}
+                  galleryImages={galleryImages}
+                  handleGalleryFilesChange={handleGalleryFilesChange}
+                  handleRemoveGalleryImage={handleRemoveGalleryImage}
+                  addGalleryFolder={addGalleryFolder}
                 />
+
+                {/* Videos Section */}
+                <div className="flex flex-col gap-10 ">
+                  <div className="flex h-10 items-center justify-between">
+                    <h3 className="text-[32px] font-medium">Videos</h3>
+                    <Switch
+                      checked={showVideos}
+                      onCheckedChange={setShowVideos}
+                    />
+                  </div>
+                  {showVideos && (
+                    <div className="flex flex-col gap-10 items-center justify-center">
+                      <div className="w-[519px] h-[346px]">
+                        <Image
+                          src={"/img/video.png"}
+                          alt="video"
+                          width={519}
+                          height={346}
+                        />
+                      </div>
+                      <div>
+                        <Button
+                          type="button"
+                          className="w-[162px] h-12 bg-[#699D99] rounded px-7 py-2 text-base museo"
+                        >
+                          Upload Videos
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

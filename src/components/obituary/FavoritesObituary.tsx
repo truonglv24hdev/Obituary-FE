@@ -25,9 +25,9 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
   const [showFavoriteOptions, setShowFavoriteOptions] = useState(false);
 
   return (
-    <div className="space-y-6 relative min-h-[344px] flex flex-col">
+    <div className="space-y-6 relative  flex flex-col">
       <div className="flex items-center justify-between">
-        <h3 className="text-[32px] font-medium">Favorites</h3>
+        <h3 className="text-[32px] museo font-medium">Favorites</h3>
         <Switch checked={show} onCheckedChange={setShow} />
       </div>
 

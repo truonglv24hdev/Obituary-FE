@@ -16,3 +16,4 @@ export { default as IconFilter } from "./IconFilter";
 export { default as IconRight } from "./IconRight";
 export { default as IconPicture } from "./IconPicture";
 export { default as IconLocation } from "./IconLocation";
+export { default as IconFilterDrop } from "./IconFilterDrop";

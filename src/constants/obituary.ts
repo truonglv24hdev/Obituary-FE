@@ -33,6 +33,7 @@ export const menuItemsObituary = [
   { id: "life-story", label: "Life story" },
   { id: "family-tree", label: "Family tree" },
   { id: "favorites", label: "Favorites" },
-  { id: "gallery", label: "Gallery" },
+  { id: "time-line", label: "Time line" },
+  { id: "events", label: "Events" },
   { id: "guest-book", label: "Guest book" },
 ];

@@ -3,7 +3,7 @@ import React from "react";
 
 const SidebarObituary = () => {
   return (
-    <div className="w-70 bg-[rgb(106,153,147)] text-white h-[716px] p-6">
+    <div className="w-70 bg-[rgb(106,153,147)] text-white h-[806px] p-6">
       <h2 className="text-4xl font-medium font-serif mb-8">Edit Memorial</h2>
       <nav className="space-y-15 relative">
         {menuItemsObituary.map((item, index) => (

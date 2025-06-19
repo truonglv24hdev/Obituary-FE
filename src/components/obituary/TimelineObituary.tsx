@@ -38,7 +38,6 @@ const TimelineObituary: React.FC<Props> = ({
           <div className="flex flex-col gap-y-24 relative z-10">
             {timelineEvents.map((event, index) => {
               const isLeft = index % 2 === 0;
-              const isLast = index === timelineEvents.length - 1;
 
               return (
                 <React.Fragment key={index}>
