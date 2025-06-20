@@ -16,7 +16,7 @@ import {
   TObituary,
 } from "@/types/type";
 import SidebarObituary from "@/components/obituary/SidebarObituary";
-import { getObituaryById, putObituary } from "@/lib/obituaryAPI";
+import { getObituaryByMemorialId, putObituary } from "@/lib/obituaryAPI";
 import { format, parse } from "date-fns";
 import { putMemorial } from "@/lib/memorialAPI";
 import {
@@ -116,7 +116,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
 
   useEffect(() => {
-    getObituaryById(id)
+    getObituaryByMemorialId(id)
       .then((data) => {
         setObituary(data);
         if (data) {
@@ -138,7 +138,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       .catch((err) => {
         console.error("Lỗi khi lấy obituary:", err);
       });
-  }, []);
+  }, [id]);
 
   const handleHeaderFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -265,7 +265,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                           className="h-100 w-full object-cover"
                         />
                       ) : (
-                        obituary?.memorial.picture && (
+                        obituary?.headerImage && (
                           <Image
                             src={`http://localhost:5000${obituary.headerImage}`}
                             alt="Memorial"
@@ -306,7 +306,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <div className="relative w-[248px] h-[248px] rounded shadow-md overflow-hidden bg-white">
+                          <div className="relative w-[248px] h-[248px] border rounded shadow-md overflow-hidden bg-white">
                             {/* Avatar image logic */}
                             <label className=" w-[248px] h-[248px] rounded shadow-md overflow-hidden bg-white">
                               {selectedAvatarFile ? (

@@ -103,7 +103,7 @@ export default function FamilyTreeSection({
 
       {showFamilyTree && (
         <div className="space-y-8">
-          {categories.map((category,index) => (
+          {categories.map((category, index) => (
             <div key={index} className="flex flex-col gap-10">
               <div className="flex items-center justify-between">
                 <Input
@@ -122,19 +122,38 @@ export default function FamilyTreeSection({
                 />
               </div>
               <div className="flex flex-wrap gap-10">
-                {category.members.map((member,index) => (
-                  <div
-                    key={index}
-                    className="text-center flex flex-col gap-4"
-                  >
-                    <div className="relative w-[140px] h-[140px] bg-gray-100 rounded-2xl overflow-hidden">
-                      <Image
-                        src={member.image || "/img/avatar.jpg"}
-                        alt={member.name || "Member"}
-                        width={220}
-                        height={170}
-                        className="w-[220px] h-[140px] rounded-2xl px-1 py-1 object-cover"
-                      />
+                {category.members.map((member, index) => (
+                  <div key={index} className="text-center flex flex-col gap-4">
+                    <div className="relative w-[140px] h-[140px]">
+                      {/* SVG Clip Path */}
+                      <svg width="0" height="0">
+                        <defs>
+                          <clipPath
+                            id="clip-octagon"
+                            clipPathUnits="objectBoundingBox"
+                          >
+                            <polygon points="0.143,0 0.857,0 1,0.143 1,0.857 0.857,1 0.143,1 0,0.857 0,0.143" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+
+                      {/* Viền trắng ngoài polygon (nhờ border) */}
+                      <div
+                        className="w-[140px] h-[140px] bg-white rounded-none"
+                        style={{ clipPath: "url(#clip-octagon)" }}
+                      >
+                        {/* Ảnh bên trong polygon */}
+                        <Image
+                          src={member.image || "/img/avatar.jpg"}
+                          alt={member.name || "Member"}
+                          width={140}
+                          height={140}
+                          className="w-full h-full object-cover"
+                          style={{ clipPath: "url(#clip-octagon)" }}
+                        />
+                      </div>
+
+                      {/* Viền polygon đen mờ ngoài cùng */}
                       <svg
                         width="140"
                         height="140"
@@ -143,27 +162,12 @@ export default function FamilyTreeSection({
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <polygon
-                          points="12,0 128,0 140,12 140,140 12,140 0,128 0,12"
+                          points="20,0 120,0 140,20 140,120 120,140 20,140 0,120 0,20"
                           fill="none"
-                          stroke="#0000004D"
-                          strokeWidth="1"
+                          stroke="#00000080"
+                          strokeWidth="2"
                         />
                       </svg>
-                      <label className="absolute bottom-0 right-0 bg-[#699D99] text-white rounded-md h-7 w-7 flex items-center justify-center cursor-pointer">
-                        <IconPencil className="relative w-4 h-4" />
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) =>
-                            handleMemberImageChange(
-                              category.id,
-                              member.id,
-                              e
-                            )
-                          }
-                          className="hidden"
-                        />
-                      </label>
                     </div>
                     <Input
                       value={member.name}
@@ -189,7 +193,7 @@ export default function FamilyTreeSection({
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <polygon
-                        points="12,0 128,0 140,12 140,128 128,140 12,140 0,128 0,12"
+                        points="20,0 120,0 140,20 140,120 120,140 20,140 0,120 0,20"
                         fill="#E5F6EC80"
                         stroke="#0000004D"
                         strokeWidth="1"

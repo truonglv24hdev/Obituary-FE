@@ -21,7 +21,7 @@ const NoMemorials = () => {
       </div>
       <div className="flex w-[333px] h-11 gap-6">
         <Link
-          href={"/memorial"}
+          href={"/my-memorial"}
           className="h-11 w-[154px] museo inline-flex items-center justify-center text-center border text-base font-light rounded text-black bg-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
           type="submit"
         >

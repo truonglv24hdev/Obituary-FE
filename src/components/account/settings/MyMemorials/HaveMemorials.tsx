@@ -59,7 +59,7 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
               key={`empty-${i}`}
               className="bg-white rounded-lg shadow-md p-6 text-center flex flex-col items-center justify-center border-2 border-dashed border-gray-300 text-gray-500"
             >
-              <Link href={"/memorial"}>
+              <Link href={"/my-memorial"}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-12 w-12"

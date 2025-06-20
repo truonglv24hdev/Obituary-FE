@@ -49,7 +49,7 @@ const Testimonial = () => {
             </p>
             <hr className="my-6 border-gray-300" />
             <div className="text-left w-[200px] h-16 flex flex-col gap-2">
-              <p className="text-[28px] leading-8 ml-1 font-medium">{testimonial.name}</p>
+              <p className="text-[28px] w-[300px] leading-8 ml-1 font-medium">{testimonial.name}</p>
               <p className="font-light museo text-xl leading-6">
                 {testimonial.location}
               </p>

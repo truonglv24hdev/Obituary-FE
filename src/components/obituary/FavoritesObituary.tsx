@@ -56,31 +56,36 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
           )}
 
           {/* Existing Favorites */}
-          <div
-            className={`flex flex-col border-blue overflow-auto rounded border p-5 gap-10`}
-          >
-            {favorites.map((favorite) => (
-              <div key={favorite.id} className="flex flex-col gap-3 w-[950px] h-14">
-                <div className="flex items-center gap-2 text-base museo font-light">
-                  <i className={favorite.icon}></i>
-                  <span>{favorite.question}</span>
+          {favorites.length > 0 && (
+            <div
+              className={`flex flex-col border-blue overflow-auto rounded border p-5 gap-10`}
+            >
+              {favorites.map((favorite) => (
+                <div
+                  key={favorite.id}
+                  className="flex flex-col gap-3 w-[950px] h-14"
+                >
+                  <div className="flex items-center gap-2 text-base museo font-light">
+                    <i className={favorite.icon}></i>
+                    <span>{favorite.question}</span>
+                  </div>
+                  <Input
+                    value={favorite.answer}
+                    onChange={(e) => {
+                      const newFavorites = favorites.map((f) =>
+                        f.id === favorite.id
+                          ? { ...f, answer: e.target.value }
+                          : f
+                      );
+                      setFavorites(newFavorites);
+                    }}
+                    placeholder="Your response"
+                    className="w-[156px] h-6 border-dashed border-[#00000080] rounded-none"
+                  />
                 </div>
-                <Input
-                  value={favorite.answer}
-                  onChange={(e) => {
-                    const newFavorites = favorites.map((f) =>
-                      f.id === favorite.id
-                        ? { ...f, answer: e.target.value }
-                        : f
-                    );
-                    setFavorites(newFavorites);
-                  }}
-                  placeholder="Your response"
-                  className="w-[156px] h-6 border-dashed border-[#00000080] rounded-none"
-                />
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Add Favorite Button at Bottom Right */}
           <div className="mt-auto flex justify-end">

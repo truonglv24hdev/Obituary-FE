@@ -18,6 +18,7 @@ export type TMemorial = {
   born: string;
   death: string;
   slug: string;
+  premium: boolean;
 };
 
 export type TObituary = {
@@ -25,9 +26,10 @@ export type TObituary = {
   headerImage: string;
   memorial: TMemorial;
   familyTree: Category[];
-  favorites: TFavorite;
+  favorites: TFavorite[];
   timeLine: TTimelineEvent;
-  gallery: []
+  gallery: [];
+  wordsFromFamily: string;
 };
 
 export type TFavorite = {
