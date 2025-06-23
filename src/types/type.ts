@@ -27,7 +27,7 @@ export type TObituary = {
   memorial: TMemorial;
   familyTree: Category[];
   favorites: TFavorite[];
-  timeLine: TTimelineEvent;
+  timeLine: TTimelineEvent[];
   gallery: [];
   wordsFromFamily: string;
 };

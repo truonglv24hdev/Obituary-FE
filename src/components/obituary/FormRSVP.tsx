@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
@@ -22,6 +22,7 @@ import { createRSVP } from "@/lib/RSVPAPI";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
+import MemoryWall from "./MemoryWall";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required").optional(),
@@ -83,6 +84,7 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
   const wakeRSVP = form.watch("wakeService.attending");
   const cortegeRSVP = form.watch("cortegeDeparture.attending");
   const cremationRSVP = form.watch("cremation.attending");
+  const [openMemoryWall, setOpenMemoryWall] = useState(false);
 
   async function Submit(values: z.infer<typeof formSchema>) {
     const formRSVP = new FormData();
@@ -124,8 +126,6 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
     formRSVP.append("cremation.attending", values.cremation?.attending || "");
     formRSVP.append("cremation.date", formattedDateCremation || "");
     formRSVP.append("cremation.time", values.cremation?.time || "");
-
-    console.log(values);
 
     const RSVP = await createRSVP(formRSVP);
 
@@ -448,6 +448,16 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
             </>
           )}
 
+          <div className="flex justify-end w-[632px] cursor-pointer">
+            <button
+              type="button"
+              className="w-[133px] h-11 cursor-pointer text-base museo bg-[#699D99] rounded text-white hover:bg-[#4B6B6C] transition"
+              onClick={() => setOpenMemoryWall(true)}
+            >
+              Add Guest
+            </button>
+          </div>
+
           <FormField
             control={form.control}
             name="email"
@@ -491,13 +501,19 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
                 console.log("Button clicked");
                 form.handleSubmit(Submit)();
               }}
-              className="w-[150px] h-11 bg-teal-600 rounded hover:bg-teal-700 text-white"
+              className="cursor-pointer w-[150px] h-11 bg-teal-600 rounded hover:bg-teal-700 text-white"
             >
               Submit RSVP
             </Button>
           </div>
         </div>
       </FormProvider>
+      {openMemoryWall && (
+        <MemoryWall
+          open={openMemoryWall}
+          onClose={() => setOpenMemoryWall(false)}
+        />
+      )}
     </div>
   );
 };

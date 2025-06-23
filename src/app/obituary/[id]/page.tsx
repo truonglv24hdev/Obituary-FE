@@ -3,7 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { use, useEffect, useState } from "react";
-import { IconPencil, IconPicture, IconCalendar } from "@/components/icons";
+import {
+  IconPencil,
+  IconPicture,
+  IconCalendar,
+  IconFilterDrop,
+  IconSetting,
+} from "@/components/icons";
 import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,6 +50,8 @@ import { favoriteTypes } from "@/constants/obituary";
 import FormRSVP from "@/components/obituary/FormRSVP";
 import { Switch } from "@/components/ui/switch";
 import Gallery from "@/components/obituary/Gallery";
+import { Checkbox } from "@/components/ui/checkbox";
+
 
 const formSchema = z.object({
   picture: z.any().optional(),
@@ -101,6 +109,8 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [galleryOldImages, setGalleryOldImages] = useState<string[]>([]);
   const [galleryFolders, setGalleryFolders] = useState<GalleryFolder[]>([]);
   const [showVideos, setShowVideos] = useState(true);
+  const [showGuestBook, setShowGuestBook] = useState(true);
+  const [selected, setSelected] = useState("All");
 
   const addTimelineEvent = () => {
     const newEvent: TimelineEvent = {
@@ -586,6 +596,183 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                         >
                           Upload Videos
                         </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Guest Book */}
+                <div className="flex flex-col gap-10 mt-16">
+                  <div className="flex flex-col  justify-between">
+                    <div className="flex h-10  justify-between">
+                      <h3 className="text-[32px] museo text-[#699D99] font-medium">
+                        Guest book
+                      </h3>
+                      <Switch
+                        checked={showGuestBook}
+                        onCheckedChange={setShowGuestBook}
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3">
+                      <Button className="w-[123px] h-10 flex text-sm museo justify-between gap-2 px-4 py-2 rounded bg-white border border-[#699D99] shadow text-[#699D99] hover:bg-gray-50">
+                        <span className="material-icons">Settings</span>
+                        <IconSetting className="w-6 h-6" />
+                      </Button>
+                      <div className="relative">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              size="sm"
+                              className="border cursor-pointer flex justify-between text-[14px] museo w-[123px] h-10 bg-[#699D99] text-white rounded px-3 py-[5px] hover:bg-[#e5f6ec]"
+                              type="button"
+                            >
+                              Filter
+                              <IconFilterDrop className="w-6 h-6" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            side="bottom"
+                            align="end"
+                            className="w-[250px] flex flex-col rounded border bg-white shadow p-0"
+                          >
+                            {["All", "Approved", "Rejected", "Pending"].map(
+                              (label) => (
+                                <label
+                                  key={label}
+                                  className={`flex items-center gap-3 px-4 py-3 cursor-pointer text-lg rounded transition ${
+                                    selected === label ? "bg-[#f5fbf8]" : ""
+                                  }`}
+                                  onClick={() => setSelected(label)}
+                                >
+                                  <span
+                                    className={`w-7 h-7 flex items-center justify-center rounded-lg border-2 transition ${
+                                      selected === label
+                                        ? "bg-[#699D99] border-[#699D99]"
+                                        : "bg-white border-gray-300"
+                                    }`}
+                                  >
+                                    {selected === label && (
+                                      <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 20 20"
+                                        fill="none"
+                                      >
+                                        <path
+                                          d="M5 10.5L9 14.5L15 7.5"
+                                          stroke="white"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />
+                                      </svg>
+                                    )}
+                                  </span>
+                                  <span className="font-medium">{label}</span>
+                                </label>
+                              )
+                            )}
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    </div>
+                  </div>
+                  {showGuestBook && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {/* Card có ảnh */}
+                      <div className="rounded-lg shadow bg-[#E5F6EC] overflow-hidden flex flex-col">
+                        <Image
+                          src="/img/avatar.jpg"
+                          alt="avatar"
+                          width={240}
+                          height={240}
+                          className="w-full h-40 object-cover"
+                        />
+                        <div className="p-5 flex flex-col flex-1">
+                          <p className="text-[#222] text-base mb-4">
+                            "Mr. Lim was a true gentleman — soft-spoken, humble,
+                            and always ready to lend a helping hand. He will be
+                            missed dearly by those of us who had the privilege
+                            of working with him."
+                          </p>
+                          <div className="text-right font-semibold text-[#222]">
+                            — Chan Wei Kiat
+                          </div>
+                        </div>
+                      </div>
+                      {/* Card không ảnh, nền xanh nhạt */}
+                      <div className="rounded-lg shadow bg-[#E5F6EC] p-5 flex flex-col justify-between">
+                        <p className="text-[#222] text-base mb-4">
+                          "Ah Huat Kor was like an older brother to me growing
+                          up, and always looked out for the younger cousins
+                          during Chinese New Year gatherings. Rest in peace,
+                          Kor."
+                        </p>
+                        <div className="text-right font-semibold text-[#222]">
+                          — Mr. & Mrs. Tan
+                        </div>
+                      </div>
+                      <div className="rounded-lg shadow bg-[#E5F6EC] p-5 flex flex-col justify-between">
+                        <p className="text-[#222] text-base mb-4">
+                          "Our deepest condolences to the Lim family. Your
+                          father&apos;s kindness and warmth touched many lives
+                          in the neighbourhood. We will miss seeing him during
+                          morning walks at the park."
+                        </p>
+                        <div className="text-right font-semibold text-[#222]">
+                          — Mr. & Mrs. Tan
+                        </div>
+                      </div>
+                      <div className="rounded-lg shadow bg-[#E5F6EC] p-5 flex flex-col justify-between">
+                        <p className="text-[#222] text-base mb-4">
+                          "He was a good man with a good heart. Always offered
+                          kopi during our temple events and made everyone feel
+                          welcome. May his soul find peace."
+                        </p>
+                        <div className="text-right font-semibold text-[#222]">
+                          — Goh Ah Seng
+                        </div>
+                      </div>
+                      {/* Card có ảnh */}
+                      <div className="rounded-lg shadow bg-[#E5F6EC] overflow-hidden flex flex-col">
+                        <Image
+                          src="/img/avatar.jpg"
+                          alt="avatar"
+                          width={240}
+                          height={240}
+                          className="w-full h-40 object-cover"
+                        />
+                        <div className="p-5 flex flex-col flex-1">
+                          <p className="text-[#222] text-base mb-4">
+                            "Mr. Lim was a true gentleman — soft-spoken, humble,
+                            and always ready to lend a helping hand. He will be
+                            missed dearly by those of us who had the privilege
+                            of working with him."
+                          </p>
+                          <div className="text-right font-semibold text-[#222]">
+                            — Chan Wei Kiat
+                          </div>
+                        </div>
+                      </div>
+                      <div className="rounded-lg shadow bg-[#E5F6EC] p-5 flex flex-col justify-between">
+                        <p className="text-[#222] text-base mb-4">
+                          "Dear Uncle, thank you for being such a steady
+                          presence in our lives. Your quiet strength and love
+                          for your family will always be remembered."
+                        </p>
+                        <div className="text-right font-semibold text-[#222]">
+                          — Elaine Ong
+                        </div>
+                      </div>
+                      <div className="rounded-lg shadow bg-[#E5F6EC] p-5 flex flex-col justify-between">
+                        <p className="text-[#222] text-base mb-4">
+                          "Our thoughts are with the Lim family. Your
+                          father&apos;s legacy of integrity and dedication lives
+                          on in all of you."
+                        </p>
+                        <div className="text-right font-semibold text-[#222]">
+                          — David Chua & Family
+                        </div>
                       </div>
                     </div>
                   )}

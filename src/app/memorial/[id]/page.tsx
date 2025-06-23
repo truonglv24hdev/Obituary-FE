@@ -1,5 +1,5 @@
 "use client";
-import { IconCalendar } from "@/components/icons";
+import { IconCalendar, IconLocation } from "@/components/icons";
 import ObituaryTab from "@/components/memorial/ObituaryTab";
 import { getObituaryById } from "@/lib/obituaryAPI";
 import { TObituary } from "@/types/type";
@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import Image from "next/image";
 import React, { use, useEffect, useState } from "react";
 
-const page = ({ params }: { params: Promise<{ id: string }> }) => {
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
 
   const [obituary, setObituary] = useState<TObituary | null>(null);
@@ -33,7 +33,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
     deathDate instanceof Date && !isNaN(deathDate.getTime());
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 mb-10">
       <div>
         {obituary?.headerImage ? (
           <Image
@@ -90,7 +90,8 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
           <ObituaryTab />
         </div>
         <div className="text-[28px] font-medium">
-          “You taught us not just how to live — but how to live with heart.”
+          &quot;You taught us not just how to live — but how to live with
+          heart.&quot;
         </div>
         <div className="w-[1125px] flex flex-col gap-15 justify-start">
           <div className="flex flex-col gap-7 ">
@@ -169,7 +170,10 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
             <h2 className="text-[32px] font-medium">Favorites</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
               {obituary?.favorites.map((item, idx) => (
-                <div key={idx} className="w-[439px] h-[72px] flex flex-col gap-1">
+                <div
+                  key={idx}
+                  className="w-[439px] h-[72px] flex flex-col gap-1"
+                >
                   <div className="flex items-center gap-2 text-base museo font-light">
                     <i className={`${item.icon}`}></i>
                     <span>{item.question}</span>
@@ -181,10 +185,125 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
               ))}
             </div>
           </div>
+          <div className="flex flex-col gap-10">
+            <h2 className="text-[32px] font-medium">Timeline</h2>
+            <div className="flex flex-col gap-y-24 relative z-10">
+              {obituary?.timeLine.map((event, index) => {
+                const isLeft = index % 2 === 0;
+                return (
+                  <React.Fragment key={index}>
+                    <div className="relative">
+                      {/* Circle ở giữa */}
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-[#A6BF98] z-10 top-5 -translate-y-1/2" />
+
+                      {index > 0 && (
+                        <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-55 border-l-1 border-dashed border-[#293548] -top-50" />
+                      )}
+
+                      <div
+                        className={`relative flex ${
+                          isLeft ? "justify-start" : "justify-end"
+                        }`}
+                      >
+                        <div
+                          className={`bg-white rounded-lg  shadow-sm w-[445px] relative ${
+                            isLeft ? "mr-auto ml-18" : "ml-auto mr-18"
+                          }`}
+                        >
+                          {/* Icon + Date */}
+                          <div className="relative flex gap-6 ">
+                            <div className="flex flex-col min-w-[50px] p-2 min-h-[114px]">
+                              {event.date && (
+                                <div className="flex flex-col ">
+                                  <span className="text-base">
+                                    {format(event.date, "MMMM")}
+                                  </span>
+                                  <span className="text-2xl font-bold">
+                                    {format(event.date, "d")}
+                                  </span>
+                                  <span className="text-base">
+                                    {format(event.date, "yyyy")}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="absolute left-22 w-px min-h-[114] border border-gray-300" />
+                            {/* Title, Description, Location */}
+                            <div className="flex flex-col px-7 p-2">
+                              <div className="flex justify-between items-start">
+                                <p>{event.title}</p>
+                              </div>
+                              <p>{event.description}</p>
+                              <div className="flex items-center gap-2 mt-5 justify-end text-gray-500"></div>
+                            </div>
+                          </div>
+                          <div
+                            className={`absolute top-3  -translate-x-1/2 w-4 h-4 rotate-45 bg-white ${
+                              isLeft ? "-right-4" : "rotate-225"
+                            }`}
+                            style={{
+                              boxShadow: "2px -2px 4px rgba(0, 0, 0, 0.1)",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </div>
+          <div className="flex flex-col gap-6 mt-10">
+            <h2 className="text-[28px] font-medium text-[#2d3b4e]">Events</h2>
+            <h3 className="text-[24px] font-medium text-[#2d3b4e]">
+              Funeral Details
+            </h3>
+            <div className="bg-[#f5fbf8] rounded-lg p-7 flex flex-col md:flex-row gap-6 items-start">
+              {/* Map */}
+              <div className="w-full md:w-[280px] h-[180px] rounded overflow-hidden flex-shrink-0">
+                <Image
+                  src="/img/map-demo.png" 
+                  alt="map"
+                  width={280}
+                  height={180}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {/* Details */}
+              <div className="flex-1 flex flex-col gap-3">
+                <div className="text-base text-[#222] mb-2">
+                  The wake will be held over these three days. We would love to
+                  invite you to come and pay your final respects and say goodbye
+                  to boon huat. Light snacks and drinks will be provided.
+                  Parking is available at the basement carpark of the building.
+                </div>
+                <div className="flex items-start gap-2">
+                  <IconLocation className="w-6 h-6 text-[#6CB1A3]" />
+                  <span className="text-[#6CB1A3] font-medium min-w-[80px]">
+                    Location:
+                  </span>
+                  <span className="text-[#222]">
+                    Tampines Funeral Parlour Level 5
+                  </span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <IconCalendar className="w-6 h-6 text-[#6CB1A3]" />
+                  <span className="text-[#6CB1A3] font-medium min-w-[80px]">
+                    Date/Time:
+                  </span>
+                  <div className="flex flex-col text-[#222]">
+                    <span>30 May 2025 (10am – 9pm)</span>
+                    <span>31 May 2025 (10am – 8pm)</span>
+                    <span>01 Jun 2025 (10am – 3pm)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

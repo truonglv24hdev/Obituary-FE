@@ -8,9 +8,7 @@ export async function getObituaryByMemorialId(id: string) {
 }
 
 export async function getObituaryById(id: string) {
-  const res = await axios.get(`/api/obituary/memorial/${id}`, {
-    requiresAuth: true,
-  });
+  const res = await axios.get(`/api/obituary/memorial/${id}`);
   return res.data;
 }
 
