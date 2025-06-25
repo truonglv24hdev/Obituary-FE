@@ -510,6 +510,7 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
       </FormProvider>
       {openMemoryWall && (
         <MemoryWall
+          obituaryId={obituaryId}
           open={openMemoryWall}
           onClose={() => setOpenMemoryWall(false)}
         />

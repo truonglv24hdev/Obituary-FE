@@ -28,6 +28,7 @@ export type TObituary = {
   familyTree: Category[];
   favorites: TFavorite[];
   timeLine: TTimelineEvent[];
+  event: TEvent[];
   gallery: [];
   wordsFromFamily: string;
 };
@@ -38,6 +39,16 @@ export type TFavorite = {
   question: string;
   answer: string;
   type: string;
+};
+
+export type TEvent = {
+  id: string;
+  eventTitle: string;
+  description: string;
+  location: string;
+  date: string[];
+  timeFrom: string[];
+  timeTo: string[];
 };
 
 export type TFavoriteType = {

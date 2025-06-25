@@ -52,7 +52,6 @@ import { Switch } from "@/components/ui/switch";
 import Gallery from "@/components/obituary/Gallery";
 import { Checkbox } from "@/components/ui/checkbox";
 
-
 const formSchema = z.object({
   picture: z.any().optional(),
   headerImage: z.any().optional(),
@@ -111,7 +110,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [showVideos, setShowVideos] = useState(true);
   const [showGuestBook, setShowGuestBook] = useState(true);
   const [selected, setSelected] = useState("All");
-
+  console.log(events);
   const addTimelineEvent = () => {
     const newEvent: TimelineEvent = {
       id: Math.random().toString(36).substr(2, 9),
@@ -128,22 +127,31 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   useEffect(() => {
     getObituaryByMemorialId(id)
       .then((data) => {
+        if (!data) return;
+
+        // Reset form fields
+        form.reset({
+          firstName: data.memorial.first_name,
+          lastName: data.memorial.last_name,
+          birthDate: parse(data.memorial.born, "dd/MM/yyyy", new Date()),
+          deathDate: parse(data.memorial.death, "dd/MM/yyyy", new Date()),
+          quote: data.quote,
+          wordsFromFamily: data.wordsFromFamily,
+          lifeStory: data.lifeStory,
+        });
+
+        // ✅ Cập nhật các state bên ngoài render
         setObituary(data);
-        if (data) {
-          form.reset({
-            firstName: data.memorial.first_name,
-            lastName: data.memorial.last_name,
-            birthDate: parse(data.memorial.born, "dd/MM/yyyy", new Date()),
-            deathDate: parse(data.memorial.death, "dd/MM/yyyy", new Date()),
-            quote: data.quote,
-            wordsFromFamily: data.wordsFromFamily,
-            lifeStory: data.lifeStory,
-          });
-          setCategories(data.familyTree ?? []);
-          setTimeline(data.timeLine);
-          setFavorites(data.favorites);
-          setGalleryOldImages(data.gallery || []);
-        }
+        setCategories(data.familyTree ?? []);
+        setTimeline(data.timeLine);
+        setFavorites(data.favorites);
+        setGalleryOldImages(data.gallery || []);
+
+        const eventsWithId = (data.event || []).map((ev:any) => ({
+          ...ev,
+          id: ev.id || Math.random().toString(36).substring(2),
+        }));
+        setEvents(eventsWithId);
       })
       .catch((err) => {
         console.error("Lỗi khi lấy obituary:", err);
@@ -240,6 +248,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       formObituary.append("lifeStory", values.lifeStory || "");
       formObituary.append("familyTree", JSON.stringify(categories));
       formObituary.append("favorites", JSON.stringify(favorites));
+      formObituary.append("event", JSON.stringify(events));
       formObituary.append("timeLine", JSON.stringify(timeLine));
 
       // Send request with FormData

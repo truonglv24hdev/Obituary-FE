@@ -1,5 +1,6 @@
 "use client";
-import { IconCalendar, IconLocation } from "@/components/icons";
+import { IconCalendar } from "@/components/icons";
+import Event from "@/components/memorial/Event";
 import ObituaryTab from "@/components/memorial/ObituaryTab";
 import { getObituaryById } from "@/lib/obituaryAPI";
 import { TObituary } from "@/types/type";
@@ -255,50 +256,9 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           </div>
           <div className="flex flex-col gap-6 mt-10">
             <h2 className="text-[28px] font-medium text-[#2d3b4e]">Events</h2>
-            <h3 className="text-[24px] font-medium text-[#2d3b4e]">
-              Funeral Details
-            </h3>
-            <div className="bg-[#f5fbf8] rounded-lg p-7 flex flex-col md:flex-row gap-6 items-start">
-              {/* Map */}
-              <div className="w-full md:w-[280px] h-[180px] rounded overflow-hidden flex-shrink-0">
-                <Image
-                  src="/img/map-demo.png" 
-                  alt="map"
-                  width={280}
-                  height={180}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              {/* Details */}
-              <div className="flex-1 flex flex-col gap-3">
-                <div className="text-base text-[#222] mb-2">
-                  The wake will be held over these three days. We would love to
-                  invite you to come and pay your final respects and say goodbye
-                  to boon huat. Light snacks and drinks will be provided.
-                  Parking is available at the basement carpark of the building.
-                </div>
-                <div className="flex items-start gap-2">
-                  <IconLocation className="w-6 h-6 text-[#6CB1A3]" />
-                  <span className="text-[#6CB1A3] font-medium min-w-[80px]">
-                    Location:
-                  </span>
-                  <span className="text-[#222]">
-                    Tampines Funeral Parlour Level 5
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <IconCalendar className="w-6 h-6 text-[#6CB1A3]" />
-                  <span className="text-[#6CB1A3] font-medium min-w-[80px]">
-                    Date/Time:
-                  </span>
-                  <div className="flex flex-col text-[#222]">
-                    <span>30 May 2025 (10am – 9pm)</span>
-                    <span>31 May 2025 (10am – 8pm)</span>
-                    <span>01 Jun 2025 (10am – 3pm)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {obituary?.event.map((event, index) => (
+              <Event key={index} event={event} />
+            ))}
           </div>
         </div>
       </div>
