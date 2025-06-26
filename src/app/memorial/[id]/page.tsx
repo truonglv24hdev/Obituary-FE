@@ -1,9 +1,13 @@
 "use client";
 import { IconCalendar } from "@/components/icons";
 import Event from "@/components/memorial/Event";
+import GuestBook from "@/components/memorial/GuestBook";
 import ObituaryTab from "@/components/memorial/ObituaryTab";
+import MemoryWall from "@/components/obituary/MemoryWall";
+import { Button } from "@/components/ui/button";
+import { getCondolences } from "@/lib/condolences";
 import { getObituaryById } from "@/lib/obituaryAPI";
-import { TObituary } from "@/types/type";
+import { TCondolences, TObituary } from "@/types/type";
 import { format } from "date-fns";
 import Image from "next/image";
 import React, { use, useEffect, useState } from "react";
@@ -12,11 +16,20 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
 
   const [obituary, setObituary] = useState<TObituary | null>(null);
+  const [condolences, setCondolences] = useState<TCondolences[] | null>(null);
+  const [openMemoryWall, setOpenMemoryWall] = useState(false);
 
   useEffect(() => {
     getObituaryById(id)
       .then((data) => {
         setObituary(data);
+      })
+      .catch((err) => {
+        console.error("Lỗi khi lấy obituary:", err);
+      });
+    getCondolences(id)
+      .then((data) => {
+        setCondolences(data);
         console.log(data);
       })
       .catch((err) => {
@@ -254,12 +267,32 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
               })}
             </div>
           </div>
-          <div className="flex flex-col gap-6 mt-10">
+          <div className="flex flex-col gap-15">
             <h2 className="text-[28px] font-medium text-[#2d3b4e]">Events</h2>
             {obituary?.event.map((event, index) => (
               <Event key={index} event={event} />
             ))}
           </div>
+          <div className="flex flex-col gap-14">
+            <div className="flex justify-between h-11">
+              <h2 className="text-[32px] font-medium">Guest book</h2>
+              <Button
+                type="button"
+                onClick={() => setOpenMemoryWall(true)}
+                className="w-[135px] h-[44px] rounded px-7 py-2 bg-[#699D99] text-base museo"
+              >
+                Contribute
+              </Button>
+            </div>
+            <GuestBook condolences={condolences || []} />
+          </div>
+          {openMemoryWall && (
+            <MemoryWall
+              obituaryId={id}
+              open={openMemoryWall}
+              onClose={() => setOpenMemoryWall(false)}
+            />
+          )}
         </div>
       </div>
     </div>

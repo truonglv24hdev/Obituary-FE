@@ -67,7 +67,8 @@ function UploadPhotoModal({
                 />
               </svg>
               <div className="mt-2 text-center">
-                <span className="font-semibold">Upload photos</span> or just drag
+                <span className="font-semibold">Upload photos</span> or just
+                drag
                 <br />
                 and drop
               </div>
@@ -96,7 +97,9 @@ function UploadPhotoModal({
                 height={180}
                 className="object-cover rounded border border-gray-200"
               />
-              <div className="text-sm text-gray-600 mt-2">{selectedFile.name}</div>
+              <div className="text-sm text-gray-600 mt-2">
+                {selectedFile.name}
+              </div>
               <input
                 ref={inputRef}
                 type="file"
@@ -108,7 +111,9 @@ function UploadPhotoModal({
                   }
                 }}
               />
-              <div className="text-xs text-blue-500 mt-1">(Click image to change)</div>
+              <div className="text-xs text-blue-500 mt-1">
+                (Click image to change)
+              </div>
             </div>
           )}
         </div>
@@ -140,9 +145,9 @@ const MemoryWall = ({
   onClose: () => void;
 }) => {
   const formSchema = z.object({
-    fullName: z.string().min(1, "First name is required").optional(),
-    email: z.string().email().optional(),
-    message: z.string().optional(),
+    fullName: z.string().min(1, "First name is required"),
+    email: z.string().email(),
+    message: z.string().min(5,"message min 5"),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -170,9 +175,11 @@ const MemoryWall = ({
     if (photo) {
       formMemoryWall.append("photo", photo);
     }
-    const condolences = await postCondolences(obituaryId, formMemoryWall);
-    if (condolences) {
+    try {
+      await postCondolences(obituaryId, formMemoryWall);
       window.location.reload();
+    } catch (error) {
+      console.error("Failed to post condolences:", error);
     }
   };
 

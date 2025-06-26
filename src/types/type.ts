@@ -115,3 +115,17 @@ export interface IEvent {
   timeFrom: string;
   timeTo: string;
 }
+
+export type TCondolences = {
+  id: string;
+  full_name: string;
+  email: string;
+  message: string;
+  photo: string;
+  video: string;
+};
+
+
+export type GuestBookProps = {
+  condolences: TCondolences[];
+};

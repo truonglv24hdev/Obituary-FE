@@ -27,8 +27,8 @@ const Event = ({ event }: Props) => {
   };
 
   return (
-    <div className="mb-10">
-      <h3 className="text-[24px] font-medium text-[#2d3b4e] mb-4">
+    <div className="flex flex-col gap-10">
+      <h3 className="text-[24px] font-medium text-[#2d3b4e]">
         {event.eventTitle}
       </h3>
 
