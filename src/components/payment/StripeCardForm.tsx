@@ -11,11 +11,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { postPayment } from "@/lib/paymentAPI";
-import { updateProfile } from "@/lib/accountAPI";
+import { postPayment, premiumMemorial } from "@/lib/paymentAPI";
 import { useRouter } from "next/navigation";
 
-export default function StripeCardForm({ amount }: { amount: number }) {
+export default function StripeCardForm({
+  amount,
+  id,
+}: {
+  amount: number;
+  id: string;
+}) {
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
@@ -52,12 +57,10 @@ export default function StripeCardForm({ amount }: { amount: number }) {
 
       if (result.paymentIntent?.status) {
         try {
-          const updatedUser = await updateProfile({
-            premium: true,
-          });
-          if (updatedUser) router.push("/account");
-        }// eslint-disable-next-line 
-        catch (error) {
+          const updatedUser = await premiumMemorial(id, {premium:true});
+          if (updatedUser) router.push(`/obituary/${id}`);
+          // eslint-disable-next-line
+        } catch (error) {
           alert("Failed to update profile. Please try again.");
         }
       }
@@ -65,8 +68,6 @@ export default function StripeCardForm({ amount }: { amount: number }) {
       if (result.error) {
         throw new Error(result.error.message || "Payment failed");
       }
-
-      alert("✅ Payment successful!");
     } catch (error) {
       alert(
         "❌ " + (error instanceof Error ? error.message : "Payment failed")

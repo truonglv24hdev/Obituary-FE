@@ -10,7 +10,7 @@ import {
 import { plans } from "@/constants/pricing";
 import Link from "next/link";
 
-const PaymentPlan = () => {
+const PaymentPlan = ({id}:{id?:string}) => {
   return (
     <div className="flex museo md:flex-row justify-center items-center mx-auto gap-5 w-[684px] h-[547px]">
       {plans.map((plan) => (
@@ -72,7 +72,7 @@ const PaymentPlan = () => {
                   : "bg-[#6ea09e] text-white hover:bg-[#5a8e8c]"
               }`}
             >
-              <Link href={plan.href}>{plan.button}</Link>
+              <Link href={`${plan.href}/${id}`}>{plan.button}</Link>
             </Button>
           </CardFooter>
         </Card>

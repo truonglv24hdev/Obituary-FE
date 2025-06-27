@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { addons } from "@/constants/optional";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import StripeCardForm from "@/components/payment/StripeCardForm";
 import Link from "next/link";
 
-const Page = () => {
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
   const router = useRouter();
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
@@ -134,7 +135,7 @@ const Page = () => {
           </div>
 
           <StripeCardWrapper>
-            <StripeCardForm amount={totalPrice} />
+            <StripeCardForm amount={totalPrice} id={id} />
           </StripeCardWrapper>
         </div>
       </div>

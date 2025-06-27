@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { IconPencil, IconPlus } from "@/components/icons";
 import { Category } from "@/types/type";
+import { postUpload } from "@/lib/obituaryAPI";
 
 interface FamilyTreeSectionProps {
   showFamilyTree: boolean;
@@ -23,22 +24,27 @@ export default function FamilyTreeSection({
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
 
-  const handleMemberImageChange = (
+  console.log(categories);
+
+  const handleMemberImageChange = async (
     categoryId: string,
     memberId: string,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
     if (file) {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const res = await postUpload(formData);
+
       setCategories(
         categories.map((cat) => {
-          if (cat.id === categoryId) {
+          if (cat._id === categoryId) {
             return {
               ...cat,
               members: cat.members.map((m) =>
-                m.id === memberId
-                  ? { ...m, image: URL.createObjectURL(file) }
-                  : m
+                m._id === memberId ? { ...m, avatar: res.url } : m
               ),
             };
           }
@@ -55,11 +61,11 @@ export default function FamilyTreeSection({
   ) => {
     setCategories(
       categories.map((cat) => {
-        if (cat.id === categoryId) {
+        if (cat._id === categoryId) {
           return {
             ...cat,
             members: cat.members.map((m) =>
-              m.id === memberId ? { ...m, name: e.target.value } : m
+              m._id === memberId ? { ...m, name: e.target.value } : m
             ),
           };
         }
@@ -71,15 +77,13 @@ export default function FamilyTreeSection({
   const addFamilyMember = (categoryId: string) => {
     setCategories(
       categories.map((cat) => {
-        if (cat.id === categoryId) {
+        if (cat._id === categoryId) {
           return {
             ...cat,
             members: [
               ...cat.members,
               {
-                id: Math.random().toString(36).substr(2, 9),
                 name: "",
-                image: "/img/default-avatar.png",
               },
             ],
           };
@@ -111,7 +115,7 @@ export default function FamilyTreeSection({
                   onChange={(e) =>
                     setCategories(
                       categories.map((cat) =>
-                        cat.id === category.id
+                        cat._id === category._id
                           ? { ...cat, category: e.target.value }
                           : cat
                       )
@@ -143,13 +147,52 @@ export default function FamilyTreeSection({
                         style={{ clipPath: "url(#clip-octagon)" }}
                       >
                         {/* Ảnh bên trong polygon */}
-                        <Image
-                          src={member.image || "/img/avatar.jpg"}
-                          alt={member.name || "Member"}
-                          width={140}
-                          height={140}
-                          className="w-full h-full object-cover"
-                          style={{ clipPath: "url(#clip-octagon)" }}
+                        {member.avatar ? (
+                          <>
+                            <Image
+                              src={
+                                member.avatar
+                                  ? `http://localhost:5000${member.avatar}`
+                                  : "/img/avatar.jpg"
+                              }
+                              alt={member.name || "Member"}
+                              width={140}
+                              height={140}
+                              className="w-full h-full object-cover"
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <Image
+                              src="/img/avatar.jpg"
+                              alt={member.name || "Member"}
+                              width={140}
+                              height={140}
+                              className="w-full h-full object-cover"
+                            />
+                          </>
+                        )}
+
+                        <label
+                          htmlFor={`file-${category._id}-${member._id}`}
+                          className="absolute bottom-1 right-1 bg-[#699D99] text-white rounded shadow p-1 w-7 h-7 cursor-pointer hover:bg-gray-400"
+                        >
+                          <IconPencil />
+                        </label>
+
+                        {/* Input file được liên kết */}
+                        <input
+                          id={`file-${category._id}-${member._id}`}
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) =>
+                            handleMemberImageChange(
+                              category._id as string,
+                              member._id as string,
+                              e
+                            )
+                          }
                         />
                       </div>
 
@@ -172,7 +215,11 @@ export default function FamilyTreeSection({
                     <Input
                       value={member.name}
                       onChange={(e) =>
-                        handleMemberNameChange(category.id, member.id, e)
+                        handleMemberNameChange(
+                          category._id as string,
+                          member._id as string,
+                          e
+                        )
                       }
                       placeholder="Name"
                       className="mx-auto mt-2 border-gray-300 border-1 border-dashed rounded-none text-center w-[66px] h-[30px]"
@@ -182,7 +229,7 @@ export default function FamilyTreeSection({
                 {category.members.length < 5 && (
                   <button
                     type="button"
-                    onClick={() => addFamilyMember(category.id)}
+                    onClick={() => addFamilyMember(category._id as string)}
                     className="relative w-[140px] h-[140px] flex items-center justify-center group"
                   >
                     <svg
@@ -224,7 +271,6 @@ export default function FamilyTreeSection({
                         setCategories([
                           ...categories,
                           {
-                            id: Math.random().toString(36).substr(2, 9),
                             category: newCategoryName,
                             members: [],
                           },

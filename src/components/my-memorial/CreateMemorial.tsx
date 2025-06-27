@@ -71,9 +71,8 @@ const CreateMemorial = () => {
       if (selectedFile) formData.append("picture", selectedFile);
 
       const res = await postMemorial(formData);
-
       if (res) {
-        router.push("/memorial/plan");
+        router.push(`/my-memorial/plan/${res._id}`);
       }
     } catch (err) {
       console.error("Submit failed:", err);

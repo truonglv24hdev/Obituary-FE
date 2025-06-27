@@ -251,6 +251,13 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       formObituary.append("lifeStory", values.lifeStory || "");
       formObituary.append("familyTree", JSON.stringify(categories));
       formObituary.append("favorites", JSON.stringify(favorites));
+      categories.forEach((cat) => {
+        cat.members.forEach((member) => {
+          if (member.avatar) {
+            formObituary.append(`familyTreeImage-${member._id}`, member.avatar);
+          }
+        });
+      });
       formObituary.append("event", JSON.stringify(events));
       formObituary.append("timeLine", JSON.stringify(timeLine));
 
@@ -259,7 +266,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       const updateObituary = await putObituary(id, formObituary);
 
       if (updateMemorial || updateObituary) {
-        router.push("/account");
+        router.push("/account/memorials");
       }
     } catch (error) {
       console.error("Failed to update memorial:", error);

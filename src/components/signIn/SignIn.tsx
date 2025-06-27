@@ -104,7 +104,7 @@ const SignIn = () => {
               )}
             />
             <div className="flex justify-end mb-2">
-              <Link href="#" className="text-sm text-blue-500 hover:underline">
+              <Link href="/forgot-password" className="text-sm text-blue-500 hover:underline">
                 Forgot Password?
               </Link>
             </div>

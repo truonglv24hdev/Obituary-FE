@@ -10,3 +10,14 @@ export async function postPayment(amount: number) {
   );
   return res.data;
 }
+
+export async function premiumMemorial(id: string, data: { premium: boolean }) {
+  const res = await axios.put(
+    `/api/memorial/${id}`,
+    data,
+    {
+      requiresAuth: true,
+    }
+  );
+  return res.data;
+}

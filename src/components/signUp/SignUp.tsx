@@ -123,7 +123,7 @@ const SignUp = () => {
               )}
             />
             <div className="flex justify-end mb-2">
-              <Link href="#" className="text-sm text-blue-500 hover:underline">
+              <Link href="/forgot-password" className="text-sm text-blue-500 hover:underline">
                 Forgot Password?
               </Link>
             </div>
@@ -163,8 +163,8 @@ const SignUp = () => {
         </div>
         <div className="text-center text-lg mt-5">
           New to Tribute Chapters?{" "}
-          <Link href="/sign-up" className="text-blue-500 hover:underline">
-            Sign up
+          <Link href="/sign-in" className="text-blue-500 hover:underline">
+            Sign in
           </Link>
         </div>
       </div>

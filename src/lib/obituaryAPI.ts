@@ -12,6 +12,16 @@ export async function getObituaryById(id: string) {
   return res.data;
 }
 
+export async function postUpload(formData: FormData) {
+  const res = await axios.post(`/api/obituary/upload`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    requiresAuth: true,
+  });
+  return res.data;
+}
+
 export async function putObituary(id: string, formData: FormData) {
   const res = await axios.put(`/api/obituary/${id}`, formData, {
     headers: {

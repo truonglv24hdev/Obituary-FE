@@ -13,7 +13,7 @@ export const plans = [
     ],
     button: "Sample memorial",
     highlight: false,
-    href:"/",
+    href:"/obituary",
     className: "mt-10"
   },
   {
