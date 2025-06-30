@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "../ui/button";
 import ActiveLink from "../common/ActiveLink";
 import { menuItems } from "@/constants/header";
+import { IconUser } from "../icons";
 
 const Heading = ({ className }: { className?: string }) => {
   const { isAuthenticated, logout } = useAuth();
@@ -39,8 +40,9 @@ const Heading = ({ className }: { className?: string }) => {
               </Button>
               <Link
                 href="/account"
-                className="bg-[#E5F6EC] w-[115px] museo h-11 text-[#222222] flex items-center justify-center rounded-sm font-light text-[18px] leading-[24px] "
+                className="bg-[#E5F6EC] w-[177px] museo h-11 text-[#222222] flex items-center justify-center gap-3 rounded-sm font-light text-[18px] leading-[24px] "
               >
+                <IconUser className="w-5 h-5"/>
                 My account
               </Link>
             </>

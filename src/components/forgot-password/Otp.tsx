@@ -1,14 +1,18 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { sendOtp } from "@/lib/authAPI";
+import { useRouter } from "next/navigation";
 
 const OTP_LENGTH = 6;
 
-const Otp = () => {
+const Otp = ({ email }: { email: string }) => {
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(""));
-  const [timer, setTimer] = useState(56 * 60); // 56 phút
+  const [timer, setTimer] = useState(60 * 60);
   const [resendActive, setResendActive] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (timer > 0) {
@@ -25,7 +29,7 @@ const Otp = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     idx: number
   ) => {
-    const value = e.target.value.replace(/\D/g, ""); // loại bỏ ký tự không phải số
+    const value = e.target.value.replace(/\D/g, "");
 
     const newOtp = [...otp];
     newOtp[idx] = value;
@@ -57,11 +61,14 @@ const Otp = () => {
     setResendActive(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const enteredOtp = otp.join("");
-    console.log("Submitted OTP:", enteredOtp);
-    // Gửi OTP đến backend tại đây nếu cần
+
+    const result = await sendOtp(email, enteredOtp);
+    if (result.code == 2) {
+      router.push(`/reset-password/${email}`);
+    }
   };
 
   const formatTime = (sec: number) => {

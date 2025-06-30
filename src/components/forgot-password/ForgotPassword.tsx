@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { sendLink } from "@/lib/authAPI";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -31,7 +32,10 @@ const ForgotPassword = () => {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     if (data.email) {
-      router.push(`/forgot-password/otp/${data.email}`);
+      const result = await sendLink(data.email);
+      if (result == 2) {
+        router.push(`/forgot-password/otp/${data.email}`);
+      }
     }
   }
 
