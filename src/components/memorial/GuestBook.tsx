@@ -48,7 +48,7 @@ export default function GuestBook({ condolences }: GuestBookProps) {
             {group.map((item, index) => (
               <div
                 key={`no-photo-${groupIndex}-${index}`}
-                className="h-[134px] rounded-lg bg-[#E5F6EC] shadow px-5 py-4 flex flex-col justify-between"
+                className=" min-h-[134px] rounded-lg bg-[#E5F6EC] shadow px-5 py-4 flex flex-col justify-between"
               >
                 <p className="text-[#222] text-lg museo font-light leading-[22px] tracking-[0px]">
                   {`"${item.message}"`}

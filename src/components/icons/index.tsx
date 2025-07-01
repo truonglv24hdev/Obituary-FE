@@ -19,3 +19,6 @@ export { default as IconLocation } from "./IconLocation";
 export { default as IconFilterDrop } from "./IconFilterDrop";
 export { default as IconUser } from "./IconUser";
 export { default as IconLeftNotArrow } from "./IconLeftNotArrow";
+export { default as IconLock } from "./IconLock";
+export { default as IconShare } from "./IconShare";
+export { default as IconDelete } from "./IconDelete";

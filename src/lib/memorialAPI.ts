@@ -15,6 +15,11 @@ export async function getMemorialByUser() {
   return res.data;
 }
 
+export async function getMemorialById(id:string) {
+  const res = await axios.get(`/api/memorial/${id}`);
+  return res.data;
+}
+
 export async function putMemorial(id: string, formData: FormData) {
   const res = await axios.put(`/api/memorial/${id}`, formData, {
     headers: {

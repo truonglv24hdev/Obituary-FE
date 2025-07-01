@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,16 +18,96 @@ import {
   Check,
   ChevronDown,
 } from "lucide-react";
-import { IconLeftNotArrow } from "@/components/icons";
+import {
+  IconDelete,
+  IconFilterDrop,
+  IconLeftNotArrow,
+  IconLock,
+  IconSearch,
+  IconShare,
+} from "@/components/icons";
 import Image from "next/image";
-// import { Check, X } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { TMemorial } from "@/types/type";
+import { getMemorialById } from "@/lib/memorialAPI";
+import { format } from "date-fns";
+import * as XLSX from "xlsx";
+import { deleteCondolences } from "@/lib/condolences";
+import { FiFacebook, FiMail } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
 
-const page = () => {
+const page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
+
   const options = ["Public", "Private", "Password protected"];
   const [selected, setSelected] = useState("Public");
+  const [memorial, setMemorial] = useState<TMemorial | null>(null);
+
+  useEffect(() => {
+    getMemorialById(id)
+      .then((data) => {
+        if (!data) return;
+        setMemorial(data);
+      })
+      .catch((err) => console.error("Lỗi khi lấy memorial:", err));
+  }, [id]);
+
+  const handleDownloadExcel = () => {
+    if (!memorial?.rsvps || memorial.rsvps.length === 0) {
+      alert("No RSVP data to export.");
+      return;
+    }
+
+    const worksheetData = memorial.rsvps.map((rsvp) => ({
+      Date: rsvp.createdAt
+        ? new Date(rsvp.createdAt).toLocaleDateString("en-US")
+        : "",
+      "First Name": rsvp.first_name,
+      "Last Name": rsvp.last_name,
+      Email: rsvp.email || "",
+      Verification: rsvp.verification ? "Accepted" : "Declined",
+      Contact: rsvp.contact || "",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "RSVPs");
+
+    XLSX.writeFile(workbook, `rsvp_list_${memorial._id}.xlsx`);
+  };
+
+  const handleDeleteCondolence = async (condolenceId: string) => {
+    try {
+      const res = await deleteCondolences(condolenceId);
+
+      if (res.code == 1) {
+        setMemorial((prev) =>
+          prev
+            ? {
+                ...prev,
+                condolences: prev.condolences.filter(
+                  (c) => c._id !== condolenceId
+                ),
+              }
+            : null
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting condolence:", error);
+    }
+  };
+
+  console.log(memorial?.condolences);
 
   return (
-    <>
+    <div className="mb-10">
       <Heading className="bg-[#699D99]" />
       <div className="w-full h-[74px] flex items-center justify-center px-25 py-[15px] border-b bg-white">
         <div className="max-w-[1240px] h-11 flex justify-center items-center gap-20 text-sm text-[#2d3b4e]">
@@ -62,8 +142,7 @@ const page = () => {
       </div>
       <div className="w-full relative flex flex-col items-center gap-6 ">
         {/* Header */}
-
-        <div className="w-[1240px] flex flex-col gap-5 justify-start">
+        <div className="w-[1240px] flex flex-col gap-7 justify-start">
           <div className="flex justify-start mt-15 ">
             <Button className="w-[217px] h-11 rounded px-[26px] py-2">
               <IconLeftNotArrow className="w-6 h-6" />
@@ -73,11 +152,22 @@ const page = () => {
           <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
             <div className="bg-[#E5F6EC4D] flex gap-10 w-[863px] h-[312px] px-6 py-6 rounded-lg">
               <div className="w-[248px] h-[248px] bg-white flex justify-center items-center">
-                <Image src={"/img/1.jpg"} alt="" width={209} height={209} />
+                <Image
+                  src={
+                    memorial?.picture
+                      ? `http://localhost:5000${memorial.picture}`
+                      : `/img/avatar.jpg`
+                  }
+                  alt=""
+                  width={209}
+                  height={209}
+                />
               </div>
               <div className="flex flex-col gap-8 h-[248px] w-[435px]">
                 <div className="flex flex-col gap-3">
-                  <h1 className="text-4xl font-bold h-10">John Doe</h1>
+                  <h1 className="text-4xl font-bold h-10">
+                    {memorial?.first_name} {memorial?.last_name}
+                  </h1>
                   <p className="text-base museo h-5 font-light ">Brother</p>
                 </div>
                 <div className="flex flex-col h-[144px] w-[435px] gap-4">
@@ -94,7 +184,7 @@ const page = () => {
                       Privacy:
                     </span>
                     <DropdownMenu>
-                      <DropdownMenuTrigger className="border px-2 py-1 rounded flex items-center gap-2 text-sm text-[#2d3b4e]">
+                      <DropdownMenuTrigger className="border-none px-2 py-1 rounded flex items-center gap-2 text-sm text-[#2d3b4e]">
                         {selected}
                         <ChevronDown className="w-4 h-4" />
                       </DropdownMenuTrigger>
@@ -156,60 +246,86 @@ const page = () => {
 
               <div className="relative z-10 w-full h-full p-5 rounded-xl text-white flex flex-col gap-7">
                 <div>
-                  <p className="text-lg font-semibold h-6">Upgrade plan</p>
+                  <p className="text-lg font-semibold h-6">
+                    {memorial?.premium ? "Paid Plan" : "Upgrade plan"}
+                  </p>
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="flex gap-6 h-[22px]">
                     <p className="text-base museo font-light">Plan:</p>
                     <span className="bg-white/20 px-2 py-0.5 text-sm museo font-light rounded-none text-white">
-                      Free
+                      {memorial?.premium ? "One time" : "Free"}
                     </span>
                   </div>
-                  <ul className="text-sm museo font-light flex flex-col h-[116px] gap-2 list-disc list-outside pl-5">
-                    <li>One-time payment</li>
-                    <li>
-                      Unlimited photos, videos and guest condolence messages
-                    </li>
-                    <li>Timeline and Family Tree feature</li>
-                    <li>Privacy and password protection</li>
-                  </ul>
+                  {memorial?.premium ? (
+                    ""
+                  ) : (
+                    <ul className="text-sm museo font-light flex flex-col h-[116px] gap-2 list-disc list-outside pl-5">
+                      <li>One-time payment</li>
+                      <li>
+                        Unlimited photos, videos and guest condolence messages
+                      </li>
+                      <li>Timeline and Family Tree feature</li>
+                      <li>Privacy and password protection</li>
+                    </ul>
+                  )}
                 </div>
 
-                <div className="mt-3 h-10">
-                  <Button className="w-full text-base museo font-light text-black rounded bg-white/50 backdrop-blur-md">
-                    Upgrade Now
-                  </Button>
-                </div>
+                {memorial?.premium ? (
+                  ""
+                ) : (
+                  <div className="mt-3 h-10">
+                    <Button className="w-full text-base museo font-light text-black rounded bg-white/50 backdrop-blur-md">
+                      Upgrade Now
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
 
         {/* RSVP List Controls */}
-        <div className="w-[1240px] h-[1048px] bg-[#E5F6EC4D] flex flex-col p-8">
+        <div className="w-[1240px] rounded bg-[#E5F6EC4D] flex flex-col p-8 gap-3">
           <div className=" h-10 flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <p className="font-medium">RSVP List</p>
+            <div className="flex items-center gap-3 h-6">
+              <p className="museo text-xl font-light">RSVP List</p>
+              <IconLock className="w-6 h-6" />
               <DropdownMenu>
-                <DropdownMenuTrigger className="border px-2 py-1 rounded">
-                  Share
+                <DropdownMenuTrigger className=" px-2 py-1">
+                  <IconShare className="w-6 h-6" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>Whatsapp</DropdownMenuItem>
-                  <DropdownMenuItem>Facebook</DropdownMenuItem>
-                  <DropdownMenuItem>Email</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FaWhatsapp className="w-6 h-6 text-black" />
+                    Whatsapp
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FiFacebook className="w-6 h-6 text-black" /> Facebook
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FiMail className="w-6 h-6 text-black" />
+                    Email
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
             <div className="flex gap-5 items-center">
-              <span className="text-sm">Split into 'individual'</span>
-              <Switch defaultChecked />
-              <span className="text-sm">Group by 'family'</span>
+              <div className="flex items-center gap-4 h-5">
+                <span className="text-sm museo font-light">
+                  Split into 'individual'
+                </span>
+                <Switch defaultChecked />
+                <span className="text-sm museo font-light">
+                  Group by 'family'
+                </span>
+              </div>
 
               <div className="flex items-center gap-3">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border px-2 py-1 rounded">
+                  <DropdownMenuTrigger className="border cursor-pointer flex justify-between items-center text-[14px] museo w-[104px] h-10 bg-[#699D99] text-white rounded px-3 py-[5px] hover:bg-[#e5f6ec]">
                     Filter
+                    <IconFilterDrop className="w-6 h-6" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem>All</DropdownMenuItem>
@@ -217,141 +333,171 @@ const page = () => {
                     <DropdownMenuItem>Decline</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Input placeholder="Search for a name" className="h-8 w-60" />
+                <div className="relative w-60 h-10">
+                  <Input
+                    placeholder="Search for a name"
+                    className="h-full w-[239px] rounded pr-10 text-teal-700 placeholder:text-[#699D99] placeholder:text-sm placeholder:font-light border border-[#699D99] focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                  <IconSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-[#699D99] w-6 h-6" />
+                </div>
               </div>
             </div>
           </div>
 
           {/* RSVP Table */}
-          <div className="">
-            <table className=" border">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="text-left p-2 border">Date</th>
-                  <th className="text-left p-2 border">Last Name</th>
-                  <th className="text-left p-2 border">Email</th>
-                  <th className="text-left p-2 border">Status</th>
-                  <th className="text-left p-2 border">Contact</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rsvps.map((rsvp, i) => (
-                  <tr key={i} className="border-t">
-                    <td className="p-2 border">{rsvp.date}</td>
-                    <td className="p-2 border">{rsvp.lastName}</td>
-                    <td className="p-2 border">{rsvp.email}</td>
-                    <td className="p-2 border">
+          <div className="w-full rounded-lg border border-gray-300 overflow-hidden">
+            <Table className="w-full border-separate border-spacing-0">
+              <TableHeader className="bg-[#699D99] text-black ">
+                <TableRow className="h-14 hover:bg-inherit">
+                  <TableHead className="text-white text-base museo font-semibold text-center w-[196px]">
+                    Date
+                  </TableHead>
+                  <TableHead className="text-white text-base museo font-semibold w-[196px] pl-4">
+                    First Name
+                  </TableHead>
+                  <TableHead className="text-white text-base museo font-semibold w-[196px] pl-4">
+                    Last Name
+                  </TableHead>
+                  <TableHead className="text-white text-base museo font-semibold w-[196px]">
+                    Email
+                  </TableHead>
+                  <TableHead className="text-white text-base museo font-semibold text-center w-[196px]">
+                    Verification Expiry
+                  </TableHead>
+                  <TableHead className="text-white text-base museo font-semibold text-center w-[196px]">
+                    Contact
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="bg-white">
+                {memorial?.rsvps.map((rsvp, i) => (
+                  <TableRow key={i} className="border-t w-[196px] h-14 ">
+                    <TableCell className="text-center border-b-2">
+                      {rsvp.createdAt &&
+                        format(new Date(rsvp.createdAt), "MM/dd/yyyy")}
+                    </TableCell>
+                    <TableCell className="pl-4 border-b-2">
+                      {rsvp.first_name}
+                    </TableCell>
+                    <TableCell className="pl-4 border-b-2">
+                      {rsvp.last_name}
+                    </TableCell>
+                    <TableCell className="p-2 border-b-2">
+                      {rsvp.email}
+                    </TableCell>
+                    <TableCell className="text-center border-b-2">
                       <span
-                        className={`text-xs font-medium px-2 py-1 rounded ${
-                          rsvp.status === "Accept"
-                            ? "text-green-600 bg-green-100"
-                            : "text-red-600 bg-red-100"
+                        className={`text-sm font-light museo px-2 py-1 rounded ${
+                          rsvp.verification === "true"
+                            ? "text-green-600 bg-white border border-[#28C76F80]"
+                            : "text-red-600 bg-white border border-[#FF000080]"
                         }`}
                       >
-                        {rsvp.status}
+                        {rsvp.verification ? "Accept" : "Decline"}
                       </span>
-                    </td>
-                    <td className="p-2 border">{rsvp.contact}</td>
-                  </tr>
+                    </TableCell>
+                    <TableCell className="text-center border-b-2">
+                      {rsvp.contact}
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
 
-          <div className="flex justify-end mt-4">
-            <Button>Download excel list</Button>
+          <div className="flex justify-end mt-5">
+            <Button
+              onClick={handleDownloadExcel}
+              className="w-[199px] h-11 rounded bg-[#699D99] text-base museo font-light"
+            >
+              Download excel list
+            </Button>
+          </div>
+        </div>
+
+        {/* Content Moderation */}
+        <div className="p-8 bg-[#F7FBF9] w-[1240px] flex flex-col rounded gap-8">
+          <h1 className="text-[32px] museo font-light">Content Moderation</h1>
+
+          {/* Messages Section */}
+          <div className="flex flex-col gap-5">
+            <h2 className="text-2xl museo font-light">Messages</h2>
+            <div className="flex flex-col gap-5">
+              {memorial?.condolences.map((item, i) => (
+                <div
+                  key={i}
+                  className="bg-white flex flex-col gap-8 p-8 rounded-lg relative w-[1176px] h-50"
+                >
+                  <div className="flex justify-between w-[1112px] h-8 ">
+                    <p className="font-semibold text-xl museo">
+                      {item.full_name},{" "}
+                      <span className="text-black font-light museo">
+                        {format(
+                          new Date(item.createdAt),
+                          "MMM dd, yyyy, hh:mm a"
+                        )}
+                      </span>
+                    </p>
+                    <IconDelete
+                      className="w-5.5 h-6"
+                      onClick={() => handleDeleteCondolence(item._id)}
+                    />
+                  </div>
+                  <p className="text-xl font-light museo text-black">
+                    {item.message}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Photos/Videos Section */}
+          <div className="flex flex-col gap-8">
+            <h2 className="text-2xl museo font-light">Photos/Videos</h2>
+            <div className="flex gap-10 ">
+              {mediaItems.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col gap-5 items-center w-[365.33px] h-[396px]"
+                >
+                  <div className="relative  w-[365.33px] h-[332px] aspect-[4/3] rounded-md overflow-hidden">
+                    <Image
+                      src={item.src}
+                      alt=""
+                      width={365.33}
+                      height={332}
+                      className="object-cover w-[365.33px] h-[332px]"
+                    />
+                    {item.type === "video" && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow">
+                          ▶
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex gap-5 w-[260px] h-11 justify-center">
+                    <Button className="px-7 py-2 text-sm text-red-600 border border-red-600 rounded bg-white hover:bg-red-50">
+                      Delete
+                    </Button>
+                    <Button className="px-7 py-2 text-sm text-green-600 border border-green-600 rounded bg-white hover:bg-green-50">
+                      Approve
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-const rsvps = [
-  {
-    date: "08/21/2024",
-    lastName: "Mercury",
-    email: "freddie@queen.co.uk",
-    status: "Accept",
-    contact: "(307) 555-0133",
-  },
-  {
-    date: "08/21/2024",
-    lastName: "Lennon",
-    email: "the_beatles@abc.co.uk",
-    status: "Decline",
-    contact: "(307) 555-0133",
-  },
-  {
-    date: "08/21/2024",
-    lastName: "Harrison",
-    email: "the_beatles@abc.co.uk",
-    status: "Accept",
-    contact: "(307) 555-0133",
-  },
-  {
-    date: "08/21/2024",
-    lastName: "Starr",
-    email: "the_beatles@abc.co.uk",
-    status: "Accept",
-    contact: "(307) 555-0133",
-  },
-  {
-    date: "08/21/2024",
-    lastName: "Hendrix",
-    email: "jimi.hendrix@usa.com",
-    status: "Accept",
-    contact: "(307) 555-0133",
-  },
-  {
-    date: "08/21/2024",
-    lastName: "Morrison",
-    email: "jim@the-door.com",
-    status: "Decline",
-    contact: "(319) 555-0115",
-  },
-  {
-    date: "08/20/2024",
-    lastName: "Joplin",
-    email: "",
-    status: "Accept",
-    contact: "(907) 555-0101",
-  },
-  {
-    date: "08/20/2024",
-    lastName: "Dylan",
-    email: "b.dylan@hotmail.com",
-    status: "Accept",
-    contact: "(319) 555-0152",
-  },
-  {
-    date: "08/20/2024",
-    lastName: "Richards",
-    email: "rollingstones@live.co.uk",
-    status: "Decline",
-    contact: "(302) 555-0103",
-  },
-  {
-    date: "08/19/2024",
-    lastName: "Charles",
-    email: "ray.charles@gmail.com",
-    status: "Accept",
-    contact: "(306) 555-0107",
-  },
-  {
-    date: "08/19/2024",
-    lastName: "Franklin",
-    email: "",
-    status: "Accept",
-    contact: "(675) 555-0110",
-  },
-  {
-    date: "08/18/2024",
-    lastName: "Brown",
-    email: "jamesbrown@yahoo.com",
-    status: "Decline",
-    contact: "(302) 555-0107",
-  },
+const mediaItems = [
+  { type: "image", src: "/img/1.jpg" },
+  { type: "video", src: "/video1.jpg" },
+  { type: "image", src: "/img/1.jpg" },
 ];
 
 export default page;
