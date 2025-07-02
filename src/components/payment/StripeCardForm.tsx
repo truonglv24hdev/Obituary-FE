@@ -58,7 +58,7 @@ export default function StripeCardForm({
       if (result.paymentIntent?.status) {
         try {
           const updatedUser = await premiumMemorial(id, {premium:true});
-          if (updatedUser) router.push(`/obituary/${id}`);
+          if (updatedUser) router.push(`/manage-memorial/${id}`);
           // eslint-disable-next-line
         } catch (error) {
           alert("Failed to update profile. Please try again.");

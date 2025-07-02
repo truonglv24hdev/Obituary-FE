@@ -42,12 +42,15 @@ import * as XLSX from "xlsx";
 import { deleteCondolences } from "@/lib/condolences";
 import { FiFacebook, FiMail } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
+import Link from "next/link";
 
 const page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
 
   const options = ["Public", "Private", "Password protected"];
+  const filter = ["All", "Accept", "Decline"];
   const [selected, setSelected] = useState("Public");
+  const [filtered, setFiltered] = useState("All");
   const [memorial, setMemorial] = useState<TMemorial | null>(null);
 
   useEffect(() => {
@@ -104,7 +107,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
     }
   };
 
-  console.log(memorial?.condolences);
+  console.log(memorial?.rsvps);
 
   return (
     <div className="mb-10">
@@ -135,9 +138,12 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
             <span className="museo text-lg font-light">Vist page</span>
           </div>
-          <Button className="bg-[#5f9c96] hover:bg-[#4a857f] museo w-[124px] h-11 text-white rounded text-base museo px-7 py-2">
+          <Link
+            href={`/obituary/${memorial?._id}`}
+            className="bg-[#5f9c96] hover:bg-[#4a857f] museo w-[124px] h-11 text-white rounded flex items-center text-base museo px-7 py-2"
+          >
             Edit page
-          </Button>
+          </Link>
         </div>
       </div>
       <div className="w-full relative flex flex-col items-center gap-6 ">
@@ -189,15 +195,19 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                         <ChevronDown className="w-4 h-4" />
                       </DropdownMenuTrigger>
 
-                      <DropdownMenuContent className="w-[220px]">
+                      <DropdownMenuContent
+                        side="bottom"
+                        align="start"
+                        className="w-[219px] h-[152px] px-6 py-3"
+                      >
                         {options.map((option) => {
                           const isSelected = selected === option;
                           return (
                             <DropdownMenuItem
                               key={option}
                               onClick={() => setSelected(option)}
-                              className={`flex items-center gap-3 px-3 py-2 text-sm cursor-pointer ${
-                                isSelected ? "bg-red-50" : ""
+                              className={`flex items-center w-[219px] h-10 gap-3 px-3 py-2 text-base museo font-light cursor-pointer ${
+                                isSelected ? "bg-[#E5F6EC4D]" : ""
                               }`}
                             >
                               <div
@@ -274,10 +284,13 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                 {memorial?.premium ? (
                   ""
                 ) : (
-                  <div className="mt-3 h-10">
-                    <Button className="w-full text-base museo font-light text-black rounded bg-white/50 backdrop-blur-md">
+                  <div className=" w-[313px] h-10">
+                    <Link
+                      href={`/payment/${memorial?._id}`}
+                      className="flex items-center justify-center w-[313px] h-10 text-base museo font-light text-black rounded bg-white/50 backdrop-blur-md"
+                    >
                       Upgrade Now
-                    </Button>
+                    </Link>
                   </div>
                 )}
               </div>
@@ -292,19 +305,33 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
               <p className="museo text-xl font-light">RSVP List</p>
               <IconLock className="w-6 h-6" />
               <DropdownMenu>
-                <DropdownMenuTrigger className=" px-2 py-1">
+                <DropdownMenuTrigger>
                   <IconShare className="w-6 h-6" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <FaWhatsapp className="w-6 h-6 text-black" />
+                <DropdownMenuContent
+                  side="bottom"
+                  align="start"
+                  className="w-[203px] h-[152px] rounded border"
+                >
+                  <DropdownMenuItem className="px-6 py-3 flex gap-4 w-[203px] h-11 text-base font-light museo">
+                    <FaWhatsapp
+                      style={{ width: "20px", height: "20px" }}
+                      className="text-black"
+                    />
                     Whatsapp
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <FiFacebook className="w-6 h-6 text-black" /> Facebook
+                  <DropdownMenuItem className="px-6 py-3 flex gap-4 h-11 text-base font-light museo">
+                    <FiFacebook
+                      style={{ width: "20px", height: "20px" }}
+                      className="text-black"
+                    />{" "}
+                    Facebook
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <FiMail className="w-6 h-6 text-black" />
+                  <DropdownMenuItem className="px-6 py-3 flex gap-4 h-11 text-base font-light museo">
+                    <FiMail
+                      style={{ width: "20px", height: "20px" }}
+                      className="text-black"
+                    />
                     Email
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -323,14 +350,40 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
 
               <div className="flex items-center gap-3">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border cursor-pointer flex justify-between items-center text-[14px] museo w-[104px] h-10 bg-[#699D99] text-white rounded px-3 py-[5px] hover:bg-[#e5f6ec]">
+                  <DropdownMenuTrigger className="border cursor-pointer flex justify-between items-center text-[14px] museo w-[104px] h-10 bg-[#699D99] text-white rounded px-3 py-[5px]">
                     Filter
                     <IconFilterDrop className="w-6 h-6" />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>All</DropdownMenuItem>
-                    <DropdownMenuItem>Accept</DropdownMenuItem>
-                    <DropdownMenuItem>Decline</DropdownMenuItem>
+                  <DropdownMenuContent
+                    side="bottom"
+                    align="start"
+                    className="w-[203px] h-[152px] rounded border"
+                  >
+                    {filter.map((option) => {
+                      const isSelected = filtered === option;
+                      return (
+                        <DropdownMenuItem
+                          key={option}
+                          onClick={() => setFiltered(option)}
+                          className={`flex items-center h-11 gap-4 px-6 py-3 text-base font-light museo cursor-pointer ${
+                            isSelected ? "bg-[#E5F6EC4D]" : ""
+                          }`}
+                        >
+                          <div
+                            className={`w-5 h-5 flex items-center justify-center rounded border ${
+                              isSelected
+                                ? "bg-[#699D99] text-white"
+                                : "border-gray-300"
+                            }`}
+                          >
+                            {isSelected && (
+                              <Check className="w-4 h-4 text-white" />
+                            )}
+                          </div>
+                          <span>{option}</span>
+                        </DropdownMenuItem>
+                      );
+                    })}
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <div className="relative w-60 h-10">
@@ -385,16 +438,16 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                     <TableCell className="p-2 border-b-2">
                       {rsvp.email}
                     </TableCell>
-                    <TableCell className="text-center border-b-2">
-                      <span
-                        className={`text-sm font-light museo px-2 py-1 rounded ${
-                          rsvp.verification === "true"
+                    <TableCell className=" border-b-2">
+                      <div
+                        className={`flex justify-center items-center text-sm mx-auto font-light museo w-[70px] h-6 px-2 py-1 rounded ${
+                          rsvp.verification
                             ? "text-green-600 bg-white border border-[#28C76F80]"
                             : "text-red-600 bg-white border border-[#FF000080]"
                         }`}
                       >
                         {rsvp.verification ? "Accept" : "Decline"}
-                      </span>
+                      </div>
                     </TableCell>
                     <TableCell className="text-center border-b-2">
                       {rsvp.contact}
@@ -423,31 +476,33 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
           <div className="flex flex-col gap-5">
             <h2 className="text-2xl museo font-light">Messages</h2>
             <div className="flex flex-col gap-5">
-              {memorial?.condolences.map((item, i) => (
-                <div
-                  key={i}
-                  className="bg-white flex flex-col gap-8 p-8 rounded-lg relative w-[1176px] h-50"
-                >
-                  <div className="flex justify-between w-[1112px] h-8 ">
-                    <p className="font-semibold text-xl museo">
-                      {item.full_name},{" "}
-                      <span className="text-black font-light museo">
-                        {format(
-                          new Date(item.createdAt),
-                          "MMM dd, yyyy, hh:mm a"
-                        )}
-                      </span>
+              {memorial?.condolences
+                .filter((item) => item.message?.trim().length > 0)
+                .map((item, i) => (
+                  <div
+                    key={i}
+                    className="bg-white flex flex-col gap-8 p-8 rounded-lg relative w-[1176px] h-50"
+                  >
+                    <div className="flex justify-between w-[1112px] h-8">
+                      <p className="font-semibold text-xl museo">
+                        {item.full_name},{" "}
+                        <span className="text-black font-light museo">
+                          {format(
+                            new Date(item.createdAt),
+                            "MMM dd, yyyy, hh:mm a"
+                          )}
+                        </span>
+                      </p>
+                      <IconDelete
+                        className="w-5.5 h-6"
+                        onClick={() => handleDeleteCondolence(item._id)}
+                      />
+                    </div>
+                    <p className="text-xl font-light museo text-black">
+                      {item.message}
                     </p>
-                    <IconDelete
-                      className="w-5.5 h-6"
-                      onClick={() => handleDeleteCondolence(item._id)}
-                    />
                   </div>
-                  <p className="text-xl font-light museo text-black">
-                    {item.message}
-                  </p>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
 
@@ -455,32 +510,27 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
           <div className="flex flex-col gap-8">
             <h2 className="text-2xl museo font-light">Photos/Videos</h2>
             <div className="flex gap-10 ">
-              {mediaItems.map((item, i) => (
+              {memorial?.condolences.map((item, i) => (
                 <div
                   key={i}
                   className="flex flex-col gap-5 items-center w-[365.33px] h-[396px]"
                 >
-                  <div className="relative  w-[365.33px] h-[332px] aspect-[4/3] rounded-md overflow-hidden">
-                    <Image
-                      src={item.src}
-                      alt=""
-                      width={365.33}
-                      height={332}
-                      className="object-cover w-[365.33px] h-[332px]"
-                    />
-                    {item.type === "video" && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow">
-                          ▶
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  {item.photo && (
+                    <div className="relative  w-[365.33px] h-[332px] aspect-[4/3] rounded-md overflow-hidden">
+                      <Image
+                        src={`http://localhost:5000${item.photo}`}
+                        alt=""
+                        width={365.33}
+                        height={332}
+                        className="object-cover w-[365.33px] h-[332px]"
+                      />
+                    </div>
+                  )}
                   <div className="flex gap-5 w-[260px] h-11 justify-center">
-                    <Button className="px-7 py-2 text-sm text-red-600 border border-red-600 rounded bg-white hover:bg-red-50">
+                    <Button className="px-7 py-2 text-sm text-[#FF2121] border border-[#FF2121] rounded bg-white hover:bg-red-50">
                       Delete
                     </Button>
-                    <Button className="px-7 py-2 text-sm text-green-600 border border-green-600 rounded bg-white hover:bg-green-50">
+                    <Button className="px-7 py-2 text-sm text-[#27FF61] border border-[#27FF61] rounded bg-white hover:bg-green-50">
                       Approve
                     </Button>
                   </div>
@@ -493,11 +543,5 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
     </div>
   );
 };
-
-const mediaItems = [
-  { type: "image", src: "/img/1.jpg" },
-  { type: "video", src: "/video1.jpg" },
-  { type: "image", src: "/img/1.jpg" },
-];
 
 export default page;

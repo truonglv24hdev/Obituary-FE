@@ -147,7 +147,7 @@ const MemoryWall = ({
   const formSchema = z.object({
     fullName: z.string().min(1, "First name is required"),
     email: z.string().email(),
-    message: z.string().min(5,"message min 5"),
+    message: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({

@@ -10,6 +10,7 @@ export type TUser = {
 
 export type TMemorial = {
   _id: string;
+  obituaryId: string;
   picture: string;
   first_name: string;
   middle_name: string;
@@ -18,20 +19,20 @@ export type TMemorial = {
   born: string;
   death: string;
   slug: string;
-  rsvps:TRSVP[];
-  condolences: TCondolences[]
+  rsvps: TRSVP[];
+  condolences: TCondolences[];
   premium: boolean;
 };
 
-export type TRSVP ={
-  _id:string,
-  first_name:string,
-  last_name:string,
-  verification:string,
-  email:string,
-  contact:string
-  createdAt:Date
-}
+export type TRSVP = {
+  _id: string;
+  first_name: string;
+  last_name: string;
+  verification: string;
+  email: string;
+  contact: string;
+  createdAt: Date;
+};
 
 export type TObituary = {
   _id: string;
@@ -135,9 +136,8 @@ export type TCondolences = {
   message: string;
   photo: string;
   video: string;
-  createdAt:Date
+  createdAt: Date;
 };
-
 
 export type GuestBookProps = {
   condolences: TCondolences[];

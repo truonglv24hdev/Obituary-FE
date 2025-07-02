@@ -27,7 +27,7 @@ const TimelineObituary: React.FC<Props> = ({
   addTimelineEvent,
 }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 z-0 relative">
       <div className="flex items-center justify-between">
         <h3 className="text-[32px] font-medium museo">Timeline</h3>
         <Switch checked={showTimeline} onCheckedChange={setShowTimeline} />
@@ -215,7 +215,7 @@ const TimelineObituary: React.FC<Props> = ({
               <Button
                 type="button"
                 onClick={addTimelineEvent}
-                className="w-[157px] h-11 bg-teal-600 rounded font-light hover:bg-teal-700 text-white"
+                className="w-[157px] h-11 bg-teal-600 z-0  rounded font-light hover:bg-teal-700 text-white"
               >
                 Add Event
               </Button>

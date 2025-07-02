@@ -36,7 +36,7 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
                 className="mx-auto my-2 w-[120px] h-[110px] object-cover"
                 layout="responsive"
               />
-              <Link href={`/obituary/${memorial._id}`} className="absolute bottom-1 right-1 bg-white text-black rounded shadow h-8 w-8 flex items-center justify-center cursor-pointer hover:bg-gray-400">
+              <Link href={`/manage-memorial/${memorial._id}`} className="absolute bottom-1 right-1 bg-white text-black rounded shadow h-8 w-8 flex items-center justify-center cursor-pointer hover:bg-gray-400">
                 <IconSetting />
               </Link>
             </div>

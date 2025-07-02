@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Switch } from "../ui/switch";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { TFavorite, TFavoriteType } from "@/types/type";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { IconCancel, IconDelete } from "../icons";
 
 interface FavoritesSectionProps {
   show: boolean;
@@ -23,27 +24,76 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
   addFavorite,
 }) => {
   const [showFavoriteOptions, setShowFavoriteOptions] = useState(false);
+  const [customQuestion, setCustomQuestion] = useState("");
+  const [customAnswer, setCustomAnswer] = useState("");
+  const [showCustomForm, setShowCustomForm] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowFavoriteOptions(false);
+      }
+    };
+
+    if (showFavoriteOptions) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showFavoriteOptions]);
+
+  const handleAddCustomFavorite = () => {
+    if (customQuestion.trim() && customAnswer.trim()) {
+      const newFavorite: TFavorite = {
+        id: `custom-${Date.now()}`,
+        type: "custom",
+        question: customQuestion,
+        answer: customAnswer,
+        icon: "fa-solid fa-question",
+      };
+      setFavorites([...favorites, newFavorite]);
+      setCustomQuestion("");
+      setCustomAnswer("");
+      setShowCustomForm(false);
+    }
+  };
 
   return (
-    <div className="space-y-6 relative  flex flex-col">
+    <div className="space-y-6 relative z-[10]">
       <div className="flex items-center justify-between">
         <h3 className="text-[32px] museo font-medium">Favorites</h3>
         <Switch checked={show} onCheckedChange={setShow} />
       </div>
 
       {show && (
-        <div className="relative flex-1 flex flex-col space-y-6">
-          {/* Overlay Favorite Options */}
+        <div className="relative flex flex-col space-y-6 z-[50]">
+          {/* Favorite Options Dropdown */}
           {showFavoriteOptions && (
-            <div className="absolute w-[723px] h-[240px] bg-[#FAFAFA] z-50 py-5 px-7 right-0 bottom-8 flex flex-col gap-6 shadow-lg">
+            <div
+              ref={dropdownRef}
+              className="absolute w-[723px] h-[240px] bg-[#FAFAFA] z-[9999] py-5 px-7 right-0 bottom-14 flex flex-col gap-6 shadow-lg border border-gray-300"
+            >
               <div className="grid grid-cols-3 gap-4">
                 {favoriteTypes.map((type) => (
                   <Button
                     type="button"
                     key={type.id}
                     onClick={() => {
-                      addFavorite(type.id);
-                      setShowFavoriteOptions(false);
+                      if (type.id === "custom") {
+                        setShowFavoriteOptions(false);
+                        setShowCustomForm(true);
+                        setCustomQuestion("");
+                        setCustomAnswer("");
+                      } else {
+                        addFavorite(type.id);
+                        setShowFavoriteOptions(false);
+                      }
                     }}
                     className="flex border-none rounded-none shadow-none hover:bg-gray-300 bg-[#FAFAFA] justify-start transition-colors w-[224px] h-5 gap-4"
                   >
@@ -55,19 +105,27 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
             </div>
           )}
 
-          {/* Existing Favorites */}
+          {/* List of Existing Favorites */}
           {favorites.length > 0 && (
-            <div
-              className={`flex flex-col border-blue overflow-auto rounded border p-5 gap-10`}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 border overflow-auto rounded border-gray-200 p-5">
               {favorites.map((favorite) => (
-                <div
-                  key={favorite.id}
-                  className="flex flex-col gap-3 w-[950px] h-14"
-                >
-                  <div className="flex items-center gap-2 text-base museo font-light">
-                    <i className={favorite.icon}></i>
-                    <span>{favorite.question}</span>
+                <div key={favorite.id} className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-base museo font-light">
+                      <i className={favorite.icon}></i>
+                      <span>{favorite.question}</span>
+                    </div>
+                    <Button
+                      type="button"
+                      className="w-5 h-5 bg-white rounded border shadow-sm hover:bg-gray-300"
+                      onClick={() => {
+                        setFavorites(
+                          favorites.filter((f) => f.id !== favorite.id)
+                        );
+                      }}
+                    >
+                      <IconDelete className="w-4 h-4 text-black" />
+                    </Button>
                   </div>
                   <Input
                     value={favorite.answer}
@@ -80,14 +138,62 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
                       setFavorites(newFavorites);
                     }}
                     placeholder="Your response"
-                    className="w-[156px] h-6 border-dashed border-[#00000080] rounded-none"
+                    className="w-full h-8 border-dashed border-[#00000080] rounded-none"
                   />
                 </div>
               ))}
             </div>
           )}
 
-          {/* Add Favorite Button at Bottom Right */}
+          {/* Custom Question Form */}
+          {showCustomForm && (
+            <div className="fixed h-full inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+              <div className="bg-white p-6 rounded-md shadow-md border border-gray-200 flex flex-col gap-10 w-[600px] h-100">
+                <div className="flex justify-between">
+                  <h2 className="text-[32px] font-medium">Favorites</h2>
+                  <button
+                    onClick={() => setShowCustomForm(false)}
+                    className=" top-5 right-5 text-gray-600 hover:text-black"
+                  >
+                    <IconCancel className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-2 w-[556px] h-19">
+                    <p className=" text-base font-light museo">
+                      Custom Question
+                    </p>
+                    <Input
+                      value={customQuestion}
+                      onChange={(e) => setCustomQuestion(e.target.value)}
+                      placeholder="What was John Doe Favorite ...?"
+                      className="w-full h-12 border-dashed border-[#00000080] rounded placeholder:text-black placeholder:museo"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 w-[556px] h-19">
+                    <p className=" text-base font-light museo">Your response</p>
+                    <Input
+                      value={customAnswer}
+                      onChange={(e) => setCustomAnswer(e.target.value)}
+                      placeholder="Write your response here..."
+                      className="w-full h-12 border-dashed border-[#00000080] rounded placeholder:text-black placeholder:museo"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    type="button"
+                    onClick={handleAddCustomFavorite}
+                    className="w-[108px] h-11 px-7 py-2 rounded text-base museo font-light bg-teal-600 text-white hover:bg-teal-700"
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Add Favorite Button */}
           <div className="mt-auto flex justify-end">
             <Button
               type="button"

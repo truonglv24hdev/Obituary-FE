@@ -45,9 +45,9 @@ import { favoriteTypes } from "@/constants/obituary";
 import FormRSVP from "@/components/obituary/FormRSVP";
 import { Switch } from "@/components/ui/switch";
 import Gallery from "@/components/obituary/Gallery";
-import { Checkbox } from "@/components/ui/checkbox";
 import GuestBook from "@/components/obituary/GuestBook";
 import { getCondolences } from "@/lib/condolences";
+import VideoWall from "@/components/obituary/VideoWall";
 
 const formSchema = z.object({
   picture: z.any().optional(),
@@ -106,6 +106,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [galleryFolders, setGalleryFolders] = useState<GalleryFolder[]>([]);
   const [showVideos, setShowVideos] = useState(true);
   const [condolences, setCondolences] = useState<TCondolences[] | null>(null);
+  const [openVideoWall, setOpenVideoWall] = useState(false);
 
   const addTimelineEvent = () => {
     const newEvent: TimelineEvent = {
@@ -611,6 +612,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                       <div>
                         <Button
                           type="button"
+                          onClick={() => setOpenVideoWall(true)}
                           className="w-[162px] h-12 bg-[#699D99] rounded px-7 py-2 text-base museo"
                         >
                           Upload Videos
@@ -619,6 +621,14 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                     </div>
                   )}
                 </div>
+
+                {openVideoWall && (
+                  <VideoWall
+                    obituaryId={id}
+                    open={openVideoWall}
+                    onClose={() => setOpenVideoWall(false)}
+                  />
+                )}
 
                 {/* Guest Book */}
                 <GuestBook condolences={condolences || []} />

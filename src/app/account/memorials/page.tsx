@@ -1,5 +1,4 @@
 import Memorials from '@/components/account/settings/Memorials'
-import Footer from '@/components/layout/Footer'
 import Heading from '@/components/layout/Heading'
 import React from 'react'
 

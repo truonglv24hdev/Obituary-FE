@@ -1,18 +1,30 @@
 import { X, Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ContributeModalProps {
+  obituaryId: string;
   open: boolean;
   onClose: () => void;
 }
 
-export default function ContributeModal({ open, onClose }: ContributeModalProps) {
+const VideoWall = ({ obituaryId, open, onClose }: ContributeModalProps) => {
   const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+    <div className="fixed h-full inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="bg-white w-[600px] rounded-2xl shadow-xl p-8 relative">
         {/* Close button */}
         <button
@@ -23,11 +35,14 @@ export default function ContributeModal({ open, onClose }: ContributeModalProps)
         </button>
 
         {/* Title */}
-        <h2 className="text-2xl font-semibold mb-6">Contribute to memory wall</h2>
+        <h2 className="text-2xl font-semibold mb-6">
+          Contribute to memory wall
+        </h2>
 
         {/* Input label */}
         <p className="text-sm text-gray-600 mb-2">
-          Video URL <span className="text-xs">(Youtube, Google drive, Dailymotion)</span>
+          Video URL{" "}
+          <span className="text-xs">(Youtube, Google drive, Dailymotion)</span>
         </p>
 
         {/* Input field */}
@@ -62,4 +77,6 @@ export default function ContributeModal({ open, onClose }: ContributeModalProps)
       </div>
     </div>
   );
-}
+};
+
+export default VideoWall;

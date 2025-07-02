@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { sendOtp } from "@/lib/authAPI";
+import { sendLink, sendOtp } from "@/lib/authAPI";
 import { useRouter } from "next/navigation";
 
 const OTP_LENGTH = 6;
@@ -55,7 +55,12 @@ const Otp = ({ email }: { email: string }) => {
     }
   };
 
-  const handleResend = () => {
+  const sendOTP = async () => {
+    const result = await sendLink(email);
+    console.log(result)
+  };
+
+  const handleResend = async () => {
     setOtp(Array(OTP_LENGTH).fill(""));
     setTimer(56 * 60);
     setResendActive(false);
@@ -139,8 +144,8 @@ const Otp = ({ email }: { email: string }) => {
           <button
             type="button"
             className="text-blue-500 hover:underline bg-transparent p-0 m-0 inline"
-            onClick={handleResend}
-            disabled={!resendActive}
+            onClick={sendOTP}
+            // disabled={!resendActive}
           >
             Resend code
           </button>

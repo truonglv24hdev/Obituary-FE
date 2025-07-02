@@ -15,7 +15,7 @@ const ActiveLink = ({
   return (
     <Link
       href={url}
-      className={`h-6  text-[18px] leading-[24px] ${
+      className={`h-6  text-[18px] leading-[24px] hover:font-semibold ${
         isActive ? "font-semibold" : "font-light"
       }`}
     >
