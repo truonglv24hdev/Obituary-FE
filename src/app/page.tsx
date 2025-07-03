@@ -7,87 +7,96 @@ import Heartwarming from "../components/layout/Heartwarming";
 import HeroSection from "../components/layout/HeroSection";
 import PricingSection from "../components/layout/PricingSection";
 import Footer from "@/components/layout/Footer";
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Heading className="bg-[#699D99]" />
-      <div className="w-full flex-1 flex justify-center items-center px-25 py-10">
-        <div className="relative w-[1240px] h-[680px] rounded-xl  shadow-lg overflow-hidden flex">
-          <div className="absolute inset-0 z-0">
+      <div className="w-full flex-1 flex flex-col md:flex-row justify-center items-center px-4 md:px-25 py-10">
+        <div className="relative w-full md:w-[1240px] h-auto md:h-[680px] rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+          <div className="absolute inset-0 z-0 min-h-[500px] md:min-h-0">
             <Image src="/img/1.jpg" alt="Logo" fill className="object-cover" />
           </div>
-          <section className="inset-y-0 w-[543px] z-10 px-12 flex flex-col items-center justify-center gap-4 border-b-[#0000001A] rounded-tl-[12px] rounded-bl-[12px] backdrop-blur-[48px] overflow-hidden">
-            <div className="w-[447px] h-[501px] flex flex-col gap-[35px]">
-              <div className="w-[447px] h-[90px] flex flex-col gap-5">
-                <h1 className="w-[447px] h-12 text-[40px] leading-[48px] font-black font-serif text-white tracking-normal">
+
+          <section className="inset-y-0 w-full md:w-[543px] z-10 px-6 md:px-12 py-8 md:py-0 flex flex-col items-center justify-center gap-4 border-b-[#0000001A] rounded-tl-[12px] md:rounded-bl-[12px] backdrop-blur-[48px] overflow-hidden bg-black/50 md:bg-transparent">
+            <div className="w-full md:w-[447px] h-auto md:h-[501px] flex flex-col gap-[35px]">
+              <div className="w-full md:w-[447px] h-auto md:h-[90px] flex flex-col gap-5 text-center md:text-left">
+                <h1 className="text-[32px] md:text-[40px] leading-[40px] md:leading-[48px] font-black font-serif text-white tracking-normal">
                   Create a Memorial
                 </h1>
-                <p className="w-[447px] h-[22px] text-[#f3f8f7] museo text-[18px] leading-[22px] tracking-normal font-museo">
+                <p className="text-[16px] md:text-[18px] leading-[22px] text-[#f3f8f7] museo font-museo">
                   Preserve And Share Memory Of Your Loved One
                 </p>
               </div>
 
-              <div className="h-[365px] flex flex-col gap-11">
-                <div className="w-[447px] h-24 gap-5 flex flex-col">
-                  <h2 className="text-[20px] h-6 font-semibold museo text-white mx-auto leading-[22px] tracking-normal">
+              <div className="h-auto md:h-[365px] flex flex-col gap-11">
+                {/* Search Obituary */}
+                <div className="w-full md:w-[447px] h-auto md:h-24 flex flex-col gap-5">
+                  <h2 className="text-[18px] md:text-[20px] font-semibold museo text-white text-center md:text-center">
                     Search Obituary
                   </h2>
-                  <div className="h-[52px] rounded-sm justify-between flex">
+                  <div className="flex flex-col md:flex-row gap-3 md:gap-0">
                     <input
                       type="text"
                       placeholder="First name"
-                      className="w-[188px] h-13 flex-1 museo px-5 py-4.5 rounded-l-md border border-gray-200 bg-white gap-1 placeholder:text-black "
+                      className="w-full md:w-[201px] h-13 museo px-5 py-4.5 border border-gray-200 bg-white placeholder:text-black 
+               rounded-md md:rounded-l-md md:rounded-r-none"
                     />
                     <input
                       type="text"
                       placeholder="Last name"
-                      className="w-[188px] h-13 flex-1 px-3 museo py-2 border-t border-b border-gray-200 bg-white gap-1 placeholder:text-black"
+                      className="w-full md:w-[201px] h-13 museo px-3 py-2 border border-t border-b md:border-l-0 border-gray-200 bg-white placeholder:text-black
+               rounded-md md:rounded-none"
                     />
                     <button
                       type="submit"
-                      className="w-[45px] h-13 cursor-pointer bg-[#6ea09e] text-white py-2 rounded-r-md font-bold"
+                      className="w-full md:w-[45px] h-13 bg-[#6ea09e] text-white py-2 font-bold flex justify-center items-center
+               rounded-md md:rounded-r-md md:rounded-l-none"
                     >
-                      <IconSearch className="w-6 h-6 mx-auto" />
+                      <IconSearch className="w-6 h-6" />
                     </button>
                   </div>
                 </div>
 
+                {/* Divider */}
                 <div className="flex items-center my-4">
                   <div className="flex-1 h-px bg-gray-300" />
                   <span className="mx-3 text-white font-bold">Or</span>
                   <div className="flex-1 h-px bg-gray-300" />
                 </div>
 
-                <div className="w-[447px] h-24 gap-5 flex flex-col">
-                  <h2 className="text-[20px] h-6 museo font-semibold text-white mx-auto leading-[22px] tracking-normal">
+                {/* Share memories of */}
+                <div className="w-full md:w-[447px] h-auto md:h-24 flex flex-col gap-5">
+                  <h2 className="text-[18px] md:text-[20px] museo font-semibold text-white text-center md:text-center">
                     Share memories of
                   </h2>
-                  <div className="h-[52px] flex gap-5">
+                  <div className="flex flex-col md:flex-row gap-3">
                     <input
                       type="text"
                       placeholder="First name"
-                      className="flex-1 px-3 py-2 museo rounded-md border w-[213px] border-gray-200 focus:outline-none bg-white placeholder:text-black"
+                      className="w-full md:w-[217px] h-13 md:h-13 px-3 py-2 museo rounded-md border border-gray-200 bg-white placeholder:text-black"
                     />
                     <input
                       type="text"
                       placeholder="Last name"
-                      className="flex-1 px-3 py-2 museo rounded-md border w-[213px] border-gray-200 focus:outline-none bg-white placeholder:text-black"
+                      className="w-full md:w-[217px] h-13 px-3 py-2 museo rounded-md border border-gray-200 bg-white placeholder:text-black"
                     />
                   </div>
-                  <button
+                  <Button
                     type="submit"
-                    className="w-full museo cursor-pointer bg-[#6ea09e] text-white py-2 rounded-md font-semibold"
+                    className="w-full md:w-[447px] rounded-lg h-13 bg-[#6ea09e] text-white py-2 font-light museo text-base flex justify-center items-center"
                   >
                     Start for Free
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
           </section>
         </div>
       </div>
+
       <HowItWorks />
       <Heartwarming />
       <HeroSection />

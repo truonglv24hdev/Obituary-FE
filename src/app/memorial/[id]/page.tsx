@@ -19,6 +19,45 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const [condolences, setCondolences] = useState<TCondolences[] | null>(null);
   const [openMemoryWall, setOpenMemoryWall] = useState(false);
 
+  const [eventMapUrls, setEventMapUrls] = useState<Record<string, string>>({});
+  useEffect(() => {
+    const fetchMapUrls = async () => {
+      if (!obituary?.event) return;
+
+      const fetchUrlForLocation = async (location: string) => {
+        const geoUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+          location
+        )}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
+
+        const res = await fetch(geoUrl);
+        const data = await res.json();
+
+        if (data.features && data.features.length > 0) {
+          const [lon, lat] = data.features[0].center;
+          return `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+ff0000(${lon},${lat})/${lon},${lat},15,0/600x300?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
+        }
+
+        return ""; // fallback nếu không tìm thấy
+      };
+
+      const promises = obituary.event.map(async (event) => {
+        const url = await fetchUrlForLocation(event.location);
+        return { id: event._id, url };
+      });
+
+      const results = await Promise.all(promises);
+
+      const urlMap: Record<string, string> = {};
+      results.forEach(({ id, url }) => {
+        urlMap[id] = url;
+      });
+
+      setEventMapUrls(urlMap);
+    };
+
+    fetchMapUrls();
+  }, [obituary]);
+
   useEffect(() => {
     getObituaryById(id)
       .then((data) => setObituary(data))
@@ -47,7 +86,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           src={
             obituary?.headerImage
               ? `http://localhost:5000${obituary.headerImage}`
-              : `/img/1.jpg`
+              : `/img/default/png`
           }
           alt="headerImage"
           width={1440}
@@ -286,7 +325,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           <div className="flex flex-col gap-15">
             <h2 className="text-[28px] font-medium text-[#2d3b4e]">Events</h2>
             {obituary?.event.map((event, index) => (
-              <Event key={index} event={event} />
+              <Event key={index} event={event} mapUrl={eventMapUrls[event._id]} />
             ))}
           </div>
 

@@ -10,12 +10,14 @@ export async function postMemorial(formData: FormData) {
   return res.data;
 }
 
-export async function getMemorialByUser() {
-  const res = await axios.get("/api/memorial", { requiresAuth: true });
+export async function getMemorialByUser(page: number = 1, limit: number = 4) {
+  const res = await axios.get(`/api/memorial?page=${page}&limit=${limit}`, {
+    requiresAuth: true,
+  });
   return res.data;
 }
 
-export async function getMemorialById(id:string) {
+export async function getMemorialById(id: string) {
   const res = await axios.get(`/api/memorial/${id}`);
   return res.data;
 }

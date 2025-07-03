@@ -79,6 +79,27 @@ const CreateMemorial = () => {
     }
   }
 
+  const slugInput = form.watch("slug")?.trim().toLowerCase() || "";
+  const born = form.watch("born");
+  const death = form.watch("death");
+
+  const getYear = (dateStr?: string) => dateStr?.match(/\d{4}/)?.[0] || "";
+  const bornYear = getYear(born);
+  const deathYear = getYear(death);
+  const age =
+    bornYear && deathYear
+      ? (parseInt(deathYear) - parseInt(bornYear)).toString()
+      : "";
+
+  const slugSuggestions =
+    slugInput.length > 0
+      ? [
+          slugInput.replace(/\s+/g, "-"),
+          bornYear && `${slugInput}${bornYear}`,
+          age && `${slugInput}${age}`,
+        ].filter(Boolean)
+      : [];
+
   return (
     <div>
       <div className="w-[1500px] h-[1587px] px-[229px] py-20 flex flex-col gap-13">
@@ -109,18 +130,19 @@ const CreateMemorial = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="hidden" // 👈 ẩn input đi
+                  className="hidden" // ẩn input đi
                 />
               </label>
             </div>
           </div>
 
-          {/* Name Inputs */}
+          {/* Form Fields */}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col gap-7 w-[918px]"
             >
+              {/* First Name */}
               <FormField
                 control={form.control}
                 name="first_name"
@@ -141,6 +163,7 @@ const CreateMemorial = () => {
                 )}
               />
 
+              {/* Middle Name */}
               <FormField
                 control={form.control}
                 name="middle_name"
@@ -161,6 +184,7 @@ const CreateMemorial = () => {
                 )}
               />
 
+              {/* Last Name */}
               <FormField
                 control={form.control}
                 name="last_name"
@@ -181,6 +205,7 @@ const CreateMemorial = () => {
                 )}
               />
 
+              {/* Gender */}
               <FormField
                 control={form.control}
                 name="gender"
@@ -216,6 +241,7 @@ const CreateMemorial = () => {
                 )}
               />
 
+              {/* Born */}
               <FormField
                 control={form.control}
                 name="born"
@@ -236,6 +262,7 @@ const CreateMemorial = () => {
                 )}
               />
 
+              {/* Death */}
               <FormField
                 control={form.control}
                 name="death"
@@ -256,39 +283,51 @@ const CreateMemorial = () => {
                 )}
               />
 
+              {/* Memorial web address */}
               <label className="block text-2xl font-light text-gray-700">
                 Memorial web address:
               </label>
-
               <FormField
                 control={form.control}
                 name="slug"
                 render={({ field }) => (
-                  <FormItem className="flex gap-37 h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
-                      https://
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-[400px] bg-white rounded"
-                        placeholder="John-Doe"
-                        {...field}
-                      />
-                    </FormControl>
-                    <p className="w-16">Tributechapters.com.sg</p>
+                  <FormItem className="flex flex-col gap-1">
+                    <div className="flex gap-3 items-center">
+                      <FormLabel className="font-light text-base w-[80px]">
+                        https://
+                      </FormLabel>
+                      <FormControl className="ml-35">
+                        <Input
+                          className="w-[400px] bg-white rounded"
+                          placeholder="john-doe"
+                          {...field}
+                        />
+                      </FormControl>
+                      <span className="text-sm">Tributechapters.com.sg</span>
+                    </div>
                     <FormMessage />
+
+                    {slugSuggestions.length > 0 && (
+                      <div className="text-sm text-gray-600 ml-58 mt-2 mb-6">
+                        <p className="text-xl text-black museo mb-3">
+                          Suggestions:
+                        </p>
+                        <ul className="list-disc list-inside text-base museo font-light text-[#222222] space-y-2">
+                          {slugSuggestions.map((s, i) => (
+                            <li
+                              key={i}
+                              className="cursor-pointer hover:underline ml-2"
+                              onClick={() => form.setValue("slug", s)}
+                            >
+                              Tributechapters.com.sg/{s}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </FormItem>
                 )}
               />
-
-              <div className="text-sm text-gray-600 ml-58 mt-2 mb-6">
-                <p className="font-medium mb-1">Suggestions:</p>
-                <ul className="list-disc list-inside ml-2">
-                  <li>Tributechapters.com.sg.sg/John-doe29</li>
-                  <li>Tributechapters.com.sg.sg/JohnDoe</li>
-                  <li>Tributechapters.com.sg.sg/John-doe1980</li>
-                </ul>
-              </div>
 
               <div className="col-span-2 text-right">
                 <Button
@@ -300,7 +339,6 @@ const CreateMemorial = () => {
               </div>
             </form>
           </Form>
-          {/* Suggestions */}
         </div>
       </div>
     </div>

@@ -19,6 +19,11 @@ export async function sendLink(email: string) {
   return res.data;
 }
 
+export async function resendLink(email: string) {
+  const res = await axios.post(`/api/send-link/${email}`);
+  return res.data;
+}
+
 export async function sendOtp(email: string, otp: string) {
   const res = await axios.post(`/api/otp/${email}`, { otp });
   return res.data;

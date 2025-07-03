@@ -14,9 +14,10 @@ type Props = {
     timeFrom: string[];
     timeTo: string[];
   };
+  mapUrl?: string;
 };
 
-const Event = ({ event }: Props) => {
+const Event = ({ event, mapUrl }: Props) => {
   const formatTime = (time: string) => {
     if (!time) return "";
     const [h, m] = time.split(":");
@@ -36,11 +37,11 @@ const Event = ({ event }: Props) => {
         {/* Map */}
         <div className="rounded overflow-hidden flex-shrink-0">
           <Image
-            src="/img/map-demo.png"
+              src={mapUrl || "/img/map-demo.png"}
             alt="map"
             width={407}
-            height={340}
-            className="w-[407px] h-auto object-cover"
+            height={308}
+            className="w-[407px] h-[308px] object-cover"
           />
         </div>
 

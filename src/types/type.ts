@@ -28,7 +28,7 @@ export type TRSVP = {
   _id: string;
   first_name: string;
   last_name: string;
-  verification: string;
+  verification: boolean;
   email: string;
   contact: string;
   createdAt: Date;
@@ -55,7 +55,7 @@ export type TFavorite = {
 };
 
 export type TEvent = {
-  id: string;
+  _id: string;
   eventTitle: string;
   description: string;
   location: string;

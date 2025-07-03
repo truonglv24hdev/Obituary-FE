@@ -1,26 +1,50 @@
 import { IconSetting } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import {formatDateRange} from "@/constants/formatDateRange";
+import { formatDateRange } from "@/constants/formatDateRange";
 import { TMemorial } from "@/types/type";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
+type Props = {
+  memorials: TMemorial[];
+  page: number;
+  totalPages: number;
+  onPageChange: (newPage: number) => void;
+};
 
+const HaveMemorials = ({
+  memorials,
+  page,
+  totalPages,
+  onPageChange,
+}: Props) => {
   return (
-    <div className="w-[982px] ">
+    <div className="w-[982px]">
       {/* Header */}
       <div className="bg-[#E5F6EC80] p-4 rounded-t-lg flex justify-between items-center">
-        <h1 className="text-2xl font-light text-gray-800 museo">My Memorials</h1>
+        <h1 className="text-2xl font-light text-gray-800 museo">
+          My Memorials
+        </h1>
         <div className="text-base font-light text-gray-600 flex items-center gap-2">
-          <button className="hover:underline museo">&lt; Previous</button>
+          <button
+            className="hover:underline museo disabled:text-gray-300"
+            onClick={() => onPageChange(page - 1)}
+            disabled={page === 1}
+          >
+            &lt; Previous
+          </button>
           <span className="text-gray-400">|</span>
-          <button className="hover:underline museo">Next &gt;</button>
+          <button
+            className="hover:underline museo disabled:text-gray-300"
+            onClick={() => onPageChange(page + 1)}
+            disabled={page === totalPages}
+          >
+            Next &gt;
+          </button>
         </div>
       </div>
 
-      {/* Memorial Cards Container */}
+      {/* Memorial cards */}
       <div className="w-[920px] h-[227px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 ml-6 mt-4">
         {memorials.map((memorial) => (
           <div
@@ -34,9 +58,11 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
                 width={110}
                 height={110}
                 className="mx-auto my-2 w-[120px] h-[110px] object-cover"
-                layout="responsive"
               />
-              <Link href={`/manage-memorial/${memorial._id}`} className="absolute bottom-1 right-1 bg-white text-black rounded shadow h-8 w-8 flex items-center justify-center cursor-pointer hover:bg-gray-400">
+              <Link
+                href={`/manage-memorial/${memorial._id}`}
+                className="absolute bottom-1 right-1 bg-white text-black rounded shadow h-8 w-8 flex items-center justify-center cursor-pointer hover:bg-gray-400"
+              >
                 <IconSetting />
               </Link>
             </div>
@@ -52,7 +78,7 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
           </div>
         ))}
 
-        {/* Empty Memorial Card slots */}
+        {/* Empty card slots */}
         {Array.from({ length: Math.max(0, 4 - memorials.length) }).map(
           (_, i) => (
             <div
@@ -83,4 +109,5 @@ const HaveMemorials = ({ memorials }: { memorials: TMemorial[] }) => {
     </div>
   );
 };
+
 export default HaveMemorials;

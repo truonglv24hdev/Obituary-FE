@@ -29,45 +29,40 @@ const steps = [
 ];
 
 const HowItWorks = () => (
-  <div className="h-[716px] w-full gap-1 px-39 py-20 flex flex-col">
-    <div className="w-[1128px] h-[556px] mx-auto flex flex-col gap-10">
-      <div className="w-[625px] h-28 flex flex-col mx-auto gap-4">
-        <h2 className="h-12 text-[40px] font-medium leading-12 tracking-normal text-center">
-          How it works?
-        </h2>
-        <p className="h-12 text-xl museo font-light leading-7 tracking-normal text-center ">
-          A simple way to honor, remember, and share the story of your loved
-          one&apos;s life.
-        </p>
-      </div>
-      <div className="w-[1128px] h-[404px] flex flex-col md:flex-row gap-[45px] justify-center items-center">
-        {steps.map((step, idx) => (
-          <div
-            key={idx}
-            className={`rounded-xl  w-[346px] h-[404px] flex flex-col items-center py-8 px-6 gap-7 ${step.bg}`}
-          >
-            <Image
-              src={`${step.img}`}
-              alt="Logo"
-              width={200}
-              height={200}
-              className="w-[200px] h-[200px]"
-            />
-            <div className="w-74.5 h-[122px] gap-3 flex flex-col ">
-              <h3
-                className={`h-7 font-bold text-2xl leading-7 text-center align-middle ${step.text}`}
-              >
-                {step.title}
-              </h3>
-              <p
-                className={`h-18 font-light museo text-base leading-6 text-center align-middle ${step.text}`}
-              >
-                {step.description}
-              </p>
-            </div>
+  <div className="w-full px-4 py-16 md:px-10 lg:px-20 flex flex-col items-center">
+    {/* Header */}
+    <div className="max-w-3xl text-center mb-12 px-4">
+      <h2 className="text-3xl md:text-4xl font-medium leading-snug mb-4">
+        How it works?
+      </h2>
+      <p className="text-lg museo font-light text-gray-600">
+        A simple way to honor, remember, and share the story of your loved
+        one&apos;s life.
+      </p>
+    </div>
+
+    {/* Steps */}
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[1128px]">
+      {steps.map((step, idx) => (
+        <div
+          key={idx}
+          className={`rounded-xl flex flex-col items-center text-center px-6 py-8 gap-6 ${step.bg}`}
+        >
+          <Image
+            src={step.img}
+            alt={`Step ${idx + 1}`}
+            width={200}
+            height={200}
+            className="w-[200px] h-[200px]"
+          />
+          <div className="space-y-2">
+            <h3 className={`text-2xl font-bold ${step.text}`}>{step.title}</h3>
+            <p className={`text-base museo font-light ${step.text}`}>
+              {step.description}
+            </p>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   </div>
 );

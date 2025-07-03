@@ -62,13 +62,29 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
       .catch((err) => console.error("Lỗi khi lấy memorial:", err));
   }, [id]);
 
+  const getFilteredRsvps = () => {
+    if (!memorial?.rsvps) return [];
+
+    if (filtered === "Accept") {
+      return memorial.rsvps.filter((r) => r.verification === true);
+    }
+
+    if (filtered === "Decline") {
+      return memorial.rsvps.filter((r) => r.verification == false);
+    }
+
+    return memorial.rsvps;
+  };
+
   const handleDownloadExcel = () => {
-    if (!memorial?.rsvps || memorial.rsvps.length === 0) {
+    const rsvpsToExport = getFilteredRsvps();
+
+    if (!rsvpsToExport.length) {
       alert("No RSVP data to export.");
       return;
     }
 
-    const worksheetData = memorial.rsvps.map((rsvp) => ({
+    const worksheetData = rsvpsToExport.map((rsvp) => ({
       Date: rsvp.createdAt
         ? new Date(rsvp.createdAt).toLocaleDateString("en-US")
         : "",
@@ -82,8 +98,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
     const worksheet = XLSX.utils.json_to_sheet(worksheetData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "RSVPs");
-
-    XLSX.writeFile(workbook, `rsvp_list_${memorial._id}.xlsx`);
+    XLSX.writeFile(workbook, `rsvp_list_${memorial?._id}.xlsx`);
   };
 
   const handleDeleteCondolence = async (condolenceId: string) => {
@@ -106,8 +121,6 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
       console.error("Error deleting condolence:", error);
     }
   };
-
-  console.log(memorial?.rsvps);
 
   return (
     <div className="mb-10">
@@ -149,11 +162,11 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
       <div className="w-full relative flex flex-col items-center gap-6 ">
         {/* Header */}
         <div className="w-[1240px] flex flex-col gap-7 justify-start">
-          <div className="flex justify-start mt-15 ">
-            <Button className="w-[217px] h-11 rounded px-[26px] py-2">
+          <div className=" justify-start mt-15 ">
+            <Link href={"/account/memorials"} className="w-[217px] h-11 flex bg-[#293548] text-base museo font-light gap-3 text-white rounded px-[26px] py-2">
               <IconLeftNotArrow className="w-6 h-6" />
               Back to memorial
-            </Button>
+            </Link>
           </div>
           <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
             <div className="bg-[#E5F6EC4D] flex gap-10 w-[863px] h-[312px] px-6 py-6 rounded-lg">
@@ -423,7 +436,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                 </TableRow>
               </TableHeader>
               <TableBody className="bg-white">
-                {memorial?.rsvps.map((rsvp, i) => (
+                {getFilteredRsvps().map((rsvp, i) => (
                   <TableRow key={i} className="border-t w-[196px] h-14 ">
                     <TableCell className="text-center border-b-2">
                       {rsvp.createdAt &&
