@@ -1,14 +1,11 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
 import Heading from "@/components/layout/Heading";
 import {
   LayoutDashboard,
@@ -18,49 +15,69 @@ import {
   Check,
   ChevronDown,
 } from "lucide-react";
-import {
-  IconDelete,
-  IconFilterDrop,
-  IconLeftNotArrow,
-  IconLock,
-  IconSearch,
-  IconShare,
-} from "@/components/icons";
+import { IconLeftNotArrow } from "@/components/icons";
 import Image from "next/image";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 import { TMemorial } from "@/types/type";
-import { getMemorialById } from "@/lib/memorialAPI";
-import { format } from "date-fns";
+import {
+  getMemorialById,
+  putMemorial,
+  verifyMemorial,
+} from "@/lib/memorialAPI";
 import * as XLSX from "xlsx";
 import { deleteCondolences } from "@/lib/condolences";
-import { FiFacebook, FiMail } from "react-icons/fi";
-import { FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
+import SetPasswordDialog from "@/components/manage-memorial/SetPasswordDialog";
+import RsvpListTable from "@/components/manage-memorial/RsvpListTable";
+import ContentModeration from "@/components/manage-memorial/ContentModeration";
+import PasswordPrompt from "@/components/manage-memorial/PasswordPrompt";
 
 const page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
 
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const options = ["Public", "Private", "Password protected"];
-  const filter = ["All", "Accept", "Decline"];
   const [selected, setSelected] = useState("Public");
   const [filtered, setFiltered] = useState("All");
   const [memorial, setMemorial] = useState<TMemorial | null>(null);
+  const [type, setType] = useState(false);
 
   useEffect(() => {
     getMemorialById(id)
       .then((data) => {
         if (!data) return;
         setMemorial(data);
+        setSelected(data.privacy);
+
+        // Nếu là password protected, luôn hiển thị modal
+        if (data.privacy === "Password protected") {
+          setShowPasswordModal(true);
+          setIsAuthorized(false);
+        } else {
+          setIsAuthorized(true);
+        }
       })
       .catch((err) => console.error("Lỗi khi lấy memorial:", err));
   }, [id]);
+
+  useEffect(() => {
+    const memorialId = localStorage.getItem("memorialId");
+    if (memorialId && memorialId === id) {
+      setType(true);
+    }
+  }, [id]);
+
+  const handlePasswordSubmit = async (password: string) => {
+    const result = await verifyMemorial(id, password);
+    if (result.code == 2) {
+      setIsAuthorized(true);
+      setShowPasswordModal(false);
+    } else {
+      setErrorMessage("Incorrect password");
+    }
+  };
 
   const getFilteredRsvps = () => {
     if (!memorial?.rsvps) return [];
@@ -122,6 +139,19 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
     }
   };
 
+  const isAuto = type === true;
+
+  if (showPasswordModal && !isAuthorized && !type) {
+    return (
+      <PasswordPrompt
+        onSubmit={handlePasswordSubmit}
+        errorMessage={errorMessage}
+        onClearError={() => setErrorMessage("")}
+        id={id}
+      />
+    );
+  }
+
   return (
     <div className="mb-10">
       <Heading className="bg-[#699D99]" />
@@ -163,7 +193,10 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
         {/* Header */}
         <div className="w-[1240px] flex flex-col gap-7 justify-start">
           <div className=" justify-start mt-15 ">
-            <Link href={"/account/memorials"} className="w-[217px] h-11 flex bg-[#293548] text-base museo font-light gap-3 text-white rounded px-[26px] py-2">
+            <Link
+              href={"/account/memorials"}
+              className="w-[217px] h-11 flex bg-[#293548] text-base museo font-light gap-3 text-white rounded px-[26px] py-2"
+            >
               <IconLeftNotArrow className="w-6 h-6" />
               Back to memorial
             </Link>
@@ -203,7 +236,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                       Privacy:
                     </span>
                     <DropdownMenu>
-                      <DropdownMenuTrigger className="border-none px-2 py-1 rounded flex items-center gap-2 text-sm text-[#2d3b4e]">
+                      <DropdownMenuTrigger className="border-none  py-1 rounded flex items-center gap-2 text-lg museo text-[#2d3b4e]">
                         {selected}
                         <ChevronDown className="w-4 h-4" />
                       </DropdownMenuTrigger>
@@ -211,14 +244,30 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                       <DropdownMenuContent
                         side="bottom"
                         align="start"
-                        className="w-[219px] h-[152px] px-6 py-3"
+                        className="w-[219px] h-[152px] px-4 py-3"
                       >
                         {options.map((option) => {
                           const isSelected = selected === option;
                           return (
                             <DropdownMenuItem
                               key={option}
-                              onClick={() => setSelected(option)}
+                              onClick={async () => {
+                                setSelected(option);
+                                setMemorial((prev) =>
+                                  prev ? { ...prev, privacy: option } : prev
+                                );
+
+                                try {
+                                  const formData = new FormData();
+                                  formData.append("privacy", option);
+                                  await putMemorial(id, formData);
+                                } catch (error) {
+                                  console.error(
+                                    "Cập nhật privacy thất bại:",
+                                    error
+                                  );
+                                }
+                              }}
                               className={`flex items-center w-[219px] h-10 gap-3 px-3 py-2 text-base museo font-light cursor-pointer ${
                                 isSelected ? "bg-[#E5F6EC4D]" : ""
                               }`}
@@ -245,7 +294,32 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                     <p className="w-22 museo text-lg font-semibold">
                       Password:
                     </p>
-                    <a className="museo text-lg font-light">Set password</a>
+                    <SetPasswordDialog
+                      key={isAuto ? "auto" : "manual"}
+                      title={isAuto ? "Set new password" : "Set password"}
+                      defaultOpen={isAuto}
+                      onSave={async (newPassword) => {
+                        const formPassword = new FormData();
+                        formPassword.append("password", newPassword);
+                        await putMemorial(id, formPassword);
+
+                        if (isAuto) {
+                          localStorage.removeItem("memorialId");
+                          setType(false);
+                        }
+                      }}
+                      {...(!isAuto
+                        ? {
+                            trigger: (
+                              <span className="museo text-lg font-light cursor-pointer">
+                                {memorial?.password
+                                  ? "**********"
+                                  : "Set password"}
+                              </span>
+                            ),
+                          }
+                        : {})}
+                    />
                   </div>
                   <div className="flex gap-[74px] items-center">
                     <p className="w-[59px] museo text-lg font-semibold">
@@ -312,246 +386,18 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
 
         {/* RSVP List Controls */}
-        <div className="w-[1240px] rounded bg-[#E5F6EC4D] flex flex-col p-8 gap-3">
-          <div className=" h-10 flex justify-between items-center">
-            <div className="flex items-center gap-3 h-6">
-              <p className="museo text-xl font-light">RSVP List</p>
-              <IconLock className="w-6 h-6" />
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <IconShare className="w-6 h-6" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  side="bottom"
-                  align="start"
-                  className="w-[203px] h-[152px] rounded border"
-                >
-                  <DropdownMenuItem className="px-6 py-3 flex gap-4 w-[203px] h-11 text-base font-light museo">
-                    <FaWhatsapp
-                      style={{ width: "20px", height: "20px" }}
-                      className="text-black"
-                    />
-                    Whatsapp
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="px-6 py-3 flex gap-4 h-11 text-base font-light museo">
-                    <FiFacebook
-                      style={{ width: "20px", height: "20px" }}
-                      className="text-black"
-                    />{" "}
-                    Facebook
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="px-6 py-3 flex gap-4 h-11 text-base font-light museo">
-                    <FiMail
-                      style={{ width: "20px", height: "20px" }}
-                      className="text-black"
-                    />
-                    Email
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="flex gap-5 items-center">
-              <div className="flex items-center gap-4 h-5">
-                <span className="text-sm museo font-light">
-                  Split into 'individual'
-                </span>
-                <Switch defaultChecked />
-                <span className="text-sm museo font-light">
-                  Group by 'family'
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="border cursor-pointer flex justify-between items-center text-[14px] museo w-[104px] h-10 bg-[#699D99] text-white rounded px-3 py-[5px]">
-                    Filter
-                    <IconFilterDrop className="w-6 h-6" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    side="bottom"
-                    align="start"
-                    className="w-[203px] h-[152px] rounded border"
-                  >
-                    {filter.map((option) => {
-                      const isSelected = filtered === option;
-                      return (
-                        <DropdownMenuItem
-                          key={option}
-                          onClick={() => setFiltered(option)}
-                          className={`flex items-center h-11 gap-4 px-6 py-3 text-base font-light museo cursor-pointer ${
-                            isSelected ? "bg-[#E5F6EC4D]" : ""
-                          }`}
-                        >
-                          <div
-                            className={`w-5 h-5 flex items-center justify-center rounded border ${
-                              isSelected
-                                ? "bg-[#699D99] text-white"
-                                : "border-gray-300"
-                            }`}
-                          >
-                            {isSelected && (
-                              <Check className="w-4 h-4 text-white" />
-                            )}
-                          </div>
-                          <span>{option}</span>
-                        </DropdownMenuItem>
-                      );
-                    })}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <div className="relative w-60 h-10">
-                  <Input
-                    placeholder="Search for a name"
-                    className="h-full w-[239px] rounded pr-10 text-teal-700 placeholder:text-[#699D99] placeholder:text-sm placeholder:font-light border border-[#699D99] focus-visible:ring-0 focus-visible:ring-offset-0"
-                  />
-                  <IconSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-[#699D99] w-6 h-6" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* RSVP Table */}
-          <div className="w-full rounded-lg border border-gray-300 overflow-hidden">
-            <Table className="w-full border-separate border-spacing-0">
-              <TableHeader className="bg-[#699D99] text-black ">
-                <TableRow className="h-14 hover:bg-inherit">
-                  <TableHead className="text-white text-base museo font-semibold text-center w-[196px]">
-                    Date
-                  </TableHead>
-                  <TableHead className="text-white text-base museo font-semibold w-[196px] pl-4">
-                    First Name
-                  </TableHead>
-                  <TableHead className="text-white text-base museo font-semibold w-[196px] pl-4">
-                    Last Name
-                  </TableHead>
-                  <TableHead className="text-white text-base museo font-semibold w-[196px]">
-                    Email
-                  </TableHead>
-                  <TableHead className="text-white text-base museo font-semibold text-center w-[196px]">
-                    Verification Expiry
-                  </TableHead>
-                  <TableHead className="text-white text-base museo font-semibold text-center w-[196px]">
-                    Contact
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody className="bg-white">
-                {getFilteredRsvps().map((rsvp, i) => (
-                  <TableRow key={i} className="border-t w-[196px] h-14 ">
-                    <TableCell className="text-center border-b-2">
-                      {rsvp.createdAt &&
-                        format(new Date(rsvp.createdAt), "MM/dd/yyyy")}
-                    </TableCell>
-                    <TableCell className="pl-4 border-b-2">
-                      {rsvp.first_name}
-                    </TableCell>
-                    <TableCell className="pl-4 border-b-2">
-                      {rsvp.last_name}
-                    </TableCell>
-                    <TableCell className="p-2 border-b-2">
-                      {rsvp.email}
-                    </TableCell>
-                    <TableCell className=" border-b-2">
-                      <div
-                        className={`flex justify-center items-center text-sm mx-auto font-light museo w-[70px] h-6 px-2 py-1 rounded ${
-                          rsvp.verification
-                            ? "text-green-600 bg-white border border-[#28C76F80]"
-                            : "text-red-600 bg-white border border-[#FF000080]"
-                        }`}
-                      >
-                        {rsvp.verification ? "Accept" : "Decline"}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center border-b-2">
-                      {rsvp.contact}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-
-          <div className="flex justify-end mt-5">
-            <Button
-              onClick={handleDownloadExcel}
-              className="w-[199px] h-11 rounded bg-[#699D99] text-base museo font-light"
-            >
-              Download excel list
-            </Button>
-          </div>
-        </div>
+        <RsvpListTable
+          rsvps={memorial?.rsvps || []}
+          filtered={filtered}
+          setFiltered={setFiltered}
+          handleDownloadExcel={handleDownloadExcel}
+        />
 
         {/* Content Moderation */}
-        <div className="p-8 bg-[#F7FBF9] w-[1240px] flex flex-col rounded gap-8">
-          <h1 className="text-[32px] museo font-light">Content Moderation</h1>
-
-          {/* Messages Section */}
-          <div className="flex flex-col gap-5">
-            <h2 className="text-2xl museo font-light">Messages</h2>
-            <div className="flex flex-col gap-5">
-              {memorial?.condolences
-                .filter((item) => item.message?.trim().length > 0)
-                .map((item, i) => (
-                  <div
-                    key={i}
-                    className="bg-white flex flex-col gap-8 p-8 rounded-lg relative w-[1176px] h-50"
-                  >
-                    <div className="flex justify-between w-[1112px] h-8">
-                      <p className="font-semibold text-xl museo">
-                        {item.full_name},{" "}
-                        <span className="text-black font-light museo">
-                          {format(
-                            new Date(item.createdAt),
-                            "MMM dd, yyyy, hh:mm a"
-                          )}
-                        </span>
-                      </p>
-                      <IconDelete
-                        className="w-5.5 h-6"
-                        onClick={() => handleDeleteCondolence(item._id)}
-                      />
-                    </div>
-                    <p className="text-xl font-light museo text-black">
-                      {item.message}
-                    </p>
-                  </div>
-                ))}
-            </div>
-          </div>
-
-          {/* Photos/Videos Section */}
-          <div className="flex flex-col gap-8">
-            <h2 className="text-2xl museo font-light">Photos/Videos</h2>
-            <div className="flex gap-10 ">
-              {memorial?.condolences.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col gap-5 items-center w-[365.33px] h-[396px]"
-                >
-                  {item.photo && (
-                    <div className="relative  w-[365.33px] h-[332px] aspect-[4/3] rounded-md overflow-hidden">
-                      <Image
-                        src={`http://localhost:5000${item.photo}`}
-                        alt=""
-                        width={365.33}
-                        height={332}
-                        className="object-cover w-[365.33px] h-[332px]"
-                      />
-                    </div>
-                  )}
-                  <div className="flex gap-5 w-[260px] h-11 justify-center">
-                    <Button className="px-7 py-2 text-sm text-[#FF2121] border border-[#FF2121] rounded bg-white hover:bg-red-50">
-                      Delete
-                    </Button>
-                    <Button className="px-7 py-2 text-sm text-[#27FF61] border border-[#27FF61] rounded bg-white hover:bg-green-50">
-                      Approve
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <ContentModeration
+          condolences={memorial?.condolences || []}
+          handleDeleteCondolence={handleDeleteCondolence}
+        />
       </div>
     </div>
   );

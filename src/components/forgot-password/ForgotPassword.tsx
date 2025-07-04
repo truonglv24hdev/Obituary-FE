@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sendLink } from "@/lib/authAPI";
+import { forgotPassword } from "@/lib/memorialAPI";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -22,6 +23,8 @@ const formSchema = z.object({
 
 const ForgotPassword = () => {
   const router = useRouter();
+  const [type, setType] = useState(false);
+  const [memorial, setMemorial] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,12 +33,27 @@ const ForgotPassword = () => {
     },
   });
 
+  useEffect(() => {
+    const memorialId = localStorage.getItem("memorialId");
+    if (memorialId) {
+      setType(true);
+      setMemorial(memorialId);
+    }
+  }, []);
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    if (data.email) {
+    if (type && data.email) {
+      const result = await forgotPassword(data.email, memorial);
+      if (result == 2) {
+        router.push(`/forgot-password/otp/${data.email}`);
+      }
+      console.log(1);
+    } else {
       const result = await sendLink(data.email);
       if (result == 2) {
         router.push(`/forgot-password/otp/${data.email}`);
       }
+      console.log(2);
     }
   }
 
@@ -72,12 +90,16 @@ const ForgotPassword = () => {
             </Button>
           </form>
         </Form>
-        <div className="text-center text-lg mt-4">
-          Back to{" "}
-          <Link href="/sign-in" className="text-blue-500 hover:underline">
-            Log in
-          </Link>
-        </div>
+        {type ? (
+          ""
+        ) : (
+          <div className="text-center text-lg mt-4">
+            Back to{" "}
+            <Link href="/sign-in" className="text-blue-500 hover:underline">
+              Log in
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

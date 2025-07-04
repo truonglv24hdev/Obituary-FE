@@ -10,6 +10,31 @@ export async function postMemorial(formData: FormData) {
   return res.data;
 }
 
+export async function verifyMemorial(id: string, password: string) {
+  const res = await axios.post(
+    `/api/memorial/verify/${id}`,
+    { password },
+    {
+      requiresAuth: true,
+    }
+  );
+  return res.data;
+}
+
+export async function forgotPassword(email: string, memorial: string) {
+  const res = await axios.post(
+    "/api/send-link",
+    { email },
+    {
+      headers: {
+        "x-memorial-id": memorial ?? "",
+      },
+      requiresAuth: true,
+    }
+  );
+  return res.data;
+}
+
 export async function getMemorialByUser(page: number = 1, limit: number = 4) {
   const res = await axios.get(`/api/memorial?page=${page}&limit=${limit}`, {
     requiresAuth: true,

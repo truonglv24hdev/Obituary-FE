@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { resendLink, sendLink, sendOtp } from "@/lib/authAPI";
 import { useRouter } from "next/navigation";
+import { el } from "date-fns/locale";
 
 const OTP_LENGTH = 6;
 
@@ -10,6 +11,8 @@ const Otp = ({ email }: { email: string }) => {
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(""));
   const [timer, setTimer] = useState(60 * 60);
   const [resendActive, setResendActive] = useState(false);
+  const [type, setType] = useState(false);
+  const [memorial, setMemorial] = useState("");
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const router = useRouter();
@@ -24,6 +27,14 @@ const Otp = ({ email }: { email: string }) => {
       setResendActive(true);
     }
   }, [timer]);
+
+  useEffect(() => {
+    const memorialId = localStorage.getItem("memorialId");
+    if (memorialId) {
+      setType(true);
+      setMemorial(memorialId);
+    }
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -74,7 +85,11 @@ const Otp = ({ email }: { email: string }) => {
 
     const result = await sendOtp(email, enteredOtp);
     if (result.code == 2) {
-      router.push(`/reset-password/${email}`);
+      if (type && memorial) {
+        router.push(`/manage-memorial/${memorial}`);
+      } else {
+        router.push(`/reset-password/${email}`);
+      }
     }
   };
 

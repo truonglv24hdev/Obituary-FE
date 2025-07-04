@@ -15,12 +15,12 @@ const Memorials = () => {
 
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const currentPage = parseInt(searchParams.get("page") || "1", 10);
-    setPage(currentPage);
-  }, [searchParams]);
+  // useEffect(() => {
+  //   const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  //   setPage(currentPage);
+  // }, [searchParams]);
 
   useEffect(() => {
     getMemorialByUser(page)

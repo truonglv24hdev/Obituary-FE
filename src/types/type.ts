@@ -22,6 +22,9 @@ export type TMemorial = {
   rsvps: TRSVP[];
   condolences: TCondolences[];
   premium: boolean;
+  setPassword: boolean;
+  password: string;
+  privacy: string;
 };
 
 export type TRSVP = {

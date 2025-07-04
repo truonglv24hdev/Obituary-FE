@@ -6,7 +6,7 @@ import { IconRight } from "../icons";
 export default function Faqs({
   className,
   children,
-  bg
+  bg,
 }: {
   className?: string;
   bg?: string;
@@ -16,29 +16,32 @@ export default function Faqs({
   const [open, setOpen] = useState(0);
 
   return (
-    <div className={`w-full h-[1000px] top-[488px] py-15 ${className}`}>
-      <div className="text-center text-[40px] museo font-semibold mb-5">{children}</div>
-      <div className="max-w-[1240px] mx-auto h-[712px] flex justify-between">
+    <div className={`w-full h-auto py-15  ${className}`}>
+      <div className="text-center text-[28px] md:text-[40px] museo font-semibold">
+        {children}
+      </div>
+
+      <div className="max-w-[1240px] mx-auto h-auto md:h-[712px] flex flex-col md:flex-row gap-6 md:gap-0 justify-between px-4 md:px-0">
         {/* Left Menu */}
-        <div className="w-99 flex flex-col gap-2">
+        <div className="w-full md:w-99 flex flex-col">
           {leftMenu.map((item, idx) => (
             <div
               key={idx}
-              className={`h-18 flex justify-between items-center gap-3 p-5 mb-3 rounded-lg cursor-pointer transition
-              ${
-                selected === idx
-                  ? "bg-[#699D99] text-white font-semibold"
-                  : "bg-[#d5f4e24d] hover:bg-[#eaf6f1] text-[#222] font-semibold"
-              }`}
+              className={`h-auto md:h-18 flex justify-between items-center gap-3 p-5 mb-3 rounded-lg cursor-pointer transition
+            ${
+              selected === idx
+                ? "bg-[#699D99] text-white font-semibold"
+                : "bg-[#d5f4e24d] hover:bg-[#eaf6f1] text-[#222] font-semibold"
+            }`}
               onClick={() => setSelected(idx)}
             >
-              <div className="w-[266px] h-8 flex gap-3 items-center">
+              <div className="flex gap-3 items-center w-full">
                 <span className="w-7 h-7">{item.icon}</span>
-                <span className="text-xl museo font-semibold leading-8">
+                <span className="text-base md:text-xl museo font-semibold leading-8">
                   {item.title}
                 </span>
               </div>
-              <span className="w-6 h-6">
+              <span className="w-6 h-6 hidden md:inline">
                 <IconRight />
               </span>
             </div>
@@ -46,18 +49,18 @@ export default function Faqs({
         </div>
 
         {/* Right Content */}
-        <div className="w-198 h-127 flex flex-col gap-5">
+        <div className="w-full md:w-198 flex flex-col gap-5">
           {rightContent.map((item, idx) => (
             <div
               key={idx}
-              className={` rounded-lg bg-[#f4fbf7] transition ${bg}
-              ${open === idx ? "h-[140px] flex flex-col  shadow" : "h-18"}`}
+              className={`rounded-lg bg-[#f4fbf7] transition ${bg}
+            ${open === idx ? "h-auto shadow p-4" : "h-18 p-4"}`}
             >
-              <div className="flex  justify-between">
-                <span className="w-[220px] museo h-8 font-semibold text-xl mt-6 ml-6">
+              <div className="flex justify-between items-start">
+                <span className="w-full museo font-semibold text-base md:text-xl mt-1">
                   {item.question}
                 </span>
-                <div className="mt-6 w-6 h-6">
+                <div className="mt-1 ml-4">
                   {item.answer && open === idx ? (
                     <button onClick={() => setOpen(-1)}>✕</button>
                   ) : (
@@ -66,7 +69,7 @@ export default function Faqs({
                 </div>
               </div>
               {item.answer && open === idx && (
-                <p className="w-[744px] museo h-12 mt-2 ml-6 text-base font-light">
+                <p className="mt-3 museo text-sm md:text-base font-light">
                   {item.answer}
                 </p>
               )}
