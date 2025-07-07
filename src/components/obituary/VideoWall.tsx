@@ -1,5 +1,6 @@
 import { X, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
 
 interface ContributeModalProps {
   obituaryId: string;
@@ -66,13 +67,13 @@ const VideoWall = ({ obituaryId, open, onClose }: ContributeModalProps) => {
 
         {/* Search button */}
         <div className="flex justify-end">
-          <button
+          <Button
             onClick={() => alert(`Searching: ${url}`)}
-            className="flex items-center gap-2 bg-[#699D99] text-white px-5 py-2 rounded-md text-sm hover:bg-[#5a8b88]"
+            className="w-[190px] h-11 rounded text-base flex items-center gap-4 museo font-light bg-[#699D99] text-white px-7 py-2 hover:bg-[#5a8b88]"
           >
-            <Search className="w-4 h-4" />
+            <Search className="w-6 h-6" />
             Search video
-          </button>
+          </Button>
         </div>
       </div>
     </div>

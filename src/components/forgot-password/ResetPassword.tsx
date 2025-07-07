@@ -55,7 +55,7 @@ const ResetPassword = ({ email }: { email: string }) => {
 
   return (
     <div className="h-200 flex items-center justify-center bg-white relative">
-      <div className="bg-white shadow-lg border rounded-lg px-8 py-10 w-[539px] h-[440px] z-10 flex flex-col gap-3">
+      <div className="bg-white shadow-lg border rounded-lg px-8 py-10 md:w-[539px] h-[440px] z-10 flex flex-col gap-3">
         <h2 className="text-[40px] font-serif font-medium mb-6">
           New Password
         </h2>

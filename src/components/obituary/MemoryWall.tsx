@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
@@ -136,19 +136,27 @@ function UploadPhotoModal({
 }
 
 const MemoryWall = ({
+  require_email,
   obituaryId,
   open,
   onClose,
 }: {
+  require_email: boolean;
   obituaryId: string;
   open: boolean;
   onClose: () => void;
 }) => {
-  const formSchema = z.object({
-    fullName: z.string().min(1, "First name is required"),
-    email: z.string().email(),
-    message: z.string().optional(),
-  });
+  const formSchema = useMemo(() => {
+    return z.object({
+      fullName: z.string().min(1, "Full name is required"),
+      email: require_email
+        ? z.string().optional()
+        : z.string().optional().or(z.literal("")),
+      message: z.string().optional(),
+    });
+  }, [require_email]);
+
+  console.log(require_email)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -163,7 +171,7 @@ const MemoryWall = ({
   const [showForm, setShowForm] = useState(open);
   const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setShowForm(open);
   }, [open]);
 
@@ -175,6 +183,7 @@ const MemoryWall = ({
     if (photo) {
       formMemoryWall.append("photo", photo);
     }
+
     try {
       await postCondolences(obituaryId, formMemoryWall);
       window.location.reload();
@@ -187,11 +196,9 @@ const MemoryWall = ({
     <>
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-          <div className="w-[620px] h-[672px] flex flex-col rounded-2xl gap-10 p-8  bg-white shadow-xl relative">
+          <div className="w-[620px] h-[672px] flex flex-col rounded-2xl gap-10 p-8 bg-white shadow-xl relative">
             <div>
-              <h2 className="text-2xl font-semibold">
-                Contribute to memory wall
-              </h2>
+              <h2 className="text-2xl font-semibold">Contribute to memory wall</h2>
               <button
                 className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-gray-600"
                 onClick={onClose}
@@ -200,7 +207,8 @@ const MemoryWall = ({
                 ×
               </button>
             </div>
-            <FormProvider {...form}>
+
+            <FormProvider {...form} key={require_email ? "required" : "optional"}>
               <div className="flex flex-col gap-5 w-[556px] min-h-[444px]">
                 <div className="flex gap-5 w-[556px] h-[76px]">
                   <FormField
@@ -208,9 +216,7 @@ const MemoryWall = ({
                     name="fullName"
                     render={({ field }) => (
                       <FormItem className="flex flex-col w-[268px] h-19 gap-2">
-                        <FormLabel className="text-base museo">
-                          First Name
-                        </FormLabel>
+                        <FormLabel className="text-base museo">Full Name</FormLabel>
                         <FormControl>
                           <Input
                             className="bg-white w-[268px] h-12 rounded border-dashed border-2 border-[#00000080]"
@@ -226,13 +232,12 @@ const MemoryWall = ({
                     name="email"
                     render={({ field }) => (
                       <FormItem className="flex flex-col w-[268px] h-19 gap-2">
-                        <FormLabel className="text-base museo">
-                          E-mail
-                        </FormLabel>
+                        <FormLabel className="text-base museo">E-mail</FormLabel>
                         <FormControl>
                           <Input
                             className="w-[268px] h-12 bg-white rounded border-dashed border-2 border-[#00000080]"
                             placeholder="itsexample@gmail.com"
+                            required={require_email}
                             {...field}
                           />
                         </FormControl>
@@ -245,9 +250,7 @@ const MemoryWall = ({
                   name="message"
                   render={({ field }) => (
                     <FormItem className="flex flex-col w-[556px] h-[288px] gap-2">
-                      <FormLabel className="text-base museo">
-                        Your message
-                      </FormLabel>
+                      <FormLabel className="text-base museo">Your message</FormLabel>
                       <FormControl>
                         <Textarea
                           className="w-[556px] h-[260px] bg-white text-[#444444] rounded border-dashed border-2 border-[#00000080]"
@@ -269,13 +272,12 @@ const MemoryWall = ({
                     Add photo
                   </button>
                   {photo && (
-                    <span className="text-sm text-gray-600 ml-2">
-                      {photo.name}
-                    </span>
+                    <span className="text-sm text-gray-600 ml-2">{photo.name}</span>
                   )}
                 </div>
               </div>
             </FormProvider>
+
             <div className="flex justify-end">
               <button
                 type="button"

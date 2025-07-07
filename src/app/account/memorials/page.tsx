@@ -1,14 +1,12 @@
-import Memorials from '@/components/account/settings/Memorials'
-import Heading from '@/components/layout/Heading'
-import React from 'react'
+import React, { Suspense } from "react";
+import MemorialsWrapper from "@/components/account/MemorialsWrapper";
+import Heading from "@/components/layout/Heading";
 
-const page = () => {
+export default function MemorialsPage() {
   return (
-    <div>
+    <Suspense fallback={<div>Loading...</div>}>
       <Heading className="bg-[#699D99]" />
-      <Memorials/>
-    </div>
-  )
+      <MemorialsWrapper />
+    </Suspense>
+  );
 }
-
-export default page

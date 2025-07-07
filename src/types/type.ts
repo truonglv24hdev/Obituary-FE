@@ -25,6 +25,8 @@ export type TMemorial = {
   setPassword: boolean;
   password: string;
   privacy: string;
+  require_email: boolean;
+  moderation: string;
 };
 
 export type TRSVP = {

@@ -102,17 +102,17 @@ const Otp = ({ email }: { email: string }) => {
   };
 
   return (
-    <div className="h-200 flex items-center justify-center bg-white relative gap-1">
-      <div className="bg-white shadow-lg border rounded-lg px-8 py-9 w-[539px] h-[437px] z-10 flex flex-col gap-8">
-        <h2 className="h-12 text-[40px] font-serif font-medium">
+    <div className="min-h-screen flex items-center justify-center bg-white relative px-4">
+      <div className="bg-white shadow-lg border rounded-lg px-6 md:px-8 py-9 w-[360px] md:w-[539px] md:h-[437px] z-10 flex flex-col gap-8">
+        <h2 className="h-12 text-[32px] md:text-[40px] font-serif font-medium text-center">
           OTP Verification
         </h2>
         <form
           onSubmit={handleSubmit}
           className="flex flex-col gap-8 items-center"
         >
-          <div className="flex w-[475px] flex-col gap-3">
-            <div className="flex gap-3 h-14">
+          <div className="flex flex-col w-full max-w-[475px] gap-3">
+            <div className="flex gap-3 h-14 justify-center">
               {otp.map((digit, idx) => (
                 <input
                   key={idx}
@@ -121,18 +121,18 @@ const Otp = ({ email }: { email: string }) => {
                   }}
                   type="text"
                   inputMode="numeric"
-                  placeholder="•" // dấu chấm tròn to
+                  placeholder="•"
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleChange(e, idx)}
                   onKeyDown={(e) => handleKeyDown(e, idx)}
                   className={`
-                w-[67px] h-14 text-2xl font-bold text-center border rounded 
-                focus:outline-none focus:ring-2 focus:ring-green-200 
-                placeholder-gray-400 
-                ${digit ? "border-[#699D99]" : "border-gray-300"} 
-                placeholder:text-3xl placeholder:text-black placeholder:font-bold placeholder:text-center
-              `}
+                  w-12 md:w-[67px] h-14 text-2xl font-bold text-center border rounded 
+                  focus:outline-none focus:ring-2 focus:ring-green-200 
+                  placeholder-gray-400 
+                  ${digit ? "border-[#699D99]" : "border-gray-300"} 
+                  placeholder:text-3xl placeholder:text-black placeholder:font-bold placeholder:text-center
+                `}
                   autoFocus={idx === 0}
                 />
               ))}
@@ -151,7 +151,7 @@ const Otp = ({ email }: { email: string }) => {
           </div>
           <Button
             type="submit"
-            className="w-[475px] h-[56px] museo bg-[#699D99] text-white py-2 rounded font-medium text-xl"
+            className="w-full max-w-[475px] h-[56px] museo bg-[#699D99] text-white py-2 rounded font-medium text-xl"
           >
             Verify
           </Button>
@@ -162,7 +162,6 @@ const Otp = ({ email }: { email: string }) => {
             type="button"
             className="text-blue-500 hover:underline bg-transparent p-0 m-0 inline"
             onClick={sendOTP}
-            // disabled={!resendActive}
           >
             Resend code
           </button>

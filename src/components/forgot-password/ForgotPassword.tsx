@@ -58,8 +58,8 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="h-200 flex items-center justify-center bg-white relative">
-      <div className="bg-white shadow-lg border rounded-lg px-8 py-9 w-[539px] h-[395px] z-10 flex flex-col gap-8">
+    <div className="min-h-screen flex items-center justify-center bg-white relative px-4">
+      <div className="bg-white shadow-lg border rounded-lg px-8 py-9 w-full max-w-[539px] md:h-[395px] z-10 flex flex-col gap-8">
         <h2 className="text-[40px] font-serif font-medium">Forgot Password</h2>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -84,7 +84,7 @@ const ForgotPassword = () => {
 
             <Button
               type="submit"
-              className="w-[475px] h-[56px] museo bg-[#699D99] text-white py-2 rounded font-medium text-xl"
+              className="w-full md:w-[475px] h-[56px] museo bg-[#699D99] text-white py-2 rounded font-medium text-xl"
             >
               Send code
             </Button>

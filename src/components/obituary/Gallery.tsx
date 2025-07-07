@@ -15,8 +15,10 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
+import { putMemorial } from "@/lib/memorialAPI";
 
 interface GallerySectionProps {
+  id: string;
   showGallery: boolean;
   setShowGallery: (value: boolean) => void;
   allowVisitorPhotos: boolean;
@@ -33,6 +35,7 @@ interface GallerySectionProps {
 }
 
 const Gallery = ({
+  id,
   showGallery,
   setShowGallery,
   allowVisitorPhotos,
@@ -78,6 +81,7 @@ const Gallery = ({
                   Allow visitors to add photos
                 </span>
                 <Switch
+                  className="bg-blue-700"
                   checked={allowVisitorPhotos}
                   onCheckedChange={setAllowVisitorPhotos}
                 />
@@ -104,9 +108,13 @@ const Gallery = ({
                       </div>
                       <Select
                         value={moderationType}
-                        onValueChange={(value: "pre" | "post") =>
-                          setModerationType(value)
-                        }
+                        onValueChange={async (value: "post" | "pre") => {
+                          setModerationType(value);
+                          console.log(value)
+                          const formData = new FormData();
+                          formData.append("moderation", value);
+                          await putMemorial(id, formData);
+                        }}
                       >
                         <SelectTrigger className="w-[259px] text-sm museo h-5 rounded border border-[#699D99] text-[#699D99] bg-white px-3 py-[5px]">
                           <SelectValue placeholder="Select moderation" />
@@ -132,11 +140,16 @@ const Gallery = ({
                     <div className="w-[259px] border"></div>
                     <div className="flex items-center gap-2">
                       <Checkbox
-                      className="rounded-2xl"
+                        className="rounded-2xl"
                         checked={requireEmail}
-                        onCheckedChange={(checked) =>
-                          setRequireEmail(Boolean(checked))
-                        }
+                        onCheckedChange={async (checked) => {
+                          const newValue = Boolean(checked);
+                          setRequireEmail(newValue);
+
+                          const formData = new FormData();
+                          formData.append("require_email", String(newValue));
+                          await putMemorial(id, formData);
+                        }}
                         id="require-email"
                       />
                       <label
@@ -210,7 +223,9 @@ const Gallery = ({
               onClick={() => document.getElementById("gallery-upload")?.click()}
               type="button"
             >
-              Upload Max 5 Photos
+              {galleryImages.length > 0
+                ? "Upload photos"
+                : "Upload Max 5 Photos"}
             </Button>
           </div>
         </div>

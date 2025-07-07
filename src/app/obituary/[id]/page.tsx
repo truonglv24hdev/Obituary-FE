@@ -575,6 +575,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
 
                 {/* Gallery Section */}
                 <Gallery
+                  id={id}
                   showGallery={showGallery}
                   setShowGallery={setShowGallery}
                   allowVisitorPhotos={allowVisitorPhotos}

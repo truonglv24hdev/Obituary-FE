@@ -15,12 +15,12 @@ const Memorials = () => {
 
   const router = useRouter();
   const pathname = usePathname();
-  // const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
 
-  // useEffect(() => {
-  //   const currentPage = parseInt(searchParams.get("page") || "1", 10);
-  //   setPage(currentPage);
-  // }, [searchParams]);
+  useEffect(() => {
+    const currentPage = parseInt(searchParams.get("page") || "1", 10);
+    setPage(currentPage);
+  }, [searchParams]);
 
   useEffect(() => {
     getMemorialByUser(page)
@@ -43,20 +43,21 @@ const Memorials = () => {
   const isActive = pathname === "/account/memorials";
 
   return (
-    <div className="w-full h[-735px] flex px-[229px] py-20 gap-10 justify-center">
-      <div className="w-[982px] flex flex-col">
+    <div className="w-full min-h-screen flex justify-center px-4 md:px-[229px] py-10 md:py-20">
+      <div className="w-full max-w-[982px] flex flex-col">
         <HeaderAccount showUpgrade={isActive && memorials.length > 0} />
-        <div className=" h-12 border-b border-gray-200 mb-6">
-          <nav className="h-12 flex gap-15">
+
+        <div className="border-b border-gray-200 mb-6">
+        <nav className="flex flex-col md:flex-row gap-4 md:gap-15 h-auto md:h-12">
             <Link
               href="/account"
-              className="museo border-b-1 border-transparent py-4 px-1 text-xl font-semibold text-gray-500 hover:border-gray-300 hover:text-gray-700"
+              className="museo border-b border-transparent py-2 md:py-4 px-1 text-lg md:text-xl font-semibold text-gray-500 hover:border-gray-300 hover:text-gray-700"
             >
               Basic Information
             </Link>
             <Link
               href="/account/memorials"
-              className="museo border-b-1 border-black py-4 px-1 text-xl font-semibold text-black"
+              className="border-b border-black py-2 md:py-4 px-1 text-lg md:text-xl font-semibold text-black"
             >
               My Memorials
             </Link>

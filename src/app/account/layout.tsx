@@ -11,7 +11,7 @@ export default function AccountLayout({
     <div>
       {children}
       <Faqs className="bg-[#E5F6EC4D]" bg="bg-white">
-        <div className="mx-auto">Frequently Asked Questions</div>
+        <div className="mx-auto mb-10">Frequently Asked Questions</div>
       </Faqs>
       <Footer />
     </div>

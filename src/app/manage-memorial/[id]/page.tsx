@@ -51,7 +51,6 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
         setMemorial(data);
         setSelected(data.privacy);
 
-        // Nếu là password protected, luôn hiển thị modal
         if (data.privacy === "Password protected") {
           setShowPasswordModal(true);
           setIsAuthorized(false);
@@ -227,7 +226,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                     <p className="w-[74px] museo text-lg font-semibold">
                       Address:
                     </p>
-                    <a className="museo text-lg font-light" href="#">
+                    <a className="museo text-lg font-light" href={`http://localhost:3000/memorial/${memorial?.obituaryId}`}>
                       Tributechapters.com.sg/John-Doe
                     </a>
                   </div>

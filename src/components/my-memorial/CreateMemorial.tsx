@@ -102,18 +102,18 @@ const CreateMemorial = () => {
 
   return (
     <div>
-      <div className="w-[1500px] h-[1587px] px-[229px] py-20 flex flex-col gap-13">
+      <div className="w-full max-w-[1500px] mx-auto min-h-screen px-4 md:px-[229px] py-10 md:py-20 flex flex-col gap-10 md:gap-13">
         <HeaderMemorial />
 
         {/* Form Box */}
-        <div className="bg-green-50 p-8 rounded-lg shadow-sm">
+        <div className="bg-green-50 p-4 md:p-8 rounded-lg shadow-sm">
           <h2 className="text-lg font-medium mb-6">
             This memorial is dedicated to:
           </h2>
 
           {/* Image Upload */}
-          <div className="flex gap-45 mb-2">
-            <p>Picture</p>
+          <div className="flex flex-col md:flex-row gap-4 md:gap-45 mb-6 md:mb-2">
+            <p className="font-medium">Picture</p>
             <div className="relative w-32 h-40 rounded shadow-md overflow-hidden bg-white">
               {selectedFile && (
                 <Image
@@ -130,7 +130,7 @@ const CreateMemorial = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
-                  className="hidden" // ẩn input đi
+                  className="hidden"
                 />
               </label>
             </div>
@@ -140,20 +140,20 @@ const CreateMemorial = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-7 w-[918px]"
+              className="flex flex-col gap-7 w-full md:w-[918px]"
             >
               {/* First Name */}
               <FormField
                 control={form.control}
                 name="first_name"
                 render={({ field }) => (
-                  <FormItem className="flex gap-37 h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
+                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
+                    <FormLabel className="w-full md:w-21 font-light text-base">
                       First Name
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="w-[400px] bg-white rounded"
+                        className="w-full md:w-[400px] bg-white rounded"
                         placeholder="John"
                         {...field}
                       />
@@ -168,13 +168,13 @@ const CreateMemorial = () => {
                 control={form.control}
                 name="middle_name"
                 render={({ field }) => (
-                  <FormItem className="flex gap-37 h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
+                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
+                    <FormLabel className="w-full md:w-21 font-light text-base">
                       Middle Name
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="w-[400px] bg-white rounded"
+                        className="w-full md:w-[400px] bg-white rounded"
                         placeholder="William"
                         {...field}
                       />
@@ -189,13 +189,13 @@ const CreateMemorial = () => {
                 control={form.control}
                 name="last_name"
                 render={({ field }) => (
-                  <FormItem className="flex gap-37 h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
+                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
+                    <FormLabel className="w-full md:w-21 font-light text-base">
                       Last Name
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="w-[400px] bg-white rounded"
+                        className="w-full md:w-[400px] bg-white rounded"
                         placeholder="Doe"
                         {...field}
                       />
@@ -210,8 +210,8 @@ const CreateMemorial = () => {
                 control={form.control}
                 name="gender"
                 render={({ field }) => (
-                  <FormItem className="flex gap-37 h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
+                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
+                    <FormLabel className="w-full md:w-21 font-light text-base">
                       Gender
                     </FormLabel>
                     <FormControl>
@@ -246,13 +246,13 @@ const CreateMemorial = () => {
                 control={form.control}
                 name="born"
                 render={({ field }) => (
-                  <FormItem className="flex gap-37 h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
+                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
+                    <FormLabel className="w-full md:w-21 font-light text-base">
                       Born
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="w-[400px] bg-white rounded"
+                        className="w-full md:w-[400px] bg-white rounded"
                         placeholder="DD/MM/YYYY"
                         {...field}
                       />
@@ -267,13 +267,13 @@ const CreateMemorial = () => {
                 control={form.control}
                 name="death"
                 render={({ field }) => (
-                  <FormItem className="flex gap-37 h-12 items-center">
-                    <FormLabel className="w-21 font-light text-base">
+                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
+                    <FormLabel className="w-full md:w-21 font-light text-base">
                       Death
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="w-[400px] bg-white rounded"
+                        className="w-full md:w-[400px] bg-white rounded"
                         placeholder="DD/MM/YYYY"
                         {...field}
                       />
@@ -283,22 +283,24 @@ const CreateMemorial = () => {
                 )}
               />
 
-              {/* Memorial web address */}
-              <label className="block text-2xl font-light text-gray-700">
+              {/* Slug label */}
+              <label className="block text-xl md:text-2xl font-light text-gray-700">
                 Memorial web address:
               </label>
+
+              {/* Slug */}
               <FormField
                 control={form.control}
                 name="slug"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col gap-1">
-                    <div className="flex gap-3 items-center">
-                      <FormLabel className="font-light text-base w-[80px]">
+                  <FormItem className="flex flex-col gap-2">
+                    <div className="flex flex-col md:flex-row gap-2 md:gap-3 items-start md:items-center">
+                      <FormLabel className="font-light text-base w-full md:w-[80px]">
                         https://
                       </FormLabel>
-                      <FormControl className="ml-35">
+                      <FormControl className="ml-0 md:ml-35">
                         <Input
-                          className="w-[400px] bg-white rounded"
+                          className="w-full md:w-[400px] bg-white rounded"
                           placeholder="john-doe"
                           {...field}
                         />
@@ -308,7 +310,7 @@ const CreateMemorial = () => {
                     <FormMessage />
 
                     {slugSuggestions.length > 0 && (
-                      <div className="text-sm text-gray-600 ml-58 mt-2 mb-6">
+                      <div className="text-sm text-gray-600 ml-0 md:ml-58 mt-2 mb-6">
                         <p className="text-xl text-black museo mb-3">
                           Suggestions:
                         </p>
@@ -329,9 +331,10 @@ const CreateMemorial = () => {
                 )}
               />
 
+              {/* Submit button */}
               <div className="col-span-2 text-right">
                 <Button
-                  className="h-11 w-21 inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                  className="h-11 w-full md:w-21 inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                   type="submit"
                 >
                   Continue

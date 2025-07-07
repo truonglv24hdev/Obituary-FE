@@ -104,7 +104,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
                 alt="avatar"
                 width={240}
                 height={240}
-                className="px-2 py-3 w-[240px] h-60 object-cover"
+                className="px-2 mx-auto my-auto py-3 w-[240px] h-60 object-cover"
               />
             )}
           </div>
@@ -325,7 +325,11 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           <div className="flex flex-col gap-15">
             <h2 className="text-[28px] font-medium text-[#2d3b4e]">Events</h2>
             {obituary?.event.map((event, index) => (
-              <Event key={index} event={event} mapUrl={eventMapUrls[event._id]} />
+              <Event
+                key={index}
+                event={event}
+                mapUrl={eventMapUrls[event._id]}
+              />
             ))}
           </div>
 
@@ -349,6 +353,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           {/* Memory Wall Modal (premium only) */}
           {isPremium && openMemoryWall && (
             <MemoryWall
+              require_email={obituary?.memorial.require_email ?? false}
               obituaryId={id}
               open={openMemoryWall}
               onClose={() => setOpenMemoryWall(false)}
