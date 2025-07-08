@@ -102,7 +102,7 @@ export default function StripeCardForm({
 
   return (
     <div className="w-full max-w-xl flex flex-col gap-7">
-      <h3 className="font-medium mb-4">Payment information</h3>
+      <h3 className="font-semibold text-2xl museo mb-2">Payment information</h3>
       <form onSubmit={handleSubmit} className="space-y-7">
         <div className="grid grid-cols-2 gap-4">
           <div>

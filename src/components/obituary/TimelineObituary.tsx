@@ -1,12 +1,12 @@
 import { TTimelineEvent } from "@/types/type";
 import React from "react";
 import { Switch } from "../ui/switch";
-import { IconCalendar, IconLocation, IconTrash } from "../icons";
+import { IconCalendar, IconTrash } from "../icons";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { Calendar } from "../ui/calendar";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
 import ButtonLocation from "./ButtonLocation";
@@ -34,7 +34,7 @@ const TimelineObituary: React.FC<Props> = ({
       </div>
 
       {showTimeline && (
-        <div className="relative">
+        <div className="relative px-4 sm:px-0 overflow-x-hidden">
           <div className="flex flex-col gap-y-24 relative z-10">
             {timelineEvents.map((event, index) => {
               const isLeft = index % 2 === 0;
@@ -42,11 +42,10 @@ const TimelineObituary: React.FC<Props> = ({
               return (
                 <React.Fragment key={index}>
                   <div className="relative">
-                    {/* Circle ở giữa */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-[#A6BF98] z-10 top-5 -translate-y-1/2" />
+                    <div className="hidden sm:block absolute left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-[#A6BF98] z-10 top-5 -translate-y-1/2" />
 
                     {index > 0 && (
-                      <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-70 border-l-1 border-dashed border-[#293548] -top-60" />
+                      <div className="hidden sm:block absolute left-1/2 transform -translate-x-1/2 w-px h-70 border-l-1 border-dashed border-[#293548] -top-60" />
                     )}
 
                     <div
@@ -55,19 +54,19 @@ const TimelineObituary: React.FC<Props> = ({
                       }`}
                     >
                       <div
-                        className={`bg-white rounded-lg  shadow-sm w-[445px] relative ${
+                        className={`bg-white rounded-lg shadow-sm w-full sm:w-[445px] relative ${
                           isLeft ? "mr-auto ml-0" : "ml-auto mr-0"
                         }`}
                       >
-                        {/* Icon + Date */}
-                        <div className="relative flex gap-6">
+                        <div className="relative flex flex-col sm:flex-row gap-6">
+                          {/* Date Column */}
                           <div className="flex flex-col min-w-[50px] min-h-[160px]">
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant={"outline"}
                                   className={cn(
-                                    "w-[90px] min-h-[160px] border-none rounded-none flex items-start justify-start text-left p-2 relative",
+                                    "w-full sm:w-[90px] min-h-[160px] border-none rounded-none flex items-start justify-start text-left p-2 relative",
                                     !event.date && "text-muted-foreground"
                                   )}
                                 >
@@ -90,20 +89,14 @@ const TimelineObituary: React.FC<Props> = ({
                                       </span>
                                     )}
                                   </div>
-
                                   <IconCalendar className="h-5 w-5 text-muted-foreground absolute bottom-2 right-2" />
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
+                              <PopoverContent className="w-auto p-0" align="start">
                                 <Calendar
                                   mode="single"
                                   selected={
-                                    event.date
-                                      ? new Date(event.date)
-                                      : undefined
+                                    event.date ? new Date(event.date) : undefined
                                   }
                                   onSelect={(date) => {
                                     const newEvents = timelineEvents.map((ev) =>
@@ -119,15 +112,17 @@ const TimelineObituary: React.FC<Props> = ({
                                     setTimelineEvents(newEvents);
                                   }}
                                   disabled={(date) =>
-                                    date > new Date() ||
-                                    date < new Date("1900-01-01")
+                                    date > new Date() || date < new Date("1900-01-01")
                                   }
                                 />
                               </PopoverContent>
                             </Popover>
                           </div>
-                          <div className="absolute left-22 w-px min-h-[160px] border border-gray-300" />
-                          {/* Title, Description, Location */}
+
+                          {/* Vertical Divider */}
+                          <div className="absolute left-22 w-px min-h-[160px] border border-gray-300 hidden sm:block" />
+
+                          {/* Content Column */}
                           <div className="flex-1 p-2">
                             <div className="flex justify-between items-start">
                               <Input
@@ -150,9 +145,7 @@ const TimelineObituary: React.FC<Props> = ({
                                 className="text-gray-400 hover:text-gray-600"
                                 onClick={() => {
                                   setTimelineEvents(
-                                    timelineEvents.filter(
-                                      (ev) => ev.id !== event.id
-                                    )
+                                    timelineEvents.filter((ev) => ev.id !== event.id)
                                   );
                                 }}
                               >
@@ -175,29 +168,29 @@ const TimelineObituary: React.FC<Props> = ({
                             />
 
                             <div className="flex items-center gap-2 mt-5 justify-end text-gray-500">
-                              <div className="flex">
-                                <ButtonLocation
-                                  onLocationRetrieved={(address) => {
-                                    const newEvents = timelineEvents.map((ev) =>
-                                      ev.id === event.id
-                                        ? {
-                                            ...ev,
-                                            description: ev.description
-                                              ? `${ev.description}\n ${address}`
-                                              : `${address}`,
-                                            location: address,
-                                          }
-                                        : ev
-                                    );
-                                    setTimelineEvents(newEvents);
-                                  }}
-                                />
-                              </div>
+                              <ButtonLocation
+                                onLocationRetrieved={(address) => {
+                                  const newEvents = timelineEvents.map((ev) =>
+                                    ev.id === event.id
+                                      ? {
+                                          ...ev,
+                                          description: ev.description
+                                            ? `${ev.description}\n${address}`
+                                            : `${address}`,
+                                          location: address,
+                                        }
+                                      : ev
+                                  );
+                                  setTimelineEvents(newEvents);
+                                }}
+                              />
                             </div>
                           </div>
                         </div>
+
+                        {/* Arrow Indicator */}
                         <div
-                          className={`absolute top-3  -translate-x-1/2 w-4 h-4 rotate-45 bg-white ${
+                          className={`hidden sm:block absolute top-3 -translate-x-1/2 w-4 h-4 rotate-45 bg-white ${
                             isLeft ? "-right-4" : "rotate-225"
                           }`}
                           style={{
@@ -215,7 +208,7 @@ const TimelineObituary: React.FC<Props> = ({
               <Button
                 type="button"
                 onClick={addTimelineEvent}
-                className="w-[157px] h-11 bg-teal-600 z-0  rounded font-light hover:bg-teal-700 text-white"
+                className="w-full sm:w-[157px] h-11 bg-teal-600 z-0 rounded font-light hover:bg-teal-700 text-white"
               >
                 Add Event
               </Button>

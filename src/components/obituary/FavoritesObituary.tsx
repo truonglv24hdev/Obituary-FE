@@ -65,21 +65,32 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
   };
 
   return (
-    <div className="space-y-6 relative z-[10]">
-      <div className="flex items-center justify-between">
+    <div className=" space-y-6 relative z-[10]">
+      {/* Header */}
+      <div className="flex flex-row items-center justify-between gap-4">
         <h3 className="text-[32px] museo font-medium">Favorites</h3>
         <Switch checked={show} onCheckedChange={setShow} />
       </div>
 
       {show && (
-        <div className="relative flex flex-col space-y-6 z-[50]">
+        <div className="relative flex flex-col gap-10 z-[50]">
           {/* Favorite Options Dropdown */}
           {showFavoriteOptions && (
             <div
               ref={dropdownRef}
-              className="absolute w-[723px] h-[240px] bg-[#FAFAFA] z-[9999] py-5 px-7 right-0 bottom-14 flex flex-col gap-6 shadow-lg border border-gray-300"
+              className="
+                absolute 
+                w-full sm:w-[723px] 
+                h-auto sm:h-[240px] 
+                bg-[#FAFAFA] 
+                z-[9999] 
+                py-5 px-4 sm:px-7 
+                right-0 bottom-14 
+                flex flex-col gap-6 
+                shadow-lg border border-gray-300
+              "
             >
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {favoriteTypes.map((type) => (
                   <Button
                     type="button"
@@ -95,7 +106,14 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
                         setShowFavoriteOptions(false);
                       }
                     }}
-                    className="flex border-none rounded-none shadow-none hover:bg-gray-300 bg-[#FAFAFA] justify-start transition-colors w-[224px] h-5 gap-4"
+                    className="
+                      flex 
+                      border-none rounded-none shadow-none 
+                      hover:bg-gray-300 bg-[#FAFAFA] 
+                      justify-start transition-colors 
+                      w-full sm:w-[224px] 
+                      h-10 sm:h-5 gap-4
+                    "
                   >
                     <i className={`${type.icon} text-black`}></i>
                     <span className="text-sm text-black">{type.label}</span>
@@ -105,7 +123,7 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
             </div>
           )}
 
-          {/* List of Existing Favorites */}
+          {/* Favorites List */}
           {favorites.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 border overflow-auto rounded border-gray-200 p-5">
               {favorites.map((favorite) => (
@@ -145,22 +163,33 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
             </div>
           )}
 
-          {/* Custom Question Form */}
+          {/* Custom Form */}
           {showCustomForm && (
-            <div className="fixed h-full inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-              <div className="bg-white p-6 rounded-md shadow-md border border-gray-200 flex flex-col gap-10 w-[600px] h-100">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+              <div
+                className="
+                  bg-white 
+                  px-4 sm:px-6 py-6
+                  rounded-md shadow-md border border-gray-200 
+                  flex flex-col gap-10 
+                  w-full max-w-[600px] 
+                  mx-4 sm:mx-0 
+                  box-border overflow-hidden
+                "
+              >
                 <div className="flex justify-between">
                   <h2 className="text-[32px] font-medium">Favorites</h2>
                   <button
                     onClick={() => setShowCustomForm(false)}
-                    className=" top-5 right-5 text-gray-600 hover:text-black"
+                    className="top-5 right-5 text-gray-600 hover:text-black"
                   >
                     <IconCancel className="w-5 h-5" />
                   </button>
                 </div>
+
                 <div className="flex flex-col gap-5">
-                  <div className="flex flex-col gap-2 w-[556px] h-19">
-                    <p className=" text-base font-light museo">
+                  <div className="flex flex-col gap-2 w-full">
+                    <p className="text-base font-light museo">
                       Custom Question
                     </p>
                     <Input
@@ -170,8 +199,9 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
                       className="w-full h-12 border-dashed border-[#00000080] rounded placeholder:text-black placeholder:museo"
                     />
                   </div>
-                  <div className="flex flex-col gap-2 w-[556px] h-19">
-                    <p className=" text-base font-light museo">Your response</p>
+
+                  <div className="flex flex-col gap-2 w-full">
+                    <p className="text-base font-light museo">Your response</p>
                     <Input
                       value={customAnswer}
                       onChange={(e) => setCustomAnswer(e.target.value)}
@@ -180,6 +210,7 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
                     />
                   </div>
                 </div>
+
                 <div className="flex justify-end">
                   <Button
                     type="button"
@@ -194,10 +225,10 @@ const FavoritesObituary: React.FC<FavoritesSectionProps> = ({
           )}
 
           {/* Add Favorite Button */}
-          <div className="mt-auto flex justify-end">
+          <div className="mt-auto flex justify-center sm:justify-end">
             <Button
               type="button"
-              className="w-[157px] h-11 bg-teal-600 rounded font-light hover:bg-teal-700 text-white"
+              className="w-full sm:w-[157px] h-11 bg-teal-600 rounded font-light hover:bg-teal-700 text-white"
               onClick={() => setShowFavoriteOptions((prev) => !prev)}
             >
               Add Favorite

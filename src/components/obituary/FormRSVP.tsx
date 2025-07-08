@@ -133,19 +133,19 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
   }
 
   return (
-    <div className="max-w-[1000px]">
+    <div className="w-full max-w-[1000px] px-2 sm:px-4">
       <h1 className="text-3xl font-semibold mb-8">RSVP</h1>
       <FormProvider {...form}>
-        <div className="flex flex-col gap-10 bg-[#E5F6EC4D] min-h-[696px] p-8">
+        <div className="flex flex-col text-[#222222B2] font-light gap-6 sm:gap-10 bg-[#E5F6EC4D] min-h-[696px] p-2 sm:p-8 rounded-md">
           <FormField
             control={form.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem className="flex w-[632px] h-12 gap-[151px]">
-                <FormLabel className="w-[200px]">First Name</FormLabel>
+              <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-[151px] mb-2 sm:mb-0">
+                <FormLabel className="w-full sm:w-[200px] museo text-sm sm:text-base">First Name</FormLabel>
                 <FormControl>
                   <Input
-                    className="w-full bg-white rounded border-none shadow-none"
+                    className="w-full bg-white rounded border border-gray-200 sm:border-none shadow-none text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                     placeholder="John"
                     {...field}
                   />
@@ -159,11 +159,11 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
             control={form.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem className="flex w-[632px] h-12 gap-[151px]">
-                <FormLabel className="w-[200px]">Last Name</FormLabel>
+              <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-[151px] mb-2 sm:mb-0">
+                <FormLabel className="w-full sm:w-[200px] museo text-sm sm:text-base">Last Name</FormLabel>
                 <FormControl>
                   <Input
-                    className="w-full bg-white rounded border-none shadow-none"
+                    className="w-full bg-white rounded border border-gray-200 sm:border-none shadow-none text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                     placeholder="Doe"
                     {...field}
                   />
@@ -173,25 +173,22 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
             )}
           />
 
+          {/* Wake Service */}
           <FormField
             control={form.control}
             name="wakeService.attending"
             render={({ field }) => (
-              <FormItem className="flex w-[632px] h-12 gap-14">
-                <FormLabel className="w-[230px] text-base museo">
-                  Wake Service RSVP
-                </FormLabel>
+              <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Wake Service RSVP</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="w-[402px] bg-white rounded border-none shadow-none">
+                    <SelectTrigger className="w-full sm:w-[402px] bg-white rounded border border-gray-200 sm:border-none shadow-none text-sm sm:text-base">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="attending">🟢 Attending</SelectItem>
-                    <SelectItem value="not-attending">
-                      🔴 Not Attending
-                    </SelectItem>
+                    <SelectItem value="not-attending">🔴 Not Attending</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -205,16 +202,14 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
                 control={form.control}
                 name="wakeService.date"
                 render={({ field }) => (
-                  <FormItem className="flex w-[632px] h-12 gap-14">
-                    <FormLabel className="w-[230px] text-base museo">
-                      Date
-                    </FormLabel>
+                  <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                    <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Date</FormLabel>
                     <FormControl>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
-                            className="w-[367px] justify-start bg-[#E5F6EC4D] font-normal border-0 border-b border-gray-400 rounded-none"
+                            className="w-full sm:w-[367px] justify-start bg-[#E5F6EC4D] font-normal border sm:border-0 border-b border-gray-400 rounded-none text-left text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                           >
                             {field.value instanceof Date &&
                             !isNaN(field.value.getTime())
@@ -243,15 +238,13 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
                 control={form.control}
                 name="wakeService.time"
                 render={({ field }) => (
-                  <FormItem className="flex w-[632px] h-12 gap-14">
-                    <FormLabel className="w-[230px] text-base museo">
-                      Time
-                    </FormLabel>
+                  <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                    <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Time</FormLabel>
                     <FormControl>
                       <Input
-                        type="string"
+                        type="text"
                         placeholder="hh:mm am/pm"
-                        className="w-[402px] border-0 border-b border-gray-300 rounded-none bg-transparent shadow-none focus:outline-none focus:ring-0"
+                        className="w-full sm:w-[402px] border border-gray-200 sm:border-0 border-b rounded-none bg-transparent shadow-none text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                         {...field}
                       />
                     </FormControl>
@@ -262,28 +255,22 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
             </>
           )}
 
+          {/* Cortege Departure */}
           <FormField
             control={form.control}
             name="cortegeDeparture.attending"
             render={({ field }) => (
-              <FormItem className="flex w-[632px] h-12 gap-14">
-                <FormLabel className="w-[230px] text-base museo">
-                  Cortege Departure RSVP
-                </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+              <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Cortege Departure RSVP</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="w-[402px] bg-white rounded border-none shadow-none">
+                    <SelectTrigger className="w-full sm:w-[402px] bg-white rounded border border-gray-200 sm:border-none shadow-none text-sm sm:text-base">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="attending">🟢 Attending</SelectItem>
-                    <SelectItem value="not-attending">
-                      🔴 Not Attending
-                    </SelectItem>
+                    <SelectItem value="not-attending">🔴 Not Attending</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -297,16 +284,14 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
                 control={form.control}
                 name="cortegeDeparture.date"
                 render={({ field }) => (
-                  <FormItem className="flex w-[632px] h-12 gap-14">
-                    <FormLabel className="w-[230px] text-base museo">
-                      Date
-                    </FormLabel>
+                  <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                    <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Date</FormLabel>
                     <FormControl>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
-                            className="w-[367px] justify-start bg-[#E5F6EC4D] font-normal border-0 border-b border-gray-400 rounded-none"
+                            className="w-full sm:w-[367px] justify-start bg-[#E5F6EC4D] font-normal border sm:border-0 border-b border-gray-400 rounded-none text-left text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                           >
                             {field.value instanceof Date &&
                             !isNaN(field.value.getTime())
@@ -330,20 +315,17 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="cortegeDeparture.time"
                 render={({ field }) => (
-                  <FormItem className="flex w-[632px] h-12 gap-14">
-                    <FormLabel className="w-[230px] text-base museo">
-                      Time
-                    </FormLabel>
+                  <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                    <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Time</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
                         placeholder="hh:mm am/pm"
-                        className="w-[402px] border-0 border-b border-gray-300 rounded-none bg-transparent shadow-none focus:outline-none focus:ring-0"
+                        className="w-full sm:w-[402px] border border-gray-200 sm:border-0 border-b rounded-none bg-transparent shadow-none text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                         {...field}
                       />
                     </FormControl>
@@ -354,28 +336,22 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
             </>
           )}
 
+          {/* Cremation */}
           <FormField
             control={form.control}
             name="cremation.attending"
             render={({ field }) => (
-              <FormItem className="flex w-[632px] h-12 gap-14">
-                <FormLabel className="w-[230px] text-base museo">
-                  Cremation RSVP
-                </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+              <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Cremation RSVP</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="w-[402px] bg-white rounded border-none shadow-none">
+                    <SelectTrigger className="w-full sm:w-[402px] bg-white rounded border border-gray-200 sm:border-none shadow-none text-sm sm:text-base">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="attending">🟢 Attending</SelectItem>
-                    <SelectItem value="not-attending">
-                      🔴 Not Attending
-                    </SelectItem>
+                    <SelectItem value="not-attending">🔴 Not Attending</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -389,16 +365,14 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
                 control={form.control}
                 name="cremation.date"
                 render={({ field }) => (
-                  <FormItem className="flex w-[632px] h-12 gap-14">
-                    <FormLabel className="w-[230px] text-base museo">
-                      Date
-                    </FormLabel>
+                  <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                    <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Date</FormLabel>
                     <FormControl>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
-                            className="w-[367px] justify-start bg-[#E5F6EC4D] font-normal border-0 border-b border-gray-400 rounded-none"
+                            className="w-full sm:w-[367px] justify-start bg-[#E5F6EC4D] font-normal border sm:border-0 border-b border-gray-400 rounded-none text-left text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                           >
                             {field.value instanceof Date &&
                             !isNaN(field.value.getTime())
@@ -422,20 +396,17 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="cremation.time"
                 render={({ field }) => (
-                  <FormItem className="flex w-[632px] h-12 gap-14">
-                    <FormLabel className="w-[230px] text-base museo">
-                      Time
-                    </FormLabel>
+                  <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-14 mb-2 sm:mb-0">
+                    <FormLabel className="w-full sm:w-[230px] text-base museo sm:text-base">Time</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
                         placeholder="hh:mm am/pm"
-                        className="w-[402px] border-0 border-b border-gray-300 rounded-none bg-transparent shadow-none focus:outline-none focus:ring-0"
+                        className="w-full sm:w-[402px] border border-gray-200 sm:border-0 border-b rounded-none bg-transparent shadow-none text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                         {...field}
                       />
                     </FormControl>
@@ -446,24 +417,26 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
             </>
           )}
 
-          <div className="flex justify-end w-[632px] cursor-pointer">
+          {/* Add Guest */}
+          <div className="flex justify-end w-full sm:w-[632px] mt-2 sm:mt-0">
             <button
               type="button"
-              className="w-[133px] h-11 cursor-pointer text-base museo bg-[#699D99] rounded text-white hover:bg-[#4B6B6C] transition"
+              className="w-full sm:w-[133px] h-11 text-base museo bg-[#699D99] rounded text-white hover:bg-[#4B6B6C] transition sm:text-base"
             >
               Add Guest
             </button>
           </div>
 
+          {/* Email + Phone */}
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="flex w-[632px] h-12 gap-[151px]">
-                <FormLabel className="w-[200px]">Email</FormLabel>
+              <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-[151px] mb-2 sm:mb-0">
+                <FormLabel className="w-full sm:w-[200px] museo text-sm sm:text-base">Email</FormLabel>
                 <FormControl>
                   <Input
-                    className="w-full bg-white rounded border-none shadow-none"
+                    className="w-full bg-white rounded border border-gray-200 sm:border-none shadow-none text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                     placeholder="example@gmail.com"
                     {...field}
                   />
@@ -472,16 +445,15 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="phone"
             render={({ field }) => (
-              <FormItem className="flex w-[632px] h-12 gap-[151px]">
-                <FormLabel className="w-[200px]">Mobile/Phone</FormLabel>
+              <FormItem className="flex flex-col sm:flex-row w-full sm:w-[632px] gap-1 sm:gap-[151px] mb-2 sm:mb-0">
+                <FormLabel className="w-full sm:w-[200px] museo text-sm sm:text-base">Mobile/Phone</FormLabel>
                 <FormControl>
                   <Input
-                    className="w-full bg-white rounded border-none shadow-none"
+                    className="w-full bg-white rounded border border-gray-200 sm:border-none shadow-none text-sm sm:text-base px-2 sm:px-3 py-2 sm:py-1"
                     placeholder="Your phone number"
                     {...field}
                   />
@@ -491,14 +463,12 @@ const FormRSVP = ({ obituaryId }: { obituaryId: string }) => {
             )}
           />
 
+          {/* Submit */}
           <div className="flex justify-end mt-8">
             <Button
               type="button"
-              onClick={() => {
-                console.log("Button clicked");
-                form.handleSubmit(Submit)();
-              }}
-              className="cursor-pointer w-[150px] h-11 bg-teal-600 rounded hover:bg-teal-700 text-white"
+              onClick={() => form.handleSubmit(Submit)()}
+              className="w-full sm:w-[150px] h-11 bg-teal-600 rounded hover:bg-teal-700 text-white text-sm sm:text-base"
             >
               Submit RSVP
             </Button>

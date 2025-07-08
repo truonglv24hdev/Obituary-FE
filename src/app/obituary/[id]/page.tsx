@@ -278,36 +278,35 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* Header Image Section */}
-          <div className="relative h-[400px] w-full">
+          <div className="relative w-full aspect-[1440/400] sm:h-[400px]">
             <FormField
               control={form.control}
               name="headerImage"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div>
+                    <div className="w-full h-full">
                       {selectedHeaderFile ? (
                         <Image
                           src={URL.createObjectURL(selectedHeaderFile)}
                           alt="Preview"
-                          width={1440}
-                          height={400}
-                          className="h-100 w-full object-cover"
+                          fill
+                          className="object-cover rounded"
                         />
                       ) : (
                         obituary?.headerImage && (
                           <Image
                             src={`http://localhost:5000${obituary.headerImage}`}
                             alt="Memorial"
-                            width={1440}
-                            height={400}
-                            className="w-full h-100 object-cover"
+                            fill
+                            className="object-cover rounded"
                           />
                         )
                       )}
-                      <label className="absolute bottom-10 right-15 bg-[#E5F6EC] text-black rounded museo text-base cursor-pointer flex items-center gap-2 justify-center px-4 py-2">
-                        <IconPicture className="w-5 h-5" />
-                        Change image
+
+                      <label className="absolute bottom-3 right-3 sm:bottom-5 sm:right-6 bg-[#E5F6EC] text-black rounded museo text-sm sm:text-base cursor-pointer flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 shadow-sm">
+                        <IconPicture className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className=" xs:inline">Change image</span>
                         <input
                           type="file"
                           accept="image/*"
@@ -325,65 +324,68 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
           <div className="flex flex-row gap-10">
             <SidebarObituary />
 
-            <div className="flex-1 p-8">
-              <div className="space-y-8 max-w-[1000px]">
+            <div className="flex-1 p-8 w-full">
+              <div className="space-y-8 max-w-[1000px] w-full">
                 {/* Basic Information */}
-                <div className="flex gap-15 w-[867px]">
+                <div className="flex flex-col lg:flex-row gap-6 lg:gap-15 w-full">
                   {/* Avatar Section */}
-                  <FormField
-                    control={form.control}
-                    name="picture"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <div className="relative w-[248px] h-[248px] border rounded shadow-md overflow-hidden bg-white">
-                            {/* Avatar image logic */}
-                            <label className=" w-[248px] h-[248px] rounded shadow-md overflow-hidden bg-white">
-                              {selectedAvatarFile ? (
-                                <Image
-                                  src={URL.createObjectURL(selectedAvatarFile)}
-                                  alt="Preview"
-                                  width={240}
-                                  height={240}
-                                  className="px-2 py-3 w-[240px] h-60 object-cover"
-                                />
-                              ) : (
-                                obituary?.memorial.picture && (
+                  <div className="w-full lg:w-[248px]">
+                    <FormField
+                      control={form.control}
+                      name="picture"
+                      render={() => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="relative w-full h-[248px] border rounded shadow-md overflow-hidden bg-white">
+                              <label className=" w-[248px] h-[248px] rounded shadow-md overflow-hidden bg-white">
+                                {selectedAvatarFile ? (
                                   <Image
-                                    src={`http://localhost:5000${obituary.memorial.picture}`}
-                                    alt="Memorial"
+                                    src={URL.createObjectURL(
+                                      selectedAvatarFile
+                                    )}
+                                    alt="Preview"
                                     width={240}
                                     height={240}
-                                    className="px-2 py-3 w-[240px] h-60 object-cover"
+                                    className="px-2 py-3 mx-auto w-[240px] h-60 object-cover"
                                   />
-                                )
-                              )}
-                              <IconPencil className="absolute bottom-1 right-1 bg-[#699D99] text-white rounded shadow h-10 w-10 flex items-center justify-center cursor-pointer hover:bg-gray-400" />
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleAvatarFileChange}
-                                className="hidden"
-                              />
-                            </label>
-                          </div>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                                ) : (
+                                  obituary?.memorial.picture && (
+                                    <Image
+                                      src={`http://localhost:5000${obituary.memorial.picture}`}
+                                      alt="Memorial"
+                                      width={240}
+                                      height={240}
+                                      className="px-2 py-3 mx-auto w-[240px] h-60 object-cover"
+                                    />
+                                  )
+                                )}
+                                <IconPencil className="absolute bottom-1 right-1 bg-[#699D99] text-white rounded shadow h-10 w-10 flex items-center justify-center cursor-pointer hover:bg-gray-400" />
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleAvatarFileChange}
+                                  className="hidden"
+                                />
+                              </label>
+                            </div>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   {/* Name and Dates Section */}
-                  <div className="flex flex-col gap-5 pt-10">
-                    <div className="flex gap-8">
+                  <div className="flex flex-col gap-5 pt-6 w-full lg:w-[560px]">
+                    <div className="flex flex-col sm:flex-row gap-4">
                       <FormField
                         control={form.control}
                         name="firstName"
                         render={({ field }) => (
-                          <FormItem>
+                          <FormItem className="w-full sm:w-1/2">
                             <FormControl>
                               <Input
                                 {...field}
-                                className="border-1 border-black border-dashed h-12 w-[177px] text-[32px] museo font-medium text-center"
+                                className="border border-dashed border-black h-12 text-[32px] museo font-medium text-center"
                                 placeholder="First name"
                               />
                             </FormControl>
@@ -395,11 +397,11 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                         control={form.control}
                         name="lastName"
                         render={({ field }) => (
-                          <FormItem>
+                          <FormItem className="w-full sm:w-1/2">
                             <FormControl>
                               <Input
                                 {...field}
-                                className="border-1 border-black border-dashed h-12 w-[177px] text-[32px] museo font-medium text-center"
+                                className="border border-dashed border-black h-12 text-[32px] museo font-medium text-center"
                                 placeholder="Last name"
                               />
                             </FormControl>
@@ -408,14 +410,12 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                       />
                     </div>
 
-                    {/* Date Fields */}
-                    <div className="flex gap-7 w-[560px]">
-                      {/* Birth Date */}
+                    <div className="flex flex-col sm:flex-row gap-4">
                       <FormField
                         control={form.control}
                         name="birthDate"
                         render={({ field }) => (
-                          <FormItem className="flex flex-col gap-2 w-[266px]">
+                          <FormItem className="w-full sm:w-1/2">
                             <FormLabel className="text-base font-light">
                               Born
                             </FormLabel>
@@ -423,54 +423,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                               <PopoverTrigger asChild>
                                 <FormControl>
                                   <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                      "w-full justify-start text-left font-normal h-14",
-                                      !field.value && "text-muted-foreground"
-                                    )}
-                                  >
-                                    {field.value instanceof Date &&
-                                    !isNaN(field.value.getTime())
-                                      ? format(field.value, "MMMM d, yyyy")
-                                      : "Pick a date"}
-                                    <IconCalendar className="ml-auto h-6 w-6" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value || undefined}
-                                  onSelect={field.onChange}
-                                  disabled={(date) =>
-                                    date > new Date() ||
-                                    date < new Date("1900-01-01")
-                                  }
-                                />
-                              </PopoverContent>
-                            </Popover>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      {/* Death Date - Similar structure to Birth Date */}
-                      <FormField
-                        control={form.control}
-                        name="deathDate"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col gap-2 w-[266px] h-14">
-                            <FormLabel className="text-base font-light">
-                              Death
-                            </FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant={"outline"}
+                                    variant="outline"
                                     className={cn(
                                       "w-full justify-between text-left font-normal h-14",
                                       !field.value && "text-muted-foreground"
@@ -499,7 +452,51 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                                 />
                               </PopoverContent>
                             </Popover>
-                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="deathDate"
+                        render={({ field }) => (
+                          <FormItem className="w-full sm:w-1/2">
+                            <FormLabel className="text-base font-light">
+                              Death
+                            </FormLabel>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <Button
+                                    variant="outline"
+                                    className={cn(
+                                      "w-full justify-between text-left font-normal h-14",
+                                      !field.value && "text-muted-foreground"
+                                    )}
+                                  >
+                                    {field.value instanceof Date &&
+                                    !isNaN(field.value.getTime())
+                                      ? format(field.value, "MMMM d, yyyy")
+                                      : "Pick a date"}
+                                    <IconCalendar className="ml-auto h-6 w-6" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent
+                                className="w-auto p-0"
+                                align="start"
+                              >
+                                <Calendar
+                                  mode="single"
+                                  selected={field.value || undefined}
+                                  onSelect={field.onChange}
+                                  disabled={(date) =>
+                                    date > new Date() ||
+                                    date < new Date("1900-01-01")
+                                  }
+                                />
+                              </PopoverContent>
+                            </Popover>
                           </FormItem>
                         )}
                       />
@@ -592,33 +589,39 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                 />
 
                 {/* Videos Section */}
-                <div className="flex flex-col gap-10 ">
-                  <div className="flex h-10 items-center justify-between">
-                    <h3 className="text-[32px] font-medium">Videos</h3>
+                <div className="flex flex-col gap-8 sm:gap-10">
+                  {/* Header */}
+                  <div className="flex sm:flex-row items-center justify-between gap-3">
+                    <h3 className="text-[28px] sm:text-[32px] font-medium">
+                      Videos
+                    </h3>
                     <Switch
                       checked={showVideos}
                       onCheckedChange={setShowVideos}
                     />
                   </div>
+
+                  {/* Video Content */}
                   {showVideos && (
-                    <div className="flex flex-col gap-10 items-center justify-center">
-                      <div className="w-[519px] h-[346px]">
+                    <div className="flex flex-col items-center gap-6 sm:gap-10">
+                      {/* Video Preview */}
+                      <div className="w-full max-w-[519px] aspect-video relative rounded overflow-hidden">
                         <Image
-                          src={"/img/video.png"}
+                          src="/img/video.png"
                           alt="video"
-                          width={519}
-                          height={346}
+                          fill
+                          className="object-cover rounded"
                         />
                       </div>
-                      <div>
-                        <Button
-                          type="button"
-                          onClick={() => setOpenVideoWall(true)}
-                          className="w-[162px] h-12 bg-[#699D99] rounded px-7 py-2 text-base museo"
-                        >
-                          Upload Videos
-                        </Button>
-                      </div>
+
+                      {/* Upload Button */}
+                      <Button
+                        type="button"
+                        onClick={() => setOpenVideoWall(true)}
+                        className="w-full sm:w-[162px] h-12 bg-[#699D99] rounded px-7 py-2 text-base museo text-white hover:bg-[#4e7c7a]"
+                      >
+                        Upload Videos
+                      </Button>
                     </div>
                   )}
                 </div>

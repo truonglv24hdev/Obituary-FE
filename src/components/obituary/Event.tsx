@@ -106,18 +106,18 @@ const Event = ({ height, events, setEvents }: Props) => {
         return (
           <div key={field.id} className="space-y-6 rounded-lg">
             <input type="hidden" {...register(`events.${index}.id`)} />
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-2">
               <FormField
                 control={control}
                 name={`events.${index}.eventTitle`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full sm:w-auto">
                     <FormControl>
                       <Input
                         {...field}
                         value={field.value ?? ""}
                         placeholder="Event Title"
-                        className="text-[32px] w-[231px] h-[64px] font-medium rounded-none border-2 border-dashed border-[#00000080]/50"
+                        className="text-[32px] w-full sm:w-[231px] h-[64px] font-medium rounded-none border-2 border-dashed border-[#00000080]/50"
                       />
                     </FormControl>
                     <FormMessage />
@@ -167,13 +167,16 @@ const Event = ({ height, events, setEvents }: Props) => {
                     onLocationRetrieved={(address) =>
                       setValue(`events.${index}.location`, address)
                     }
-                    className="w-[122px] h-[38px] border-[#0000001A] border"
+                    className="w-full sm:w-[122px] h-[38px] border-[#0000001A] border"
                   />
                 </div>
 
                 <div className="flex flex-col gap-6 bg-[#E5F6EC4D] p-5">
-                  <FormItem className="flex items-start gap-[166px]">
-                    <FormLabel className="w-[100px] pt-2">Location</FormLabel>
+                  {/* Location */}
+                  <FormItem className="flex flex-col sm:flex-row items-start sm:gap-[166px] gap-2">
+                    <FormLabel className="w-full sm:w-[100px] pt-2">
+                      Location
+                    </FormLabel>
                     <FormControl>
                       <FormField
                         control={control}
@@ -182,7 +185,7 @@ const Event = ({ height, events, setEvents }: Props) => {
                           <Input
                             {...field}
                             value={field.value ?? ""}
-                            className="w-[402px] border-0 border-b border-gray-400 rounded-none"
+                            className="w-full sm:w-[402px] border-0 border-b border-gray-400 rounded-none"
                           />
                         )}
                       />
@@ -190,14 +193,17 @@ const Event = ({ height, events, setEvents }: Props) => {
                     <FormMessage />
                   </FormItem>
 
-                  <FormItem className="flex items-start gap-[166px]">
-                    <FormLabel className="w-[100px] pt-2">Date</FormLabel>
+                  {/* Date */}
+                  <FormItem className="flex flex-col sm:flex-row items-start sm:gap-[166px] gap-2">
+                    <FormLabel className="w-full sm:w-[100px] pt-2">
+                      Date
+                    </FormLabel>
                     <FormControl>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
-                            className="w-[402px] justify-start text-left bg-[#E5F6EC4D] font-normal border-0 border-b border-gray-400 rounded-none"
+                            className="w-full sm:w-[402px] justify-start text-left bg-[#E5F6EC4D] font-normal border-0 border-b border-gray-400 rounded-none"
                           >
                             {watch(`events.${index}.date`)
                               ? format(
@@ -228,14 +234,15 @@ const Event = ({ height, events, setEvents }: Props) => {
                     <FormMessage />
                   </FormItem>
 
+                  {/* Time From / To */}
                   {["timeFrom", "timeTo"].map((key) => (
                     <FormField
                       key={key}
                       control={control}
                       name={`events.${index}.${key}` as const}
                       render={({ field }) => (
-                        <FormItem className="flex items-start gap-[166px]">
-                          <FormLabel className="w-[100px] pt-2">
+                        <FormItem className="flex flex-col sm:flex-row items-start sm:gap-[166px] gap-2">
+                          <FormLabel className="w-full sm:w-[100px] pt-2">
                             {key === "timeFrom" ? "Time From" : "Time To"}
                           </FormLabel>
                           <FormControl>
@@ -243,7 +250,7 @@ const Event = ({ height, events, setEvents }: Props) => {
                               {...field}
                               type="time"
                               value={field.value ?? ""}
-                              className="w-[402px] border-0 border-b border-gray-400 rounded-none"
+                              className="w-full sm:w-[402px] border-0 border-b border-gray-400 rounded-none"
                             />
                           </FormControl>
                           <FormMessage />
@@ -254,7 +261,7 @@ const Event = ({ height, events, setEvents }: Props) => {
 
                   <Button
                     type="button"
-                    className="w-[228px] h-8 bg-[#699D99] rounded px-2 py-[6px] text-base museo "
+                    className="w-full sm:w-[228px] h-8 bg-[#699D99] rounded px-2 py-[6px] text-base museo"
                   >
                     Add additional date and time
                   </Button>
@@ -290,7 +297,7 @@ const Event = ({ height, events, setEvents }: Props) => {
       <div className="flex justify-end mt-8">
         <Button
           type="button"
-          className="bg-[#699D99] hover:bg-[#5c8e8a] text-white rounded w-[195px] h-[44px] text-base"
+          className="bg-[#699D99] hover:bg-[#5c8e8a] text-white rounded w-full sm:w-[195px] h-[44px] text-base"
           onClick={handleAddEvent}
         >
           Add Another Event

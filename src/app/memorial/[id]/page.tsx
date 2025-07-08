@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { getCondolences } from "@/lib/condolences";
 import { getObituaryById } from "@/lib/obituaryAPI";
 import { TCondolences, TObituary } from "@/types/type";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import Image from "next/image";
 import React, { use, useEffect, useState } from "react";
 
@@ -68,9 +68,13 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
       .catch((err) => console.error("Lỗi khi lấy condolences:", err));
   }, [id]);
 
-  const bornDate = obituary?.memorial?.born && new Date(obituary.memorial.born);
+  const bornDate =
+    obituary?.memorial?.born &&
+    parse(obituary.memorial.born, "dd/MM/yyyy", new Date());
+
   const deathDate =
-    obituary?.memorial?.death && new Date(obituary.memorial.death);
+    obituary?.memorial?.death &&
+    parse(obituary.memorial.death, "dd/MM/yyyy", new Date());
 
   const isValidBornDate =
     bornDate instanceof Date && !isNaN(bornDate.getTime());

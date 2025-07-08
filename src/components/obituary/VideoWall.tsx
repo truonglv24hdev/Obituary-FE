@@ -25,29 +25,29 @@ const VideoWall = ({ obituaryId, open, onClose }: ContributeModalProps) => {
   if (!open) return null;
 
   return (
-    <div className="fixed h-full inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-white w-[600px] rounded-2xl shadow-xl p-8 relative">
+    <div className="fixed h-full inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+      <div className="bg-white w-full max-w-[600px] rounded-2xl shadow-xl p-6 sm:p-8 relative">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-gray-600 hover:text-black"
+          className="absolute top-4 right-4 text-gray-600 hover:text-black"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Title */}
-        <h2 className="text-2xl font-semibold mb-6">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-5 sm:mb-6">
           Contribute to memory wall
         </h2>
 
         {/* Input label */}
         <p className="text-sm text-gray-600 mb-2">
           Video URL{" "}
-          <span className="text-xs">(Youtube, Google drive, Dailymotion)</span>
+          <span className="text-xs">(YouTube, Google Drive, Dailymotion)</span>
         </p>
 
         {/* Input field */}
-        <div className="border border-dashed border-gray-400 rounded-lg px-4 py-3 mb-4">
+        <div className="border border-dashed border-gray-400 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 mb-4">
           <input
             type="text"
             placeholder="Enter the URL address of your video"
@@ -58,9 +58,9 @@ const VideoWall = ({ obituaryId, open, onClose }: ContributeModalProps) => {
         </div>
 
         {/* Format helper */}
-        <p className="text-sm font-semibold text-gray-700 mb-6">
+        <p className="text-sm font-semibold text-gray-700 mb-5 sm:mb-6">
           The format should be like this:{" "}
-          <span className="text-gray-500">
+          <span className="text-gray-500 break-all block">
             https://www.youtube.com/watch?v=AbkEmIgJMcU
           </span>
         </p>
@@ -69,9 +69,9 @@ const VideoWall = ({ obituaryId, open, onClose }: ContributeModalProps) => {
         <div className="flex justify-end">
           <Button
             onClick={() => alert(`Searching: ${url}`)}
-            className="w-[190px] h-11 rounded text-base flex items-center gap-4 museo font-light bg-[#699D99] text-white px-7 py-2 hover:bg-[#5a8b88]"
+            className="w-full sm:w-[190px] h-11 rounded text-base flex items-center justify-center gap-3 museo font-light bg-[#699D99] text-white px-6 hover:bg-[#5a8b88]"
           >
-            <Search className="w-6 h-6" />
+            <Search className="w-5 h-5" />
             Search video
           </Button>
         </div>

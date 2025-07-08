@@ -53,45 +53,48 @@ const Gallery = ({
   return (
     <div className="space-y-6">
       {/* Gallery Title */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-[32px] text-[#699D99] font-medium">Gallery</h3>
+      <div className="flex sm:flex-row items-center justify-between gap-3">
+        <h3 className="text-[28px] sm:text-[32px] text-[#699D99] font-medium">
+          Gallery
+        </h3>
         <Switch checked={showGallery} onCheckedChange={setShowGallery} />
       </div>
 
       {/* Gallery Toolbar */}
       {showGallery && (
-        <div className="flex gap-15 flex-col">
-          <div className="flex h-[72px] border items-center justify-between bg-white shadow-md px-5 py-4 gap-1">
-            <div className="flex h-10 w-[307px] items-center gap-4">
-              <span className="text-[14px] museo w-[196px] text-gray-700">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col lg:flex-row gap-4 lg:h-[72px] border items-start lg:items-center justify-between bg-white shadow-md px-5 py-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+              <span className="text-[14px] museo text-gray-700">
                 Organize your photos in folder
               </span>
               <Button
                 onClick={addGalleryFolder}
                 size="sm"
-                className="bg-[#699D99] hover:bg-[#4e7c7a] text-[14px] museo text-white w-[91px] h-10 rounded border px-4 py-[5px]"
+                className="bg-[#699D99] hover:bg-[#4e7c7a] text-[14px] museo text-white w-fit h-10 rounded px-4 py-[5px]"
                 type="button"
               >
                 Add folder
               </Button>
             </div>
-            <div className="flex items-center gap-5 w-[463px] h-10">
-              <div className="flex items-center gap-[15px]">
-                <span className="text-[14px] museo w-[178px] text-gray-700">
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-[14px] museo text-gray-700">
                   Allow visitors to add photos
                 </span>
                 <Switch
-                  className="bg-blue-700"
                   checked={allowVisitorPhotos}
                   onCheckedChange={setAllowVisitorPhotos}
                 />
               </div>
-              <div className="relative flex w-[210px] h-10 gap-2">
+
+              <div className="flex items-center gap-2 flex-wrap">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       size="sm"
-                      className="bg-white border text-[14px] museo h-10 w-[98px] border-[#699D99] text-[#699D99] rounded px-3 py-[5px] hover:bg-[#e5f6ec]"
+                      className="bg-white border text-[14px] museo h-10 w-fit border-[#699D99] text-[#699D99] rounded px-3 py-[5px] hover:bg-[#e5f6ec]"
                       type="button"
                     >
                       Moderation
@@ -100,23 +103,22 @@ const Gallery = ({
                   <PopoverContent
                     side="bottom"
                     align="end"
-                    className="w-[322px] flex flex-col h-[292px] rounded px-6 py-5 gap-4"
+                    className="w-[322px] flex flex-col h-auto rounded px-6 py-5 gap-4"
                   >
-                    <div className="flex flex-col gap-2 w-[259px] h-[68px]">
-                      <div className="font-semibold text-base museo w-[127px] h-5">
+                    <div className="flex flex-col gap-2">
+                      <div className="font-semibold text-base museo">
                         Moderation type
                       </div>
                       <Select
                         value={moderationType}
                         onValueChange={async (value: "post" | "pre") => {
                           setModerationType(value);
-                          console.log(value)
                           const formData = new FormData();
                           formData.append("moderation", value);
                           await putMemorial(id, formData);
                         }}
                       >
-                        <SelectTrigger className="w-[259px] text-sm museo h-5 rounded border border-[#699D99] text-[#699D99] bg-white px-3 py-[5px]">
+                        <SelectTrigger className="text-sm museo h-10 rounded border border-[#699D99] text-[#699D99] bg-white px-3">
                           <SelectValue placeholder="Select moderation" />
                         </SelectTrigger>
                         <SelectContent>
@@ -125,7 +127,7 @@ const Gallery = ({
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="text-sm font-light museo w-[259px] h-30 flex flex-col">
+                    <div className="text-sm font-light museo">
                       <div className="mb-2">
                         <span className="font-semibold">Post-moderation:</span>{" "}
                         new photos are automatically published. You can erase
@@ -134,10 +136,10 @@ const Gallery = ({
                       <div>
                         <span className="font-semibold">Pre-moderation:</span>{" "}
                         by default, new photos are not displayed... until
-                        explicitely approved by you.
+                        explicitly approved by you.
                       </div>
                     </div>
-                    <div className="w-[259px] border"></div>
+                    <div className="border" />
                     <div className="flex items-center gap-2">
                       <Checkbox
                         className="rounded-2xl"
@@ -145,7 +147,6 @@ const Gallery = ({
                         onCheckedChange={async (checked) => {
                           const newValue = Boolean(checked);
                           setRequireEmail(newValue);
-
                           const formData = new FormData();
                           formData.append("require_email", String(newValue));
                           await putMemorial(id, formData);
@@ -161,24 +162,25 @@ const Gallery = ({
                     </div>
                   </PopoverContent>
                 </Popover>
+
                 <Button
                   size="sm"
                   type="button"
-                  className="bg-[#699D99] hover:bg-[#4e7c7a] text-[14px] museo text-white rounded w-[104px] h-10 px-3 py-[5px] flex items-center gap-6"
+                  className="bg-[#699D99] hover:bg-[#4e7c7a] text-[14px] museo text-white rounded h-10 px-3 py-[5px] flex items-center gap-2"
                 >
                   Filter
-                  <IconFilterDrop className="w-6 h-6" />
+                  <IconFilterDrop className="w-5 h-5" />
                 </Button>
               </div>
             </div>
           </div>
 
           {/* Gallery Images */}
-          <div className="flex flex-wrap gap-[60px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {galleryOldImages.map((imgUrl, idx) => (
               <div
                 key={`old-${idx}`}
-                className="relative w-[280px] h-[280px] rounded-lg overflow-hidden"
+                className="relative w-full aspect-square rounded-lg overflow-hidden"
                 onClick={() => handleRemoveGalleryImage("old", idx)}
                 title="Click để xóa ảnh này"
               >
@@ -186,15 +188,14 @@ const Gallery = ({
                   src={`http://localhost:5000${imgUrl}`}
                   alt={`gallery-old-${idx}`}
                   fill
-                  className="rounded-lg object-contain"
+                  className="rounded-lg object-cover"
                 />
               </div>
             ))}
-
             {galleryImages.map((file, idx) => (
               <div
                 key={`new-${idx}`}
-                className="relative w-[280px] h-[280px] rounded-lg overflow-hidden"
+                className="relative w-full aspect-square rounded-lg overflow-hidden"
                 onClick={() => handleRemoveGalleryImage("new", idx)}
                 title="Click để xóa ảnh này"
               >
@@ -202,7 +203,7 @@ const Gallery = ({
                   src={URL.createObjectURL(file)}
                   alt={`preview-${idx}`}
                   fill
-                  className="rounded-lg object-contain"
+                  className="rounded-lg object-cover"
                 />
               </div>
             ))}
@@ -219,7 +220,7 @@ const Gallery = ({
               onChange={handleGalleryFilesChange}
             />
             <Button
-              className="w-[211px] museo text-base h-12 rounded px-7 py-2 bg-[#699D99] mb-5"
+              className="w-full sm:w-[211px] museo text-base h-12 rounded px-7 py-2 bg-[#699D99] mb-5"
               onClick={() => document.getElementById("gallery-upload")?.click()}
               type="button"
             >

@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["images.unsplash.com","img.clerk.com", "localhost", "api.mapbox.com"],
+    domains: ["images.unsplash.com","img.clerk.com", "localhost", "api.mapbox.com", "obituary-be.up.railway.app"],
     remotePatterns: [
       {
         protocol: 'https',

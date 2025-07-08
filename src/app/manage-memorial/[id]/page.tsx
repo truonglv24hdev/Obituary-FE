@@ -152,90 +152,112 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   return (
-    <div className="mb-10">
+    <div className="md:mb-10">
       <Heading className="bg-[#699D99]" />
-      <div className="w-full h-[74px] flex items-center justify-center px-25 py-[15px] border-b bg-white">
-        <div className="max-w-[1240px] h-11 flex justify-center items-center gap-20 text-sm text-[#2d3b4e]">
-          <div className="w-[122px] h-6 flex items-center gap-2">
+      <div className="w-full h-auto flex items-center justify-center px-4 py-[15px] border-b bg-white">
+        <div className="max-w-[1240px] w-full flex flex-wrap lg:flex-nowrap justify-center items-center gap-4 lg:gap-20 text-sm text-[#2d3b4e] overflow-x-auto">
+          <div className="min-w-[122px] h-6 flex items-center gap-2">
             <div className="w-6 h-6">
               <LayoutDashboard size={24} />
             </div>
-            <span className="museo text-lg font-light">Dashboard</span>
+            <span className="museo text-base lg:text-lg font-light whitespace-nowrap">
+              Dashboard
+            </span>
           </div>
-          <div className="w-[122px] h-6 flex items-center gap-2">
+          <div className="min-w-[122px] h-6 flex items-center gap-2">
             <div className="w-6 h-6">
               <Bell size={24} />
             </div>
-            <span className="museo text-lg font-light">Notifications</span>
+            <span className="museo text-base lg:text-lg font-light whitespace-nowrap">
+              Notifications
+            </span>
           </div>
-          <div className="w-[122px] h-6 flex items-center gap-2">
+          <div className="min-w-[122px] h-6 flex items-center gap-2">
             <div className="w-6 h-6">
               <BarChart2 size={24} />
             </div>
-            <span className="museo text-lg font-light">Statistics</span>
+            <span className="museo text-base lg:text-lg font-light whitespace-nowrap">
+              Statistics
+            </span>
           </div>
-          <div className="w-[122px] h-6 flex items-center gap-2">
+          <div className="min-w-[122px] h-6 flex items-center gap-2">
             <div className="w-6 h-6">
               <ExternalLink size={24} />
             </div>
-            <span className="museo text-lg font-light">Vist page</span>
+            <span className="museo text-base lg:text-lg font-light whitespace-nowrap">
+              Vist page
+            </span>
           </div>
           <Link
             href={`/obituary/${memorial?._id}`}
-            className="bg-[#5f9c96] hover:bg-[#4a857f] museo w-[124px] h-11 text-white rounded flex items-center text-base museo px-7 py-2"
+            className="bg-[#5f9c96] hover:bg-[#4a857f] museo text-white rounded flex items-center justify-center text-sm lg:text-base museo px-5 py-2 min-w-[124px] h-11 whitespace-nowrap"
           >
             Edit page
           </Link>
         </div>
       </div>
+
       <div className="w-full relative flex flex-col items-center gap-6 ">
         {/* Header */}
-        <div className="w-[1240px] flex flex-col gap-7 justify-start">
-          <div className=" justify-start mt-15 ">
+        <div className="w-full max-w-[1240px] mx-auto flex flex-col gap-7">
+          <div className="mt-15">
             <Link
               href={"/account/memorials"}
-              className="w-[217px] h-11 flex bg-[#293548] text-base museo font-light gap-3 text-white rounded px-[26px] py-2"
+              className="w-[217px] md:ml-0 ml-2 h-11 flex bg-[#293548] text-base museo font-light gap-3 text-white rounded px-[26px] py-2"
             >
               <IconLeftNotArrow className="w-6 h-6" />
               Back to memorial
             </Link>
           </div>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
-            <div className="bg-[#E5F6EC4D] flex gap-10 w-[863px] h-[312px] px-6 py-6 rounded-lg">
-              <div className="w-[248px] h-[248px] bg-white flex justify-center items-center">
+
+          <div className="flex flex-col xl:flex-row items-start gap-5 w-full">
+            {/* Left section */}
+            <div className="bg-[#E5F6EC4D] w-full xl:w-[863px] min-h-[312px] px-4 sm:px-6 py-6 rounded-lg flex flex-col sm:flex-row gap-6 sm:gap-10">
+              {/* Image box */}
+              <div className="flex-shrink-0 w-full sm:w-[248px] h-[248px] bg-white flex justify-center items-center">
                 <Image
                   src={
                     memorial?.picture
-                      ? `http://localhost:5000${memorial.picture}`
-                      : `/img/avatar.jpg`
+                      ? encodeURI(
+                          `https://obituary-be.up.railway.app${memorial.picture}`
+                        )
+                      : "/img/avatar.jpg"
                   }
                   alt=""
                   width={209}
                   height={209}
+                  className="object-cover h-[209px]"
                 />
               </div>
-              <div className="flex flex-col gap-8 h-[248px] w-[435px]">
+
+              {/* Info section */}
+              <div className="flex flex-col gap-6 sm:gap-8 flex-1">
                 <div className="flex flex-col gap-3">
-                  <h1 className="text-4xl font-bold h-10">
+                  <h1 className="text-3xl sm:text-4xl font-bold">
                     {memorial?.first_name} {memorial?.last_name}
                   </h1>
-                  <p className="text-base museo h-5 font-light ">Brother</p>
+                  <p className="text-base museo font-light">Brother</p>
                 </div>
-                <div className="flex flex-col h-[144px] w-[435px] gap-4">
-                  <div className="flex gap-[59px] items-center">
+
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-[59px]">
                     <p className="w-[74px] museo text-lg font-semibold">
                       Address:
                     </p>
-                    <a className="museo text-lg font-light" href={`http://localhost:3000/memorial/${memorial?.obituaryId}`}>
+                    <a
+                      className="museo text-lg font-light break-all"
+                      href={`http://localhost:3000/memorial/${memorial?.obituaryId}`}
+                    >
                       Tributechapters.com.sg/John-Doe
                     </a>
                   </div>
-                  <div className="flex items-center gap-[64px]">
+
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-[64px]">
                     <span className="w-[69px] museo text-lg font-semibold">
                       Privacy:
                     </span>
                     <DropdownMenu>
-                      <DropdownMenuTrigger className="border-none  py-1 rounded flex items-center gap-2 text-lg museo text-[#2d3b4e]">
+                      <DropdownMenuTrigger className="border-none py-1 rounded flex items-center gap-2 text-base sm:text-lg museo text-[#2d3b4e]">
                         {selected}
                         <ChevronDown className="w-4 h-4" />
                       </DropdownMenuTrigger>
@@ -243,7 +265,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                       <DropdownMenuContent
                         side="bottom"
                         align="start"
-                        className="w-[219px] h-[152px] px-4 py-3"
+                        className="w-[219px] sm:w-[219px] max-h-[200px] px-3 sm:px-4 py-2 sm:py-3"
                       >
                         {options.map((option) => {
                           const isSelected = selected === option;
@@ -267,7 +289,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                                   );
                                 }
                               }}
-                              className={`flex items-center w-[219px] h-10 gap-3 px-3 py-2 text-base museo font-light cursor-pointer ${
+                              className={`flex items-center w-[219px] h-10 gap-3 px-3 py-2 text-sm sm:text-base museo font-light cursor-pointer ${
                                 isSelected ? "bg-[#E5F6EC4D]" : ""
                               }`}
                             >
@@ -282,14 +304,15 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                                   <Check className="w-4 h-4 text-white" />
                                 )}
                               </div>
-                              <span>{option}</span>
+                              <span className="break-words">{option}</span>
                             </DropdownMenuItem>
                           );
                         })}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <div className="flex gap-[43px] items-center">
+
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-[43px]">
                     <p className="w-22 museo text-lg font-semibold">
                       Password:
                     </p>
@@ -320,43 +343,42 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                         : {})}
                     />
                   </div>
-                  <div className="flex gap-[74px] items-center">
+
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-[74px]">
                     <p className="w-[59px] museo text-lg font-semibold">
                       Status:
                     </p>
-                    <a className="museo text-lg font-light">
+                    <span className="museo text-lg font-light">
                       Memorial page is live
-                    </a>
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="relative w-[353px] h-[312px] rounded-xl overflow-hidden">
+            {/* Right - Plan Box */}
+            <div className="w-[353px] mx-auto md:mx-0 h-[324px] relative rounded-xl overflow-hidden">
               <Image
                 src="/img/update.jpg"
                 alt="Candle and flowers"
                 fill
                 className="absolute inset-0 w-full h-full object-cover z-0"
               />
+              <div className="relative z-10 w-full h-full p-5 text-white flex flex-col gap-6">
+                <p className="text-lg font-semibold">
+                  {memorial?.premium ? "Paid Plan" : "Upgrade plan"}
+                </p>
 
-              <div className="relative z-10 w-full h-full p-5 rounded-xl text-white flex flex-col gap-7">
-                <div>
-                  <p className="text-lg font-semibold h-6">
-                    {memorial?.premium ? "Paid Plan" : "Upgrade plan"}
-                  </p>
-                </div>
                 <div className="flex flex-col gap-3">
-                  <div className="flex gap-6 h-[22px]">
+                  <div className="flex gap-4 sm:gap-6 items-center">
                     <p className="text-base museo font-light">Plan:</p>
                     <span className="bg-white/20 px-2 py-0.5 text-sm museo font-light rounded-none text-white">
                       {memorial?.premium ? "One time" : "Free"}
                     </span>
                   </div>
-                  {memorial?.premium ? (
-                    ""
-                  ) : (
-                    <ul className="text-sm museo font-light flex flex-col h-[116px] gap-2 list-disc list-outside pl-5">
+
+                  {!memorial?.premium && (
+                    <ul className="text-sm museo font-light flex flex-col gap-2 list-disc list-outside pl-5">
                       <li>One-time payment</li>
                       <li>
                         Unlimited photos, videos and guest condolence messages
@@ -367,13 +389,11 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                   )}
                 </div>
 
-                {memorial?.premium ? (
-                  ""
-                ) : (
-                  <div className=" w-[313px] h-10">
+                {!memorial?.premium && (
+                  <div className="w-full sm:w-[313px] h-10">
                     <Link
                       href={`/payment/${memorial?._id}`}
-                      className="flex items-center justify-center w-[313px] h-10 text-base museo font-light text-black rounded bg-white/50 backdrop-blur-md"
+                      className="flex items-center justify-center w-full h-10 text-base museo font-light text-black rounded bg-white/50 backdrop-blur-md"
                     >
                       Upgrade Now
                     </Link>

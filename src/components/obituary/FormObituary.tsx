@@ -17,7 +17,7 @@ interface ObituaryFormProps {
   show: boolean;
   setShow: (value: boolean) => void;
   name: string;
-  form: UseFormReturn<any>; // Add form prop
+  form: UseFormReturn<any>; 
   placeholder?: string;
 }
 
@@ -44,7 +44,7 @@ const FormObituary = ({
             <Button
               variant="outline"
               size="sm"
-              className="h-10 museo text-base"
+              className="hidden sm:block h-10 museo text-base"
               onClick={onSubtitleClick}
             >
               {subtitleButtonLabel}
