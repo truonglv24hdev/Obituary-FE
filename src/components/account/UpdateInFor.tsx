@@ -29,11 +29,7 @@ const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
   password: z
     .string()
-    .min(6)
-    .max(20)
-    .refine((val) => val !== "", {
-      message: "Password must be between 6 and 20 characters",
-    }),
+    .min(6),
   address: z.string().optional(),
   country: z.string().optional(),
   code: z
@@ -156,6 +152,7 @@ const UpdateInfor = () => {
                     <div className="flex-1">
                       <FormControl>
                         <Input
+                          type={field.label === "Password" ? "password" : "text"}
                           className="w-full bg-white rounded"
                           {...fieldProps}
                         />

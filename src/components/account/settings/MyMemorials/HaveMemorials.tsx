@@ -55,7 +55,7 @@ const HaveMemorials = ({
           >
             <div className="relative w-[138px] h-[127px] rounded mx-auto mt-3 shadow-lg border border-gray-200 bg-white">
               <Image
-                src={`http://localhost:5000${memorial.picture}`}
+                src={`https://obituary-be-production.up.railway.app${memorial.picture}`}
                 alt="Preview"
                 width={120}
                 height={110}

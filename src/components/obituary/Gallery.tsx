@@ -185,7 +185,7 @@ const Gallery = ({
                 title="Click để xóa ảnh này"
               >
                 <Image
-                  src={`http://localhost:5000${imgUrl}`}
+                  src={`https://obituary-be-production.up.railway.app${imgUrl}`}
                   alt={`gallery-old-${idx}`}
                   fill
                   className="rounded-lg object-cover"

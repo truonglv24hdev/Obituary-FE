@@ -180,13 +180,15 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
               Statistics
             </span>
           </div>
-          <div className="min-w-[122px] h-6 flex items-center gap-2">
-            <div className="w-6 h-6">
-              <ExternalLink size={24} />
-            </div>
-            <span className="museo text-base lg:text-lg font-light whitespace-nowrap">
-              Vist page
-            </span>
+          <div className=" h-6 flex items-center gap-2">
+            <Link href={`/memorial/${memorial?.obituaryId}`} className="flex gap-2 min-w-[170px]">
+              <div className="w-6 h-6">
+                <ExternalLink size={24} />
+              </div>
+              <span className="museo text-base lg:text-lg font-light whitespace-nowrap">
+                Vist page
+              </span>
+            </Link>
           </div>
           <Link
             href={`/obituary/${memorial?._id}`}
@@ -219,7 +221,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                   src={
                     memorial?.picture
                       ? encodeURI(
-                          `https://obituary-be.up.railway.app${memorial.picture}`
+                          `https://obituary-be-production.up.railway.app${memorial.picture}`
                         )
                       : "/img/avatar.jpg"
                   }

@@ -24,10 +24,6 @@ const formSchema = z.object({
   password: z
     .string()
     .min(6)
-    .max(20)
-    .refine((val) => val.length >= 6 && val.length <= 20, {
-      message: "Password must be between 6 and 20 characters",
-    }),
 });
 
 const SignIn = () => {
@@ -131,7 +127,7 @@ const SignIn = () => {
             variant="outline"
             className="flex-1 flex items-center justify-center"
             onClick={() => {
-              window.location.href = "http://localhost:5000/api/auth/google";
+              window.location.href = "https://obituary-be-production.up.railway.app/api/auth/google";
             }}
           >
             <FontAwesomeIcon icon={faGoogle} className="w-7 h-7" />
@@ -140,6 +136,9 @@ const SignIn = () => {
           <Button
             variant="outline"
             className="flex-1 flex items-center justify-center"
+            onClick={() => {
+              window.location.href = "https://obituary-be-production.up.railway.app/api/auth/facebook/";
+            }}
           >
             <FontAwesomeIcon icon={faFacebookF} className="w-7 h-7" />
             Facebook

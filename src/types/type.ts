@@ -114,12 +114,12 @@ export interface GalleryImage {
 }
 
 export interface Category {
-  _id?: string;
+  id: string;
   category: string;
   members: {
-    _id?: string;
+    id: string;
     name: string;
-    avatar?: string;
+    image?: string;
   }[];
 }
 

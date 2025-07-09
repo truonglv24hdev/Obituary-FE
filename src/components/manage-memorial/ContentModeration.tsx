@@ -62,7 +62,7 @@ export default function ContentModeration({
             >
               <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden">
                 <Image
-                  src={`http://localhost:5000${item.photo}`}
+                  src={`https://obituary-be-production.up.railway.app${item.photo}`}
                   alt="Condolence"
                   fill
                   className="object-cover w-full h-full"

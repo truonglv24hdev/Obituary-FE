@@ -23,13 +23,7 @@ const formSchema = z.object({
     .string()
     .min(2, { message: "First name must be at least 2 characters." }),
   email: z.string().email(),
-  password: z
-    .string()
-    .min(6)
-    .max(20)
-    .refine((val) => val.length >= 6 && val.length <= 20, {
-      message: "Password must be between 6 and 20 characters",
-    }),
+  password: z.string().min(6),
 });
 
 const SignUp = () => {
@@ -64,7 +58,7 @@ const SignUp = () => {
     <div className="h-200 flex items-center justify-center bg-white relative">
       <div className="bg-white shadow-lg border rounded-lg px-8 py-10 w-[560px] h-[700px] z-10 flex flex-col gap-3">
         <h2 className="text-[40px] font-serif font-medium mb-6">
-          Welcome Back
+          Create Account
         </h2>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -123,7 +117,10 @@ const SignUp = () => {
               )}
             />
             <div className="flex justify-end mb-2">
-              <Link href="/forgot-password" className="text-sm text-blue-500 hover:underline">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-blue-500 hover:underline"
+              >
                 Forgot Password?
               </Link>
             </div>
@@ -164,7 +161,7 @@ const SignUp = () => {
         <div className="text-center text-lg mt-5">
           New to Tribute Chapters?{" "}
           <Link href="/sign-in" className="text-blue-500 hover:underline">
-            Sign in
+            Sign up
           </Link>
         </div>
       </div>

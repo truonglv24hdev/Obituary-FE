@@ -89,7 +89,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
         <Image
           src={
             obituary?.headerImage
-              ? `http://localhost:5000${obituary.headerImage}`
+              ? `https://obituary-be-production.up.railway.app${obituary.headerImage}`
               : `/img/default/png`
           }
           alt="headerImage"
@@ -104,7 +104,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           <div className="w-[248px] h-[248px] border rounded shadow-md overflow-hidden bg-white">
             {obituary?.memorial.picture && (
               <Image
-                src={`http://localhost:5000${obituary.memorial.picture}`}
+                src={`https://obituary-be-production.up.railway.app${obituary.memorial.picture}`}
                 alt="avatar"
                 width={240}
                 height={240}
@@ -184,12 +184,12 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
                                 className="w-[140px] h-[140px] bg-white"
                                 style={{ clipPath: "url(#clip-octagon)" }}
                               >
-                                {member.avatar ? (
+                                {member.image ? (
                                   <>
                                     <Image
                                       src={
-                                        member.avatar
-                                          ? `http://localhost:5000${member.avatar}`
+                                        member.image
+                                          ? `https://obituary-be-production.up.railway.app${member.image}`
                                           : "/img/avatar.jpg"
                                       }
                                       alt={member.name || "Member"}

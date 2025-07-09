@@ -17,6 +17,11 @@ import Image from "next/image";
 import HeaderMemorial from "./HeaderMemorial";
 import { postMemorial } from "@/lib/memorialAPI";
 import { useRouter } from "next/navigation";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Calendar } from "../ui/calendar";
+import { cn } from "@/lib/utils";
+import { IconCalendar } from "../icons";
+import { format } from "date-fns";
 
 const formSchema = z.object({
   first_name: z
@@ -105,14 +110,12 @@ const CreateMemorial = () => {
       <div className="w-full max-w-[1500px] mx-auto min-h-screen px-4 md:px-[229px] py-10 md:py-20 flex flex-col gap-10 md:gap-13">
         <HeaderMemorial />
 
-        {/* Form Box */}
         <div className="bg-green-50 p-4 md:p-8 rounded-lg shadow-sm">
           <h2 className="text-lg font-medium mb-6">
             This memorial is dedicated to:
           </h2>
 
-          {/* Image Upload */}
-          <div className="flex flex-col md:flex-row gap-4 md:gap-45 mb-6 md:mb-2">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-45 mb-6 md:mb-5">
             <p className="font-medium">Picture</p>
             <div className="relative w-32 h-40 rounded shadow-md overflow-hidden bg-white">
               {selectedFile && (
@@ -136,74 +139,45 @@ const CreateMemorial = () => {
             </div>
           </div>
 
-          {/* Form Fields */}
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col gap-7 w-full md:w-[918px]"
             >
-              {/* First Name */}
-              <FormField
-                control={form.control}
-                name="first_name"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
-                    <FormLabel className="w-full md:w-21 font-light text-base">
-                      First Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-full md:w-[400px] bg-white rounded"
-                        placeholder="John"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Middle Name */}
-              <FormField
-                control={form.control}
-                name="middle_name"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
-                    <FormLabel className="w-full md:w-21 font-light text-base">
-                      Middle Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-full md:w-[400px] bg-white rounded"
-                        placeholder="William"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Last Name */}
-              <FormField
-                control={form.control}
-                name="last_name"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
-                    <FormLabel className="w-full md:w-21 font-light text-base">
-                      Last Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-full md:w-[400px] bg-white rounded"
-                        placeholder="Doe"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {[
+                {
+                  name: "first_name",
+                  label: "First Name",
+                  placeholder: "John",
+                },
+                {
+                  name: "middle_name",
+                  label: "Middle Name",
+                  placeholder: "William",
+                },
+                { name: "last_name", label: "Last Name", placeholder: "Doe" },
+              ].map((field) => (
+                <FormField
+                  key={field.name}
+                  control={form.control}
+                  name={field.name as keyof z.infer<typeof formSchema>}
+                  render={({ field: f }) => (
+                    <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
+                      <FormLabel className="w-full md:w-21 font-light text-base">
+                        {field.label}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="w-full h-12 md:w-[400px] border-none bg-white rounded"
+                          placeholder={field.placeholder}
+                          {...f}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
 
               {/* Gender */}
               <FormField
@@ -241,54 +215,59 @@ const CreateMemorial = () => {
                 )}
               />
 
-              {/* Born */}
-              <FormField
-                control={form.control}
-                name="born"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
-                    <FormLabel className="w-full md:w-21 font-light text-base">
-                      Born
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-full md:w-[400px] bg-white rounded"
-                        placeholder="DD/MM/YYYY"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Death */}
-              <FormField
-                control={form.control}
-                name="death"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
-                    <FormLabel className="w-full md:w-21 font-light text-base">
-                      Death
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-full md:w-[400px] bg-white rounded"
-                        placeholder="DD/MM/YYYY"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {["born", "death"].map((fieldName) => (
+                <FormField
+                  key={fieldName}
+                  control={form.control}
+                  name={fieldName as "born" | "death"}
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
+                      <FormLabel className="w-full md:w-21 font-light text-base">
+                        {fieldName === "born" ? "Born" : "Death"}
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full md:w-[400px] border-none justify-between text-left font-normal h-12",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? format(new Date(field.value), "dd/MM/yyyy")
+                                : "DD/MM/YYYY"}
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={
+                              field.value ? new Date(field.value) : undefined
+                            }
+                            onSelect={(date) => {
+                              if (date) field.onChange(date.toISOString());
+                            }}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
 
               {/* Slug label */}
               <label className="block text-xl md:text-2xl font-light text-gray-700">
                 Memorial web address:
               </label>
 
-              {/* Slug */}
               <FormField
                 control={form.control}
                 name="slug"
@@ -300,12 +279,12 @@ const CreateMemorial = () => {
                       </FormLabel>
                       <FormControl className="ml-0 md:ml-35">
                         <Input
-                          className="w-full md:w-[400px] bg-white rounded"
+                          className="w-full h-12 md:w-[400px] bg-white rounded"
                           placeholder="john-doe"
                           {...field}
                         />
                       </FormControl>
-                      <span className="text-sm">Tributechapters.com.sg</span>
+                      <span className="ml-1 text-sm">Tributechapters.com.sg</span>
                     </div>
                     <FormMessage />
 
@@ -334,7 +313,7 @@ const CreateMemorial = () => {
               {/* Submit button */}
               <div className="col-span-2 text-right">
                 <Button
-                  className="h-11 w-full md:w-21 inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                  className="h-11 w-full md:w-[125px] inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-[#699D99] hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                   type="submit"
                 >
                   Continue

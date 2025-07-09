@@ -104,7 +104,7 @@ const GuestBook = ({ condolences }: GuestBookProps) => {
                 className="rounded-lg bg-[#E5F6EC] overflow-hidden shadow h-[426px] flex flex-col"
               >
                 <Image
-                  src={`http://localhost:5000${item.photo}`}
+                  src={`https://obituary-be-production.up.railway.app${item.photo}`}
                   alt="avatar"
                   width={365}
                   height={213}

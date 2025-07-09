@@ -254,8 +254,8 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       formObituary.append("favorites", JSON.stringify(favorites));
       categories.forEach((cat) => {
         cat.members.forEach((member) => {
-          if (member.avatar) {
-            formObituary.append(`familyTreeImage-${member._id}`, member.avatar);
+          if (member.image) {
+            formObituary.append(`familyTreeImage-${member.id}`, member.id);
           }
         });
       });
@@ -296,7 +296,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                       ) : (
                         obituary?.headerImage && (
                           <Image
-                            src={`http://localhost:5000${obituary.headerImage}`}
+                            src={`https://obituary-be-production.up.railway.app${obituary.headerImage}`}
                             alt="Memorial"
                             fill
                             className="object-cover rounded"
@@ -351,7 +351,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                                 ) : (
                                   obituary?.memorial.picture && (
                                     <Image
-                                      src={`http://localhost:5000${obituary.memorial.picture}`}
+                                      src={`https://obituary-be-production.up.railway.app${obituary.memorial.picture}`}
                                       alt="Memorial"
                                       width={240}
                                       height={240}
