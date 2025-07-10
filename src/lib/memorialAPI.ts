@@ -35,6 +35,16 @@ export async function forgotPassword(email: string, memorial: string) {
   return res.data;
 }
 
+export async function getMemorialBySearch(firstName: string, lastName: string) {
+  const res = await axios.get("/api/memorial/search", {
+    params: {
+      firstName: firstName,
+      lastName: lastName,
+    },
+  });
+  return res.data;
+}
+
 export async function getMemorialByUser(page: number = 1, limit: number = 4) {
   const res = await axios.get(`/api/memorial?page=${page}&limit=${limit}`, {
     requiresAuth: true,

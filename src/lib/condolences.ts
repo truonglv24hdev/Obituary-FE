@@ -17,7 +17,19 @@ export async function deleteCondolences(id: string) {
   return res.data;
 }
 
+export async function acceptCondolences(id: string) {
+  const res = await axios.put(`/api/condolences/${id}`,{}, {
+    requiresAuth: true,
+  });
+  return res.data;
+}
+
 export async function getCondolences(id: string) {
   const res = await axios.get(`/api/condolences/${id}`);
+  return res.data;
+}
+
+export async function getAllCondolences(id: string) {
+  const res = await axios.get(`/api/condolences/all/${id}`);
   return res.data;
 }

@@ -38,7 +38,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
     <div className="font-sans">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left - Order Summary */}
-        <div className="bg-[#699D99] text-white p-10 lg:p-20 flex flex-col gap-10 h-auto lg:h-[920px]">
+        <div className="bg-[#699D99] text-white p-10 lg:p-20 flex flex-col gap-10 h-auto lg:h-[945px]">
           <div className="flex items-center space-x-2 mb-6">
             <Button
               onClick={() => router.back()}

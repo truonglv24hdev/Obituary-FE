@@ -1,5 +1,6 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { IconSearch } from "../components/icons";
 import Heading from "../components/layout/Heading";
 import HowItWorks from "../components/layout/HowItWorks";
@@ -9,8 +10,21 @@ import PricingSection from "../components/layout/PricingSection";
 import Footer from "@/components/layout/Footer";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Button } from "@/components/ui/button";
+import { getMemorialBySearch } from "@/lib/memorialAPI";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+  const [searchFirstName, setSearchFirstName] = useState("");
+  const [searchLastName, setSearchLastName] = useState("");
+
+  const handleSearchSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await getMemorialBySearch(searchFirstName,searchLastName)
+    if(res.obituaryId){
+      router.push(`/memorial/${res.obituaryId}`)
+    }
+  };
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Heading className="bg-[#699D99]" />
@@ -37,27 +51,33 @@ export default function Home() {
                   <h2 className="text-[18px] md:text-[20px] font-semibold museo text-white text-center md:text-center">
                     Search Obituary
                   </h2>
-                  <div className="flex flex-col md:flex-row gap-3 md:gap-0">
-                    <input
-                      type="text"
-                      placeholder="First name"
-                      className="w-full md:w-[201px] h-13 museo px-5 py-4.5 border border-gray-200 bg-white placeholder:text-black 
-               rounded-md md:rounded-l-md md:rounded-r-none"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Last name"
-                      className="w-full md:w-[201px] h-13 museo px-3 py-2 border border-t border-b md:border-l-0 border-gray-200 bg-white placeholder:text-black
-               rounded-md md:rounded-none"
-                    />
-                    <button
-                      type="submit"
-                      className="w-full md:w-[45px] h-13 bg-[#6ea09e] text-white py-2 font-bold flex justify-center items-center
-               rounded-md md:rounded-r-md md:rounded-l-none"
-                    >
-                      <IconSearch className="w-6 h-6" />
-                    </button>
-                  </div>
+                  <form onSubmit={handleSearchSubmit}>
+                    <div className="flex flex-col md:flex-row gap-3 md:gap-0">
+                      <input
+                        type="text"
+                        placeholder="First name"
+                        value={searchFirstName}
+                        onChange={(e) => setSearchFirstName(e.target.value)}
+                        className="w-full md:w-[201px] h-13 museo px-5 py-4.5 border border-gray-200 bg-white placeholder:text-black 
+          rounded-md md:rounded-l-md md:rounded-r-none"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Last name"
+                        value={searchLastName}
+                        onChange={(e) => setSearchLastName(e.target.value)}
+                        className="w-full md:w-[201px] h-13 museo px-3 py-2 border border-t border-b md:border-l-0 border-gray-200 bg-white placeholder:text-black
+          rounded-md md:rounded-none"
+                      />
+                      <button
+                        type="submit"
+                        className="w-full md:w-[45px] h-13 bg-[#6ea09e] text-white py-2 font-bold flex justify-center items-center
+          rounded-md md:rounded-r-md md:rounded-l-none"
+                      >
+                        <IconSearch className="w-6 h-6" />
+                      </button>
+                    </div>
+                  </form>
                 </div>
 
                 {/* Divider */}

@@ -18,7 +18,7 @@ import {
 } from "@/types/type";
 import SidebarObituary from "@/components/obituary/SidebarObituary";
 import { getObituaryByMemorialId, putObituary } from "@/lib/obituaryAPI";
-import { format, parse } from "date-fns";
+import { format, parse, isValid } from "date-fns";
 import { putMemorial } from "@/lib/memorialAPI";
 import {
   Form,
@@ -46,7 +46,7 @@ import FormRSVP from "@/components/obituary/FormRSVP";
 import { Switch } from "@/components/ui/switch";
 import Gallery from "@/components/obituary/Gallery";
 import GuestBook from "@/components/obituary/GuestBook";
-import { getCondolences } from "@/lib/condolences";
+import { getAllCondolences } from "@/lib/condolences";
 import VideoWall from "@/components/obituary/VideoWall";
 
 const formSchema = z.object({
@@ -126,12 +126,11 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       .then((data) => {
         if (!data) return;
 
-        console.log(data._id);
         form.reset({
           firstName: data.memorial.first_name,
           lastName: data.memorial.last_name,
-          birthDate: parse(data.memorial.born, "dd/MM/yyyy", new Date()),
-          deathDate: parse(data.memorial.death, "dd/MM/yyyy", new Date()),
+          birthDate: data.memorial.born ? new Date(data.memorial.born) : null,
+          deathDate: data.memorial.death ? new Date(data.memorial.death) : null,
           quote: data.quote,
           wordsFromFamily: data.wordsFromFamily,
           lifeStory: data.lifeStory,
@@ -148,7 +147,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
           id: ev.id || Math.random().toString(36).substring(2),
         }));
         setEvents(eventsWithId);
-        getCondolences(data._id)
+        getAllCondolences(data._id)
           .then((data) => {
             setCondolences(data);
             console.log(data);
@@ -234,7 +233,6 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
 
       formObituary.append("galleryOld", JSON.stringify(galleryOldImages));
 
-      // Format dates
       const formattedBorn = values.birthDate
         ? format(values.birthDate, "dd/MM/yyyy")
         : undefined;
@@ -242,7 +240,6 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
         ? format(values.deathDate, "dd/MM/yyyy")
         : undefined;
 
-      // Append other data
       formMemorial.append("first_name", values.firstName || "");
       formMemorial.append("last_name", values.lastName || "");
       formMemorial.append("born", formattedBorn || "");

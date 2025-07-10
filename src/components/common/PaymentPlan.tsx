@@ -68,7 +68,7 @@ const PaymentPlan = ({ id }: { id?: string }) => {
         <Button
           className={` w-full md:w-[268px] h-11 rounded-sm font-semibold text-base mx-auto transition-all duration-200 ${
             plan.highlight
-              ? "bg-white text-[#6ea09e] hover:bg-gray-100 mt-[-30px] md:mt-[-23px]"
+              ? "bg-white text-[#6ea09e] hover:bg-gray-100 mt-[-20px] md:mt-[-23px]"
               : "bg-[#6ea09e] text-white hover:bg-[#5a8e8c]"
           }`}
         >

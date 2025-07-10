@@ -25,7 +25,7 @@ import {
   verifyMemorial,
 } from "@/lib/memorialAPI";
 import * as XLSX from "xlsx";
-import { deleteCondolences } from "@/lib/condolences";
+import { acceptCondolences, deleteCondolences } from "@/lib/condolences";
 import Link from "next/link";
 import SetPasswordDialog from "@/components/manage-memorial/SetPasswordDialog";
 import RsvpListTable from "@/components/manage-memorial/RsvpListTable";
@@ -138,6 +138,26 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
     }
   };
 
+  const handleAcceptCondolence = async (condolenceId: string) => {
+    try {
+      const res = await acceptCondolences(condolenceId);
+      if (res.code == 1) {
+        setMemorial((prev) =>
+          prev
+            ? {
+                ...prev,
+                condolences: prev.condolences.filter(
+                  (c) => c._id !== condolenceId
+                ),
+              }
+            : null
+        );
+      }
+    } catch (error) {
+      console.error("Error accept condolence:", error);
+    }
+  };
+
   const isAuto = type === true;
 
   if (showPasswordModal && !isAuthorized && !type) {
@@ -181,7 +201,10 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
             </span>
           </div>
           <div className=" h-6 flex items-center gap-2">
-            <Link href={`/memorial/${memorial?.obituaryId}`} className="flex gap-2 min-w-[170px]">
+            <Link
+              href={`/memorial/${memorial?.obituaryId}`}
+              className="flex gap-2 min-w-[170px]"
+            >
               <div className="w-6 h-6">
                 <ExternalLink size={24} />
               </div>
@@ -216,7 +239,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
             {/* Left section */}
             <div className="bg-[#E5F6EC4D] w-full xl:w-[863px] min-h-[312px] px-4 sm:px-6 py-6 rounded-lg flex flex-col sm:flex-row gap-6 sm:gap-10">
               {/* Image box */}
-              <div className="flex-shrink-0 w-full sm:w-[248px] h-[248px] bg-white flex justify-center items-center">
+              <div className="flex-shrink-0 w-full sm:w-[248px] h-[248px] sm:h-[276px] bg-white flex justify-center items-center">
                 <Image
                   src={
                     memorial?.picture
@@ -227,8 +250,8 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
                   }
                   alt=""
                   width={209}
-                  height={209}
-                  className="object-cover h-[209px]"
+                  height={220}
+                  className="object-cover h-[220px]"
                 />
               </div>
 
@@ -418,6 +441,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
         <ContentModeration
           condolences={memorial?.condolences || []}
           handleDeleteCondolence={handleDeleteCondolence}
+          handleAcceptCondolence={handleAcceptCondolence}
         />
       </div>
     </div>

@@ -18,8 +18,8 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const [obituary, setObituary] = useState<TObituary | null>(null);
   const [condolences, setCondolences] = useState<TCondolences[] | null>(null);
   const [openMemoryWall, setOpenMemoryWall] = useState(false);
-
   const [eventMapUrls, setEventMapUrls] = useState<Record<string, string>>({});
+
   useEffect(() => {
     const fetchMapUrls = async () => {
       if (!obituary?.event) return;
@@ -37,7 +37,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           return `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+ff0000(${lon},${lat})/${lon},${lat},15,0/600x300?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
         }
 
-        return ""; // fallback nếu không tìm thấy
+        return "";
       };
 
       const promises = obituary.event.map(async (event) => {
@@ -46,7 +46,6 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
       });
 
       const results = await Promise.all(promises);
-
       const urlMap: Record<string, string> = {};
       results.forEach(({ id, url }) => {
         urlMap[id] = url;
@@ -64,7 +63,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
       .catch((err) => console.error("Lỗi khi lấy obituary:", err));
 
     getCondolences(id)
-      .then((data) => setCondolences(data))
+      .then((data) => {setCondolences(data); console.log(data)})
       .catch((err) => console.error("Lỗi khi lấy condolences:", err));
   }, [id]);
 
@@ -80,7 +79,6 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
     bornDate instanceof Date && !isNaN(bornDate.getTime());
   const isValidDeathDate =
     deathDate instanceof Date && !isNaN(deathDate.getTime());
-
   const isPremium = obituary?.memorial?.premium ?? false;
 
   return (
@@ -99,8 +97,8 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
         />
       </div>
 
-      <div className="flex flex-col w-[1125px] mx-auto relative items-center overflow-hidden gap-10 bg-white">
-        <div className="flex gap-15">
+      <div className="flex flex-col w-full max-w-[1125px] px-4 md:px-0 mx-auto relative items-center overflow-hidden gap-10 bg-white">
+        <div className="flex flex-col md:flex-row gap-5 md:gap-15 w-full items-center md:justify-center">
           <div className="w-[248px] h-[248px] border rounded shadow-md overflow-hidden bg-white">
             {obituary?.memorial.picture && (
               <Image
@@ -112,11 +110,11 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
               />
             )}
           </div>
-          <div className="flex flex-col my-auto gap-5">
+          <div className="flex flex-col my-auto gap-5 text-center md:text-left">
             <div className="text-[32px] font-medium px-2 py-1">
               {obituary?.memorial.first_name} {obituary?.memorial.last_name}
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 justify-center md:justify-start">
               <IconCalendar className="w-6 h-6" />
               <div>{isValidBornDate && format(bornDate, "MMMM d, yyyy")}</div>
               <span className="mx-1">•</span>
@@ -126,22 +124,24 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
 
         <div
-          className={`w-[1125px] flex items-center shadow-md h-[62px] rounded border ${
-            isPremium ? "px-10 justify-between" : "px-25 gap-25 justify-center"
+          className={`w-full md:w-[1125px] flex flex-wrap items-center shadow-md h-auto md:h-[62px] rounded border ${
+            isPremium
+              ? "px-4 md:px-10 justify-between"
+              : "px-4 md:px-25 gap-4 md:gap-25 justify-center"
           } py-[15px]`}
         >
           <ObituaryTab premium={isPremium} />
         </div>
 
         {isPremium && (
-          <div className="text-[28px] font-medium text-center">
+          <div className="text-[28px] font-medium text-center px-4">
             &quot;You taught us not just how to live — but how to live with
             heart.&quot;
           </div>
         )}
 
-        <div className="w-[1125px] flex flex-col gap-15 justify-start">
-          {/* Words from Family */}
+        <div className="w-full flex flex-col gap-15 justify-start">
+          {/* Words from family */}
           <div className="flex flex-col gap-7">
             <div className="text-[32px] font-medium">Words from family</div>
             <div className="text-xl museo text-[#00000099]">
@@ -157,19 +157,23 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           </div>
 
-          {/* Family Tree (premium only) */}
+          {/* Family Tree */}
           {isPremium && (
             <div className="flex flex-col gap-7">
               <div className="text-[32px] font-medium">Family tree</div>
               <div className="flex flex-col gap-12">
                 {obituary?.familyTree.map((cat, index) => (
-                  <div key={index} className="flex flex-col gap-10">
+                  <div
+                    key={index}
+                    className="flex flex-col gap-10 overflow-x-auto"
+                  >
                     <h2 className="text-2xl museo">{cat.category}</h2>
-                    <div className="flex gap-9">
+                    <div className="flex gap-9 flex-wrap md:flex-nowrap">
                       {cat.members.map((member, i) => (
                         <div key={i} className="flex gap-5">
                           <div className="flex flex-col gap-5 px-3 py-2">
                             <div className="relative w-[140px] h-[140px]">
+                              {/* SVG and Image block here */}
                               <svg width="0" height="0">
                                 <defs>
                                   <clipPath
@@ -238,15 +242,15 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           )}
 
-          {/* Favorites (premium only) */}
+          {/* Favorites */}
           {isPremium && (
             <div className="flex flex-col gap-10">
               <h2 className="text-[32px] font-medium">Favorites</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 w-full">
                 {obituary?.favorites.map((item, idx) => (
                   <div
                     key={idx}
-                    className="w-[439px] h-[72px] flex flex-col gap-1"
+                    className="w-full max-w-[439px] flex flex-col gap-1"
                   >
                     <div className="flex items-center gap-2 text-base museo font-light">
                       <i className={`${item.icon}`}></i>
@@ -261,16 +265,17 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           )}
 
-          {/* Timeline (premium only) */}
+          {/* Timeline */}
           {isPremium && (
             <div className="flex flex-col gap-10">
               <h2 className="text-[32px] font-medium">Timeline</h2>
-              <div className="flex flex-col gap-y-24 relative z-10">
+              <div className="flex flex-col gap-y-24 relative z-10 px-2 md:px-0">
+                {/* Timeline rendering... */}
                 {obituary?.timeLine.map((event, index) => {
                   const isLeft = index % 2 === 0;
                   return (
-                    <div key={index} className="relative">
-                      <div className="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-[#A6BF98] z-10 top-5 -translate-y-1/2" />
+                    <div key={index} className="relative w-full">
+                      <div className="absolute hidden sm:block left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-[#A6BF98] z-10 top-5 -translate-y-1/2" />
                       {index > 0 && (
                         <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-55 border-l-1 border-dashed border-[#293548] -top-50" />
                       )}
@@ -281,7 +286,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
                       >
                         <div
                           className={`bg-white rounded-lg shadow-sm w-[445px] relative ${
-                            isLeft ? "mr-auto ml-18" : "ml-auto mr-18"
+                            isLeft ? "mr-auto md:ml-18" : "ml-auto md:mr-18"
                           }`}
                         >
                           <div className="relative flex gap-6">
@@ -309,7 +314,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
                             </div>
                           </div>
                           <div
-                            className={`absolute top-3 -translate-x-1/2 w-4 h-4 rotate-45 bg-white ${
+                            className={`hidden sm:block absolute top-3 -translate-x-1/2 w-4 h-4 rotate-45 bg-white ${
                               isLeft ? "-right-4" : "rotate-225"
                             }`}
                             style={{
@@ -325,8 +330,8 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           )}
 
-          {/* Events (always shown) */}
-          <div className="flex flex-col gap-15">
+          {/* Events */}
+          <div className="flex flex-col gap-15 w-full">
             <h2 className="text-[28px] font-medium text-[#2d3b4e]">Events</h2>
             {obituary?.event.map((event, index) => (
               <Event
@@ -337,10 +342,10 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             ))}
           </div>
 
-          {/* Guest Book (premium only) */}
+          {/* Guest Book */}
           {isPremium && (
             <div className="flex flex-col gap-14">
-              <div className="flex justify-between h-11">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 h-auto md:h-11">
                 <h2 className="text-[32px] font-medium">Guest book</h2>
                 <Button
                   type="button"
@@ -354,7 +359,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           )}
 
-          {/* Memory Wall Modal (premium only) */}
+          {/* Memory Wall Modal */}
           {isPremium && openMemoryWall && (
             <MemoryWall
               require_email={obituary?.memorial.require_email ?? false}

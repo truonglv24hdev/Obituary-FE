@@ -107,7 +107,7 @@ export default function StripeCardForm({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm mb-1">Card number</label>
-            <div className="border rounded-md p-3">
+            <div className="border rounded p-3">
               <CardNumberElement options={inputStyle} />
             </div>
           </div>
@@ -120,6 +120,7 @@ export default function StripeCardForm({
               value={formData.cardName}
               onChange={handleInputChange}
               required
+              className="h-[45px] rounded"
             />
           </div>
         </div>
@@ -127,14 +128,14 @@ export default function StripeCardForm({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm mb-1">Expiry date</label>
-            <div className="border rounded-md p-3">
+            <div className="border rounded p-3">
               <CardExpiryElement options={inputStyle} />
             </div>
           </div>
 
           <div>
             <label className="block text-sm mb-1">Security code</label>
-            <div className="border rounded-md p-3">
+            <div className="border rounded p-3">
               <CardCvcElement options={inputStyle} />
             </div>
           </div>
@@ -147,7 +148,7 @@ export default function StripeCardForm({
             placeholder="Billing address"
             value={formData.address}
             onChange={handleInputChange}
-            required
+            className="h-12 rounded"
           />
           <div className="flex items-center mt-4 gap-2">
             <Checkbox
@@ -163,7 +164,7 @@ export default function StripeCardForm({
 
         <Button
           type="submit"
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+          className="w-full h-12 rounded bg-[#699D99] hover:bg-emerald-700 text-white"
           disabled={loading}
         >
           {loading ? "Processing..." : "Make payment"}

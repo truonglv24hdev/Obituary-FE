@@ -9,18 +9,24 @@ import { TCondolences } from "@/types/type";
 type Props = {
   condolences: TCondolences[];
   handleDeleteCondolence: (id: string) => void;
+  handleAcceptCondolence: (id: string) => void;
 };
 
 export default function ContentModeration({
   condolences,
   handleDeleteCondolence,
+  handleAcceptCondolence,
 }: Props) {
-  const messages = condolences.filter((item) => item.message?.trim().length > 0);
+  const messages = condolences.filter(
+    (item) => item.message?.trim().length > 0
+  );
   const photos = condolences.filter((item) => item.photo);
 
   return (
     <div className="p-6 sm:p-8 bg-[#F7FBF9] w-full max-w-[1240px] mx-auto flex flex-col rounded gap-8">
-      <h1 className="text-[28px] sm:text-[32px] museo font-light">Content Moderation</h1>
+      <h1 className="text-[28px] sm:text-[32px] museo font-light">
+        Content Moderation
+      </h1>
 
       {/* Messages Section */}
       <div className="flex flex-col gap-5">
@@ -75,7 +81,10 @@ export default function ContentModeration({
                 >
                   Delete
                 </Button>
-                <Button className="px-5 py-2 text-sm text-[#27FF61] border border-[#27FF61] rounded bg-white hover:bg-green-50">
+                <Button
+                  className="px-5 py-2 text-sm text-[#27FF61] border border-[#27FF61] rounded bg-white hover:bg-green-50"
+                  onClick={() => handleAcceptCondolence(item._id)}
+                >
                   Approve
                 </Button>
               </div>

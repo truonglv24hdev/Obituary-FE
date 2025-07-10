@@ -14,9 +14,9 @@ export default function GuestBook({ condolences }: GuestBookProps) {
   }
 
   return (
-    <div className="flex w-full gap-6">
+    <div className="flex flex-col md:flex-row w-full gap-6">
       {/* Left column: with photo */}
-      <div className="w-1/3 flex flex-col gap-6">
+      <div className="w-full md:w-1/3 flex flex-col gap-6">
         {withPhoto.map((item, index) => (
           <div
             key={`with-photo-${index}`}
@@ -42,13 +42,13 @@ export default function GuestBook({ condolences }: GuestBookProps) {
       </div>
 
       {/* Right column: without photo */}
-      <div className="w-2/3 flex flex-col gap-6">
+      <div className="w-full md:w-2/3 flex flex-col gap-6">
         {groupedWithoutPhoto.map((group, groupIndex) => (
           <div key={`group-${groupIndex}`} className="flex flex-col gap-3">
             {group.map((item, index) => (
               <div
                 key={`no-photo-${groupIndex}-${index}`}
-                className=" min-h-[134px] rounded-lg bg-[#E5F6EC] shadow px-5 py-4 flex flex-col justify-between"
+                className="min-h-[134px] rounded-lg bg-[#E5F6EC] shadow px-5 py-4 flex flex-col justify-between"
               >
                 <p className="text-[#222] text-lg museo font-light leading-[22px] tracking-[0px]">
                   {`"${item.message}"`}
