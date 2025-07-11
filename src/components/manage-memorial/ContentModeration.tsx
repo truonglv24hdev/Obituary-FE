@@ -66,14 +66,41 @@ export default function ContentModeration({
               key={i}
               className="flex flex-col gap-4 items-center w-full sm:w-[calc(33%-20px)] max-w-full"
             >
-              <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden">
-                <Image
-                  src={`https://obituary-be-production.up.railway.app${item.photo}`}
-                  alt="Condolence"
-                  fill
-                  className="object-cover w-full h-full"
-                />
+              <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden group">
+                {item.video ? (
+                  <>
+                    <Image
+                      src={"/img/video-thumbnail.png"}
+                      alt="Video Thumbnail"
+                      fill
+                      className="object-cover w-full h-full"
+                    />
+                    <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                      <button
+                        className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition"
+                        onClick={() => window.open(item.video, "_blank")}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8 text-black"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <Image
+                    src={`https://obituary-be-production.up.railway.app${item.photo}`}
+                    alt="Condolence Photo"
+                    fill
+                    className="object-cover w-full h-full"
+                  />
+                )}
               </div>
+
               <div className="flex gap-4 w-full justify-center">
                 <Button
                   className="px-5 py-2 text-sm text-[#FF2121] border border-[#FF2121] rounded bg-white hover:bg-red-50"

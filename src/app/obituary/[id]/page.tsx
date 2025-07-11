@@ -92,7 +92,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   const [showFavorites, setShowFavorites] = useState(true);
   const [favorites, setFavorites] = useState<TFavorite[]>([]);
   const [showGallery, setShowGallery] = useState(true);
-  const [allowVisitorPhotos, setAllowVisitorPhotos] = useState(false);
+  const [allowVisitorPhotos, setAllowVisitorPhotos] = useState(true);
   const [moderationType, setModerationType] = useState<"pre" | "post">("pre");
   const [requireEmail, setRequireEmail] = useState(false);
   const [selectedHeaderFile, setSelectedHeaderFile] = useState<File | null>(
@@ -135,12 +135,16 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
           wordsFromFamily: data.wordsFromFamily,
           lifeStory: data.lifeStory,
         });
+        console.log(data)
 
         setObituary(data);
         setCategories(data.familyTree ?? []);
         setTimeline(data.timeLine);
         setFavorites(data.favorites);
         setGalleryOldImages(data.gallery || []);
+        setRequireEmail(data.memorial.require_email)
+        setModerationType(data.memorial.moderation)
+        setAllowVisitorPhotos(data.memorial.add_photos)
 
         const eventsWithId = (data.event || []).map((ev: any) => ({
           ...ev,
@@ -244,6 +248,9 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
       formMemorial.append("last_name", values.lastName || "");
       formMemorial.append("born", formattedBorn || "");
       formMemorial.append("death", formattedDeath || "");
+      formMemorial.append("require_email", String(requireEmail));
+      formMemorial.append("moderation", moderationType);
+      formMemorial.append("add_photos", String(allowVisitorPhotos));
       formObituary.append("quote", values.quote || "");
       formObituary.append("wordsFromFamily", values.wordsFromFamily || "");
       formObituary.append("lifeStory", values.lifeStory || "");

@@ -15,7 +15,7 @@ const HeaderAccount = ({ showUpgrade = false }: Props) => {
           You can change your account settings here
         </p>
         {showUpgrade && (
-          <Button className="self-start md:self-auto">
+          <Button className="h-10 bg-[#699D99] rounded self-start md:self-auto">
             <Link className="museo" href={"/payment"}>
               Upgrade to Premium
             </Link>

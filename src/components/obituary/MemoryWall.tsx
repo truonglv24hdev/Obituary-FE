@@ -139,11 +139,13 @@ function UploadPhotoModal({
 const MemoryWall = ({
   require_email,
   obituaryId,
+  allowVisitors,
   open,
   onClose,
 }: {
   require_email: boolean;
   obituaryId: string;
+  allowVisitors: boolean;
   open: boolean;
   onClose: () => void;
 }) => {
@@ -156,8 +158,6 @@ const MemoryWall = ({
       message: z.string().optional(),
     });
   }, [require_email]);
-
-  console.log(require_email);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -280,11 +280,14 @@ const MemoryWall = ({
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 h-auto">
                   <button
                     type="button"
-                    className="px-4 py-2 h-10 border border-[#222222] rounded cursor-pointer bg-white hover:bg-gray-50 transition w-fit"
+                    className="px-4 py-2 h-10 border border-[#222222] rounded cursor-pointer bg-white hover:bg-gray-50 transition w-fit disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={() => {
-                      setShowForm(false);
-                      setOpenUploadPhoto(true);
+                      if (allowVisitors) {
+                        setShowForm(false);
+                        setOpenUploadPhoto(true);
+                      }
                     }}
+                    disabled={!allowVisitors}
                   >
                     Add photo
                   </button>
@@ -313,18 +316,20 @@ const MemoryWall = ({
         </div>
       )}
 
-      <UploadPhotoModal
-        open={openUploadPhoto}
-        onClose={() => {
-          setOpenUploadPhoto(false);
-          setShowForm(true);
-        }}
-        onConfirm={(file) => {
-          setPhoto(file);
-          setOpenUploadPhoto(false);
-          setShowForm(true);
-        }}
-      />
+      {allowVisitors && (
+        <UploadPhotoModal
+          open={openUploadPhoto}
+          onClose={() => {
+            setOpenUploadPhoto(false);
+            setShowForm(true);
+          }}
+          onConfirm={(file) => {
+            setPhoto(file);
+            setOpenUploadPhoto(false);
+            setShowForm(true);
+          }}
+        />
+      )}
     </>
   );
 };

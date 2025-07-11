@@ -22,6 +22,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { Switch } from "@/components/ui/switch";
 import { IEvent } from "@/types/type";
 import ButtonLocation from "./ButtonLocation";
+import EventTimeSlots from "./EventTimeSlots";
 
 type Props = {
   height: string;
@@ -71,10 +72,12 @@ const Event = ({ height, events, setEvents }: Props) => {
       if (existingIndex !== -1) {
         const updated = [...prev];
         updated[existingIndex] = { ...eventToSave };
+        console.log(eventToSave);
         setSubmitStatus("Cập nhật sự kiện thành công!");
         return updated;
       } else {
         setSubmitStatus("Thêm sự kiện mới thành công!");
+        console.log(eventToSave);
         return [...prev, eventToSave];
       }
     });
@@ -86,13 +89,10 @@ const Event = ({ height, events, setEvents }: Props) => {
       eventTitle: "",
       description: "",
       location: "",
-      date: "",
-      timeFrom: "",
-      timeTo: "",
       show: true,
+      schedule: [{ date: "", timeFrom: "", timeTo: "" }], 
     };
-    append(newEvent);
-    setEvents((prev) => [...prev, newEvent]);
+    append(newEvent); 
     setSubmitStatus("");
   };
 
@@ -174,7 +174,7 @@ const Event = ({ height, events, setEvents }: Props) => {
                 <div className="flex flex-col gap-6 bg-[#E5F6EC4D] p-5">
                   {/* Location */}
                   <FormItem className="flex flex-col sm:flex-row items-start sm:gap-[166px] gap-2">
-                    <FormLabel className="w-full sm:w-[100px] pt-2">
+                    <FormLabel className="w-full text-base museo font-light text-[#222222B2] sm:w-[100px] pt-2">
                       Location
                     </FormLabel>
                     <FormControl>
@@ -193,78 +193,8 @@ const Event = ({ height, events, setEvents }: Props) => {
                     <FormMessage />
                   </FormItem>
 
-                  {/* Date */}
-                  <FormItem className="flex flex-col sm:flex-row items-start sm:gap-[166px] gap-2">
-                    <FormLabel className="w-full sm:w-[100px] pt-2">
-                      Date
-                    </FormLabel>
-                    <FormControl>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className="w-full sm:w-[402px] justify-start text-left bg-[#E5F6EC4D] font-normal border-0 border-b border-gray-400 rounded-none"
-                          >
-                            {watch(`events.${index}.date`)
-                              ? format(
-                                  new Date(watch(`events.${index}.date`)),
-                                  "MMMM d, yyyy"
-                                )
-                              : "Pick a date"}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={
-                              watch(`events.${index}.date`)
-                                ? new Date(watch(`events.${index}.date`))
-                                : undefined
-                            }
-                            onSelect={(date) =>
-                              setValue(
-                                `events.${index}.date`,
-                                date?.toISOString().split("T")[0]
-                              )
-                            }
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-
-                  {/* Time From / To */}
-                  {["timeFrom", "timeTo"].map((key) => (
-                    <FormField
-                      key={key}
-                      control={control}
-                      name={`events.${index}.${key}` as const}
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col sm:flex-row items-start sm:gap-[166px] gap-2">
-                          <FormLabel className="w-full sm:w-[100px] pt-2">
-                            {key === "timeFrom" ? "Time From" : "Time To"}
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="time"
-                              value={field.value ?? ""}
-                              className="w-full sm:w-[402px] border-0 border-b border-gray-400 rounded-none"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-
-                  <Button
-                    type="button"
-                    className="w-full sm:w-[228px] h-8 bg-[#699D99] rounded px-2 py-[6px] text-base museo"
-                  >
-                    Add additional date and time
-                  </Button>
+                  {/* Add additional schedule */}
+                  <EventTimeSlots eventIndex={index} />
 
                   <div className="flex justify-end mt-8">
                     <Button

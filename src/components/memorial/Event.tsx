@@ -10,9 +10,11 @@ type Props = {
     eventTitle: string;
     description: string;
     location: string;
-    date: string[];
-    timeFrom: string[];
-    timeTo: string[];
+    schedule: {
+      date: string;
+      timeFrom: string;
+      timeTo: string;
+    }[];
   };
   mapUrl?: string;
 };
@@ -26,7 +28,7 @@ const Event = ({ event, mapUrl }: Props) => {
     dateObj.setMinutes(Number(m));
     return format(dateObj, "h:mmaaa").toLowerCase();
   };
-
+  console.log(event)
   return (
     <div className="flex flex-col gap-10 w-full">
       <h3 className="text-[24px] font-medium text-[#2d3b4e]">
@@ -71,10 +73,13 @@ const Event = ({ event, mapUrl }: Props) => {
               </span>
             </div>
             <div className="flex flex-col text-[#222] text-xl md:text-2xl museo">
-              {event.date.map((date, i) => {
-                const formattedDate = format(parseISO(date), "dd MMM yyyy");
-                const from = event.timeFrom?.[i] || "";
-                const to = event.timeTo?.[i] || "";
+              {event.schedule.map((slot, i) => {
+                const formattedDate = format(
+                  parseISO(slot.date),
+                  "dd MMM yyyy"
+                );
+                const from = slot.timeFrom || "";
+                const to = slot.timeTo || "";
 
                 return (
                   <span key={i}>

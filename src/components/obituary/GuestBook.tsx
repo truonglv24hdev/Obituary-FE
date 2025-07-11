@@ -9,9 +9,16 @@ import { GuestBookProps } from "@/types/type";
 const GuestBook = ({ condolences }: GuestBookProps) => {
   const [showGuestBook, setShowGuestBook] = useState(true);
   const [selected, setSelected] = useState("All");
-  const withPhoto = condolences?.filter((item) => item.photo) || [];
-  const withoutPhoto = condolences?.filter((item) => !item.photo) || [];
+  const filteredCondolences =
+    condolences?.filter((item) => {
+      if (selected === "Approved") return item.status === true && item.deleted === false;
+      if (selected === "Rejected") return item.deleted === true;
+      if (selected === "Pending") return item.status === false && item.deleted === false;
+      return true;
+    }) || [];
 
+  const withPhoto = filteredCondolences.filter((item) => item.photo);
+  const withoutPhoto = filteredCondolences.filter((item) => !item.photo);
   const groupedWithoutPhoto = [];
   for (let i = 0; i < withoutPhoto.length; i += 3) {
     groupedWithoutPhoto.push(withoutPhoto.slice(i, i + 3));

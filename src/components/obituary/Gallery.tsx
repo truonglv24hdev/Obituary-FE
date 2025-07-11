@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-
 import IconFilterDrop from "@/components/icons/IconFilterDrop";
 import { Switch } from "../ui/switch";
 import { Button } from "../ui/button";
@@ -85,7 +83,13 @@ const Gallery = ({
                 </span>
                 <Switch
                   checked={allowVisitorPhotos}
-                  onCheckedChange={setAllowVisitorPhotos}
+                  onCheckedChange={async (value) => {
+                    setAllowVisitorPhotos(value);
+                    const formData = new FormData();
+                    formData.append("add_photos", String(value));
+                    await putMemorial(id, formData);
+                  }}
+                  className="bg-blue-700"
                 />
               </div>
 
@@ -118,7 +122,7 @@ const Gallery = ({
                           await putMemorial(id, formData);
                         }}
                       >
-                        <SelectTrigger className="text-sm museo h-10 rounded border border-[#699D99] text-[#699D99] bg-white px-3">
+                        <SelectTrigger className="text-sm w-[259px] museo h-10 rounded border border-[#699D99] text-[#699D99] bg-white px-3">
                           <SelectValue placeholder="Select moderation" />
                         </SelectTrigger>
                         <SelectContent>

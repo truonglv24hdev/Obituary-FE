@@ -364,6 +364,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             <MemoryWall
               require_email={obituary?.memorial.require_email ?? false}
               obituaryId={id}
+              allowVisitors={obituary?.memorial.add_photos}
               open={openMemoryWall}
               onClose={() => setOpenMemoryWall(false)}
             />

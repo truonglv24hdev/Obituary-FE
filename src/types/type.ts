@@ -27,6 +27,7 @@ export type TMemorial = {
   privacy: string;
   require_email: boolean;
   moderation: string;
+  add_photos: boolean;
 };
 
 export type TRSVP = {
@@ -129,9 +130,11 @@ export interface IEvent {
   description: string;
   location: string;
   show: boolean;
-  date: string;
-  timeFrom: string;
-  timeTo: string;
+  schedule?: {
+    date: string;
+    timeFrom: string;
+    timeTo: string;
+  }[];
 }
 
 export type TCondolences = {
@@ -142,6 +145,8 @@ export type TCondolences = {
   photo: string;
   video: string;
   createdAt: Date;
+  status: boolean;
+  deleted: boolean;
 };
 
 export type GuestBookProps = {
