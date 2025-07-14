@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { IconBook, IconQR } from "@/components/icons";
 import PaymentPlan from "../common/PaymentPlan";
+import Link from "next/link";
 
 const addons = [
   {
@@ -35,7 +36,7 @@ const PricingSection = () => {
 
         {/* Add-ons */}
         <div className="w-full max-w-[554px] mx-auto flex flex-col gap-2 mt-16">
-          <h3 className="text-xl museo font-semibold text-center mb-6">
+          <h3 className="text-[32px] museo font-semibold text-center mb-6">
             Optional Add-ons
           </h3>
           <div className="flex flex-col md:flex-row justify-center gap-10">
@@ -60,15 +61,15 @@ const PricingSection = () => {
                 </div>
                 {/* Vertical separator only on desktop */}
                 {idx !== addons.length - 1 && (
-                  <div className="hidden md:block absolute -right-10 top-1/2 -translate-y-1/2 w-[1px] h-[70%] bg-black" />
+                  <div className="hidden md:block absolute -right-7 top-1/2 -translate-y-1/2 w-[1px] h-[70%] bg-black" />
                 )}
               </div>
             ))}
           </div>
-          <div className="flex justify-center mt-10">
-            <Button className="w-[134px] h-11 cursor-pointer bg-teal-600 museo text-base text-white px-8 rounded-sm font-semibold hover:bg-teal-700">
+          <div className="flex justify-center">
+            <Link href={"/my-memorial"} className="w-[134px] flex items-center justify-center h-11 cursor-pointer bg-[#699D99] museo text-base text-white px-5 rounded-sm font-semibold hover:bg-teal-700">
               Get Started
-            </Button>
+            </Link>
           </div>
         </div>
       </div>

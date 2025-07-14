@@ -145,7 +145,7 @@ const MemoryWall = ({
 }: {
   require_email: boolean;
   obituaryId: string;
-  allowVisitors: boolean;
+  allowVisitors?: boolean;
   open: boolean;
   onClose: () => void;
 }) => {

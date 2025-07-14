@@ -170,7 +170,7 @@ const Gallery = ({
                 <Button
                   size="sm"
                   type="button"
-                  className="bg-[#699D99] hover:bg-[#4e7c7a] text-[14px] museo text-white rounded h-10 px-3 py-[5px] flex items-center gap-2"
+                  className="bg-[#699D99] w-[104px]  hover:bg-[#4e7c7a] text-[14px] museo text-white rounded h-10 px-3 py-[5px] flex items-center justify-between"
                 >
                   Filter
                   <IconFilterDrop className="w-5 h-5" />

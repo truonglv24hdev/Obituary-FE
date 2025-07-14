@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
   onSubmit: (password: string) => void;
@@ -83,12 +84,12 @@ const PasswordPrompt = ({
         </div>
 
         <div className="flex flex-col sm:flex-row justify-end gap-4 sm:gap-5">
-          <Button
+          <Link
+            href={"/account/memorials"}
             className="h-10 sm:h-11 w-full sm:w-[107px] border text-sm sm:text-base museo font-light bg-white text-black border-black px-5 sm:px-7 py-2 rounded"
-            onClick={() => setPassword("")}
           >
             Cancel
-          </Button>
+          </Link>
           <Button
             onClick={() => onSubmit(password)}
             className="bg-[#699D99] h-10 sm:h-11 w-full sm:w-[125px] text-white px-5 sm:px-7 py-2 rounded text-sm sm:text-base museo font-light"

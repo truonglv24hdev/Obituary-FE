@@ -20,9 +20,9 @@ export default function Home() {
 
   const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await getMemorialBySearch(searchFirstName,searchLastName)
-    if(res.obituaryId){
-      router.push(`/memorial/${res.obituaryId}`)
+    const res = await getMemorialBySearch(searchFirstName, searchLastName);
+    if (res.obituaryId) {
+      router.push(`/memorial/${res.obituaryId}`);
     }
   };
   return (
@@ -31,7 +31,12 @@ export default function Home() {
       <div className="w-full flex-1 flex flex-col md:flex-row justify-center items-center px-4 md:px-25 py-10">
         <div className="relative w-full md:w-[1240px] h-auto md:h-[680px] rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row">
           <div className="absolute inset-0 z-0 min-h-[500px] md:min-h-0">
-            <Image src="/img/1.jpg" alt="Logo" fill className="object-cover" />
+            <Image
+              src="/img/home.png"
+              alt="Logo"
+              fill
+              className="object-cover"
+            />
           </div>
 
           <section className="inset-y-0 w-full md:w-[543px] z-10 px-6 md:px-12 py-8 md:py-0 flex flex-col items-center justify-center gap-4 border-b-[#0000001A] rounded-tl-[12px] md:rounded-bl-[12px] backdrop-blur-[48px] overflow-hidden bg-black/50 md:bg-transparent">
@@ -71,7 +76,7 @@ export default function Home() {
                       />
                       <button
                         type="submit"
-                        className="w-full md:w-[45px] h-13 bg-[#6ea09e] text-white py-2 font-bold flex justify-center items-center
+                        className="w-full cursor-pointer md:w-[45px] h-13 bg-[#6ea09e] text-white py-2 font-bold flex justify-center items-center
           rounded-md md:rounded-r-md md:rounded-l-none"
                       >
                         <IconSearch className="w-6 h-6" />
@@ -106,7 +111,7 @@ export default function Home() {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full md:w-[447px] rounded-lg h-13 bg-[#6ea09e] text-white py-2 font-light museo text-base flex justify-center items-center"
+                    className="w-full cursor-pointer md:w-[447px] rounded-lg h-13 bg-[#6ea09e] text-white py-2 font-light museo text-base flex justify-center items-center"
                   >
                     Start for Free
                   </Button>

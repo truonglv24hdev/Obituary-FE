@@ -384,7 +384,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
             {/* Right - Plan Box */}
             <div className="w-[353px] mx-auto md:mx-0 h-[324px] relative rounded-xl overflow-hidden">
               <Image
-                src="/img/update.jpg"
+                src="/img/upgrade.png"
                 alt="Candle and flowers"
                 fill
                 className="absolute inset-0 w-full h-full object-cover z-0"

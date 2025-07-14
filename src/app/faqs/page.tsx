@@ -9,7 +9,7 @@ const page = () => {
     <>
       <div className="relative h-122">
         <div className="absolute inset-0 z-0">
-          <Image src="/img/pricing.jpg" alt="Logo" fill />
+          <Image src="/img/FAQs.jpg" alt="Logo" fill />
           <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
           <div className="absolute inset-0 z-10 flex items-center justify-center">
             <div className="h-32 w-[400px] flex flex-col items-center justify-center text-center text-white">

@@ -58,7 +58,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white relative px-4">
+    <div className="h-150 flex items-center justify-center bg-white relative px-4">
       <div className="bg-white shadow-lg border rounded-lg px-8 py-9 w-full max-w-[539px] md:h-[395px] z-10 flex flex-col gap-8">
         <h2 className="text-[40px] font-serif font-medium">Forgot Password</h2>
         <Form {...form}>

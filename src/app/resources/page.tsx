@@ -14,7 +14,7 @@ const page = () => {
       <div className="relative h-122 sm:h-[488px]">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/img/pricing.jpg"
+            src="/img/resource.jpg"
             alt="Logo"
             fill
             className="object-cover"
@@ -51,16 +51,18 @@ const page = () => {
         <div className="max-w-[944px] flex flex-col sm:flex-row gap-8">
           {/* Flower Shops Card */}
           <Card className="w-full sm:w-[458px] h-auto sm:h-120">
-            <Image
-              src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
-              alt="Flower Shop"
-              width={459}
-              height={320}
-              className="w-full h-[220px] sm:h-[320px] object-cover rounded-t-lg"
-            />
-            <div className="flex flex-col sm:flex-row h-auto sm:h-[92px] gap-4 sm:gap-20 items-center justify-center p-4">
+            <div>
+              <Image
+                src="/img/rl.jpg"
+                alt="Flower Shop"
+                width={459}
+                height={320}
+                className="w-full h-[220px] sm:h-[320px] object-cover rounded-t-lg"
+              />
+            </div>
+            <div className="flex sm:flex-row h-auto sm:h-[92px] gap-10 sm:gap-12 items-center justify-center p-4">
               <CardHeader>
-                <IconShop className="w-10 h-10 text-[#699D99]" />
+                <IconShop className="w-19 h-19 text-[#699D99]" />
               </CardHeader>
               <CardContent className="flex flex-col gap-2 text-star">
                 <CardTitle className="font-semibold museo text-xl sm:text-[32px] leading-7 sm:leading-10">
@@ -76,18 +78,18 @@ const page = () => {
           {/* Funeral Directors Card */}
           <Card className="w-full sm:w-[458px] h-auto sm:h-120">
             <Image
-              src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
+              src="/img/rr.png"
               alt="Funeral Directors"
               width={459}
               height={320}
               className="w-full h-[220px] sm:h-[320px] object-cover rounded-t-lg"
             />
-            <div className="flex flex-col sm:flex-row h-auto sm:h-[92px] gap-4 sm:gap-20 items-center justify-center p-4">
+            <div className="flex sm:flex-row h-auto sm:h-[92px] gap-8  sm:gap-12 items-center justify-center p-4">
               <CardHeader>
-                <IconFuneral className="w-10 h-10 text-[#699D99]" />
+                <IconFuneral className="w-19 h-19 text-[#699D99]" />
               </CardHeader>
               <CardContent className="flex flex-col gap-2 text-star">
-                <CardTitle className="font-semibold museo text-xl sm:text-[32px] leading-7 sm:leading-10">
+                <CardTitle className="font-semibold md:w-[260px] museo text-xl sm:text-[32px] leading-7 sm:leading-10">
                   Funeral Directors
                 </CardTitle>
                 <span className="font-light museo text-base sm:text-xl text-gray-500">
@@ -106,10 +108,10 @@ const page = () => {
               Latest blogs and articles
             </h1>
             <div className="flex gap-2 items-center">
-              <Button className="bg-[#699D99] text-white py-2 px-5 sm:px-7 rounded text-sm sm:text-base font-light">
+              <Button className="bg-[#699D99] cursor-pointer text-white py-2 px-5 sm:px-7 rounded text-sm sm:text-base font-light">
                 Blogs
               </Button>
-              <Button className="border border-gray-400 bg-white text-black py-2 px-5 sm:px-7 rounded text-sm sm:text-base font-light">
+              <Button className="border cursor-pointer border-gray-400 bg-white text-black py-2 px-5 sm:px-7 rounded text-sm sm:text-base font-light">
                 Articles
               </Button>
             </div>

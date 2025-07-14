@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -55,6 +55,11 @@ const CreateMemorial = () => {
       slug: "",
     },
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) router.replace("/sign-in");
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -284,7 +289,9 @@ const CreateMemorial = () => {
                           {...field}
                         />
                       </FormControl>
-                      <span className="ml-1 text-sm">Tributechapters.com.sg</span>
+                      <span className="ml-1 text-sm">
+                        Tributechapters.com.sg
+                      </span>
                     </div>
                     <FormMessage />
 

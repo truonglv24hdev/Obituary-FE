@@ -102,7 +102,7 @@ const Otp = ({ email }: { email: string }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white relative px-4">
+    <div className="h-150 flex items-center justify-center bg-white relative px-4">
       <div className="bg-white shadow-lg border rounded-lg px-6 md:px-8 py-9 w-[360px] md:w-[539px] md:h-[437px] z-10 flex flex-col gap-8">
         <h2 className="h-12 text-[32px] md:text-[40px] font-serif font-medium text-center">
           OTP Verification

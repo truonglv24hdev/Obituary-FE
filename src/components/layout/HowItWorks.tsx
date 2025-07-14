@@ -55,6 +55,7 @@ const HowItWorks = () => (
             height={200}
             className="w-[200px] h-[200px]"
           />
+          
           <div className="space-y-2">
             <h3 className={`text-2xl font-bold ${step.text}`}>{step.title}</h3>
             <p className={`text-base museo font-light ${step.text}`}>

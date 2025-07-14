@@ -65,9 +65,11 @@ export type TEvent = {
   eventTitle: string;
   description: string;
   location: string;
-  date: string[];
-  timeFrom: string[];
-  timeTo: string[];
+  schedule: {
+    date: string;
+    timeFrom: string;
+    timeTo: string;
+  }[];
 };
 
 export type TFavoriteType = {

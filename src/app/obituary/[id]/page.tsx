@@ -596,7 +596,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
                 <div className="flex flex-col gap-8 sm:gap-10">
                   {/* Header */}
                   <div className="flex sm:flex-row items-center justify-between gap-3">
-                    <h3 className="text-[28px] sm:text-[32px] font-medium">
+                    <h3 className="text-[28px] sm:text-[32px] font-medium museo">
                       Videos
                     </h3>
                     <Switch

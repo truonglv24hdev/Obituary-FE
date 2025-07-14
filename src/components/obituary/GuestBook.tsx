@@ -58,12 +58,12 @@ const GuestBook = ({ condolences }: GuestBookProps) => {
             <PopoverContent
               side="bottom"
               align="end"
-              className="w-[250px] flex flex-col rounded border bg-white shadow p-0"
+              className="w-[203px] h-[192px] flex flex-col rounded border bg-white shadow p-0"
             >
               {["All", "Approved", "Rejected", "Pending"].map((label) => (
                 <label
                   key={label}
-                  className={`flex items-center gap-3 px-4 py-3 cursor-pointer text-sm sm:text-lg rounded transition ${
+                  className={`flex h-12 items-center gap-3 px-4 py-3 cursor-pointer text-sm sm:text-lg rounded transition ${
                     selected === label ? "bg-[#f5fbf8]" : ""
                   }`}
                   onClick={() => setSelected(label)}

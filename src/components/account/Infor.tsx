@@ -10,7 +10,7 @@ const Infor = () => {
       <div className="w-full max-w-[982px] flex flex-col gap-12">
         <HeaderAccount />
 
-        <div className="border-b border-gray-200 mb-6 px-4">
+        <div className="border-b border-gray-200 mb-6 md:mb-0 px-4">
           <nav className="flex flex-col md:flex-row gap-4 md:gap-15 h-auto md:h-12">
             <Link
               href="/account"

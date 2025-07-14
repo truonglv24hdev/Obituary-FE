@@ -53,9 +53,31 @@ export default function RsvpListTable({
 
   const getFilteredRsvps = () => {
     if (!rsvps) return [];
-    if (filtered === "Accept") return rsvps.filter((r) => r.verification === true);
-    if (filtered === "Decline") return rsvps.filter((r) => r.verification === false);
+    if (filtered === "Accept")
+      return rsvps.filter((r) => r.verification === true);
+    if (filtered === "Decline")
+      return rsvps.filter((r) => r.verification === false);
     return rsvps;
+  };
+
+  const shareUrl =
+    "http://localhost:3000/manage-memorial/6854d388c8086af6b171cd60";
+  const encodedUrl = encodeURIComponent(shareUrl);
+
+  const handleShare = (platform: "whatsapp" | "facebook" | "email") => {
+    let url = "";
+    switch (platform) {
+      case "whatsapp":
+        url = `https://wa.me/?text=${encodedUrl}`;
+        break;
+      case "facebook":
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+        break;
+      case "email":
+        url = `mailto:?subject=Check this out&body=${encodedUrl}`;
+        break;
+    }
+    window.open(url, "_blank");
   };
 
   return (
@@ -68,23 +90,41 @@ export default function RsvpListTable({
             <IconLock className="w-6 h-6" />
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <IconShare className="w-6 h-6" />
+                <IconShare className="w-6 h-6 cursor-pointer" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 side="bottom"
                 align="start"
                 className="w-[203px] h-[155px] rounded border"
               >
-                <DropdownMenuItem className="px-6 py-3 flex gap-4 text-base font-light museo">
-                  <FaWhatsapp className="text-black" style={{ width: 20, height: 20 }} />
+                <DropdownMenuItem
+                  onClick={() => handleShare("whatsapp")}
+                  className="px-6 py-3 flex gap-4 text-base font-light museo"
+                >
+                  <FaWhatsapp
+                    className="text-black"
+                    style={{ width: 20, height: 20 }}
+                  />
                   Whatsapp
                 </DropdownMenuItem>
-                <DropdownMenuItem className="px-6 py-3 flex gap-4 text-base font-light museo">
-                  <FiFacebook className="text-black" style={{ width: 20, height: 20 }} />
+                <DropdownMenuItem
+                  onClick={() => handleShare("facebook")}
+                  className="px-6 py-3 flex gap-4 text-base font-light museo"
+                >
+                  <FiFacebook
+                    className="text-black"
+                    style={{ width: 20, height: 20 }}
+                  />
                   Facebook
                 </DropdownMenuItem>
-                <DropdownMenuItem className="px-6 py-3 flex gap-4 text-base font-light museo">
-                  <FiMail className="text-black" style={{ width: 20, height: 20 }} />
+                <DropdownMenuItem
+                  onClick={() => handleShare("email")}
+                  className="px-6 py-3 flex gap-4 text-base font-light museo"
+                >
+                  <FiMail
+                    className="text-black"
+                    style={{ width: 20, height: 20 }}
+                  />
                   Email
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -94,9 +134,13 @@ export default function RsvpListTable({
           {/* Filter + Search */}
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
             <div className="flex items-center gap-3">
-              <span className="text-sm museo font-light">Split into 'individual'</span>
+              <span className="text-sm museo font-light">
+                Split into 'individual'
+              </span>
               <Switch defaultChecked />
-              <span className="text-sm museo font-light">Group by 'family'</span>
+              <span className="text-sm museo font-light">
+                Group by 'family'
+              </span>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
@@ -127,7 +171,9 @@ export default function RsvpListTable({
                               : "border-gray-300"
                           }`}
                         >
-                          {isSelected && <Check className="w-4 h-4 text-white" />}
+                          {isSelected && (
+                            <Check className="w-4 h-4 text-white" />
+                          )}
                         </div>
                         <span>{option}</span>
                       </DropdownMenuItem>
@@ -176,10 +222,15 @@ export default function RsvpListTable({
               {getFilteredRsvps().map((rsvp, i) => (
                 <TableRow key={i} className="border-t w-[196px] h-14">
                   <TableCell className="text-center border-b-2">
-                    {rsvp.createdAt && format(new Date(rsvp.createdAt), "MM/dd/yyyy")}
+                    {rsvp.createdAt &&
+                      format(new Date(rsvp.createdAt), "MM/dd/yyyy")}
                   </TableCell>
-                  <TableCell className="pl-4 border-b-2">{rsvp.first_name}</TableCell>
-                  <TableCell className="pl-4 border-b-2">{rsvp.last_name}</TableCell>
+                  <TableCell className="pl-4 border-b-2">
+                    {rsvp.first_name}
+                  </TableCell>
+                  <TableCell className="pl-4 border-b-2">
+                    {rsvp.last_name}
+                  </TableCell>
                   <TableCell className="p-2 border-b-2">{rsvp.email}</TableCell>
                   <TableCell className="border-b-2">
                     <div
@@ -192,7 +243,9 @@ export default function RsvpListTable({
                       {rsvp.verification ? "Accept" : "Decline"}
                     </div>
                   </TableCell>
-                  <TableCell className="text-center border-b-2">{rsvp.contact}</TableCell>
+                  <TableCell className="text-center border-b-2">
+                    {rsvp.contact}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

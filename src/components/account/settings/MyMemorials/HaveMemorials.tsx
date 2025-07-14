@@ -39,10 +39,16 @@ const HaveMemorials = ({
           <button
             className="hover:underline museo disabled:text-gray-300"
             onClick={() => onPageChange(page + 1)}
-            disabled={page >= totalPages + 1}
+            disabled={page >= totalPages}
           >
             Next &gt;
           </button>
+          <Link
+            href={"/my-memorial"}
+            className="ml-5 text-base museo bg-[#699D99] flex items-center text-white justify-center h-10 w-[178px] rounded"
+          >
+            Create Memorial
+          </Link>
         </div>
       </div>
 
@@ -79,43 +85,6 @@ const HaveMemorials = ({
             </div>
           </div>
         ))}
-
-        {/* Empty slots */}
-        {Array.from({ length: Math.max(0, 4 - memorials.length) }).map(
-          (_, i) => (
-            <div
-              key={`empty-${i}`}
-              className="bg-white rounded-lg shadow-md p-6 text-center flex flex-col items-center justify-center border-2 border-dashed border-gray-300 text-gray-500"
-            >
-              <Link
-                href={"/my-memorial"}
-                className="flex flex-col items-center justify-center gap-2"
-              >
-                {/* Ô vuông chứa dấu + */}
-                <div className="w-[132px] h-[132px] bg-[#E5F6EC80] flex items-center justify-center rounded">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 text-black"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </div>
-                {/* Text label */}
-                <p className="mt-1 museo text-base font-light text-gray-700">
-                  New Memorial page
-                </p>
-              </Link>
-            </div>
-          )
-        )}
       </div>
     </div>
   );

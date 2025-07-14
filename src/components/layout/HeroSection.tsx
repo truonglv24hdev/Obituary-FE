@@ -10,7 +10,7 @@ const HeroSection = () => {
 
       {/* Background image */}
       <Image
-        src="/img/7.jpg"
+        src="/img/hero.png"
         alt="Candle and flowers"
         fill
         className="absolute inset-0 w-full h-full object-cover z-0"
@@ -25,7 +25,7 @@ const HeroSection = () => {
           Honor your loved ones by creating a lasting tribute. Share stories,
           photos, and memories that keep their legacy alive.
         </p>
-        <Button className="w-fit px-6 py-2 h-11 rounded-lg bg-[#E5F6EC] text-[#293548] font-light text-sm sm:text-[16px] hover:bg-[#E5F6EC]">
+        <Button className="w-fit cursor-pointer px-6 py-2 h-11 rounded-lg bg-[#E5F6EC] text-[#293548] font-light text-sm sm:text-[16px] hover:bg-[#E5F6EC]">
           Get started free
         </Button>
       </div>
