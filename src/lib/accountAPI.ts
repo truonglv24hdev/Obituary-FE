@@ -27,3 +27,8 @@ export async function updateProfile(data: {
   );
   return res.data;
 }
+
+export async function getAllUser() {
+  const res = await axios.get("/api/user");
+  return res.data;
+}

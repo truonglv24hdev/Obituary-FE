@@ -1,4 +1,5 @@
 export type TUser = {
+  _id: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -6,6 +7,8 @@ export type TUser = {
   address: string;
   country: string;
   code: string;
+  memorials: TMemorial[]
+  deleted:boolean
 };
 
 export type TMemorial = {

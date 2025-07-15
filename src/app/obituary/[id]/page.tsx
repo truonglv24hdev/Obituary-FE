@@ -48,6 +48,7 @@ import Gallery from "@/components/obituary/Gallery";
 import GuestBook from "@/components/obituary/GuestBook";
 import { getAllCondolences } from "@/lib/condolences";
 import VideoWall from "@/components/obituary/VideoWall";
+import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
 
 const formSchema = z.object({
   picture: z.any().optional(),
@@ -63,6 +64,12 @@ const formSchema = z.object({
 });
 
 export default function page({ params }: { params: Promise<{ id: string }> }) {
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) router.replace("/sign-in");
+  }, []);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -135,16 +142,16 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
           wordsFromFamily: data.wordsFromFamily,
           lifeStory: data.lifeStory,
         });
-        console.log(data)
+        console.log(data);
 
         setObituary(data);
         setCategories(data.familyTree ?? []);
         setTimeline(data.timeLine);
         setFavorites(data.favorites);
         setGalleryOldImages(data.gallery || []);
-        setRequireEmail(data.memorial.require_email)
-        setModerationType(data.memorial.moderation)
-        setAllowVisitorPhotos(data.memorial.add_photos)
+        setRequireEmail(data.memorial.require_email);
+        setModerationType(data.memorial.moderation);
+        setAllowVisitorPhotos(data.memorial.add_photos);
 
         const eventsWithId = (data.event || []).map((ev: any) => ({
           ...ev,
@@ -278,382 +285,388 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
     }
   };
   return (
-    <div className="min-h-screen bg-white">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          {/* Header Image Section */}
-          <div className="relative w-full aspect-[1440/400] sm:h-[400px]">
-            <FormField
-              control={form.control}
-              name="headerImage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="w-full h-full">
-                      {selectedHeaderFile ? (
-                        <Image
-                          src={URL.createObjectURL(selectedHeaderFile)}
-                          alt="Preview"
-                          fill
-                          className="object-cover rounded"
-                        />
-                      ) : (
-                        obituary?.headerImage && (
+    <ProtectedRoute>
+      <div className="min-h-screen bg-white">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            {/* Header Image Section */}
+            <div className="relative w-full aspect-[1440/400] sm:h-[400px]">
+              <FormField
+                control={form.control}
+                name="headerImage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="w-full h-full">
+                        {selectedHeaderFile ? (
                           <Image
-                            src={`https://obituary-be-production.up.railway.app${obituary.headerImage}`}
-                            alt="Memorial"
+                            src={URL.createObjectURL(selectedHeaderFile)}
+                            alt="Preview"
                             fill
                             className="object-cover rounded"
                           />
-                        )
-                      )}
+                        ) : (
+                          obituary?.headerImage && (
+                            <Image
+                              src={`https://obituary-be-production.up.railway.app${obituary.headerImage}`}
+                              alt="Memorial"
+                              fill
+                              className="object-cover rounded"
+                            />
+                          )
+                        )}
 
-                      <label className="absolute bottom-3 right-3 sm:bottom-5 sm:right-6 bg-[#E5F6EC] text-black rounded museo text-sm sm:text-base cursor-pointer flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 shadow-sm">
-                        <IconPicture className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span className=" xs:inline">Change image</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleHeaderFileChange}
-                          className="hidden"
-                        />
-                      </label>
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+                        <label className="absolute bottom-3 right-3 sm:bottom-5 sm:right-6 bg-[#E5F6EC] text-black rounded museo text-sm sm:text-base cursor-pointer flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 shadow-sm">
+                          <IconPicture className="w-4 h-4 sm:w-5 sm:h-5" />
+                          <span className=" xs:inline">Change image</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleHeaderFileChange}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div className="flex flex-row gap-10">
-            <SidebarObituary />
+            <div className="flex flex-row gap-10">
+              <SidebarObituary />
 
-            <div className="flex-1 p-8 w-full">
-              <div className="space-y-8 max-w-[1000px] w-full">
-                {/* Basic Information */}
-                <div className="flex flex-col lg:flex-row gap-6 lg:gap-15 w-full">
-                  {/* Avatar Section */}
-                  <div className="w-full lg:w-[248px]">
-                    <FormField
-                      control={form.control}
-                      name="picture"
-                      render={() => (
-                        <FormItem>
-                          <FormControl>
-                            <div className="relative w-full h-[248px] border rounded shadow-md overflow-hidden bg-white">
-                              <label className=" w-[248px] h-[248px] rounded shadow-md overflow-hidden bg-white">
-                                {selectedAvatarFile ? (
-                                  <Image
-                                    src={URL.createObjectURL(
-                                      selectedAvatarFile
-                                    )}
-                                    alt="Preview"
-                                    width={240}
-                                    height={240}
-                                    className="px-2 py-3 mx-auto w-[240px] h-60 object-cover"
-                                  />
-                                ) : (
-                                  obituary?.memorial.picture && (
+              <div className="flex-1 p-8 w-full">
+                <div className="space-y-8 max-w-[1000px] w-full">
+                  {/* Basic Information */}
+                  <div className="flex flex-col lg:flex-row gap-6 lg:gap-15 w-full">
+                    {/* Avatar Section */}
+                    <div className="w-full lg:w-[248px]">
+                      <FormField
+                        control={form.control}
+                        name="picture"
+                        render={() => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative w-full h-[248px] border rounded shadow-md overflow-hidden bg-white">
+                                <label className=" w-[248px] h-[248px] rounded shadow-md overflow-hidden bg-white">
+                                  {selectedAvatarFile ? (
                                     <Image
-                                      src={`https://obituary-be-production.up.railway.app${obituary.memorial.picture}`}
-                                      alt="Memorial"
+                                      src={URL.createObjectURL(
+                                        selectedAvatarFile
+                                      )}
+                                      alt="Preview"
                                       width={240}
                                       height={240}
                                       className="px-2 py-3 mx-auto w-[240px] h-60 object-cover"
                                     />
-                                  )
-                                )}
-                                <IconPencil className="absolute bottom-1 right-1 bg-[#699D99] text-white rounded shadow h-10 w-10 flex items-center justify-center cursor-pointer hover:bg-gray-400" />
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  onChange={handleAvatarFileChange}
-                                  className="hidden"
-                                />
-                              </label>
-                            </div>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Name and Dates Section */}
-                  <div className="flex flex-col gap-5 pt-6 w-full lg:w-[560px]">
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                          <FormItem className="w-full sm:w-1/2">
-                            <FormControl>
-                              <Input
-                                {...field}
-                                className="border border-dashed border-black h-12 text-[32px] museo font-medium text-center"
-                                placeholder="First name"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                          <FormItem className="w-full sm:w-1/2">
-                            <FormControl>
-                              <Input
-                                {...field}
-                                className="border border-dashed border-black h-12 text-[32px] museo font-medium text-center"
-                                placeholder="Last name"
-                              />
+                                  ) : (
+                                    obituary?.memorial.picture && (
+                                      <Image
+                                        src={`https://obituary-be-production.up.railway.app${obituary.memorial.picture}`}
+                                        alt="Memorial"
+                                        width={240}
+                                        height={240}
+                                        className="px-2 py-3 mx-auto w-[240px] h-60 object-cover"
+                                      />
+                                    )
+                                  )}
+                                  <IconPencil className="absolute bottom-1 right-1 bg-[#699D99] text-white rounded shadow h-10 w-10 flex items-center justify-center cursor-pointer hover:bg-gray-400" />
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleAvatarFileChange}
+                                    className="hidden"
+                                  />
+                                </label>
+                              </div>
                             </FormControl>
                           </FormItem>
                         )}
                       />
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <FormField
-                        control={form.control}
-                        name="birthDate"
-                        render={({ field }) => (
-                          <FormItem className="w-full sm:w-1/2">
-                            <FormLabel className="text-base font-light">
-                              Born
-                            </FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant="outline"
-                                    className={cn(
-                                      "w-full justify-between text-left font-normal h-14",
-                                      !field.value && "text-muted-foreground"
-                                    )}
-                                  >
-                                    {field.value instanceof Date &&
-                                    !isNaN(field.value.getTime())
-                                      ? format(field.value, "MMMM d, yyyy")
-                                      : "Pick a date"}
-                                    <IconCalendar className="ml-auto h-6 w-6" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value || undefined}
-                                  onSelect={field.onChange}
-                                  disabled={(date) =>
-                                    date > new Date() ||
-                                    date < new Date("1900-01-01")
-                                  }
+                    {/* Name and Dates Section */}
+                    <div className="flex flex-col gap-5 pt-6 w-full lg:w-[560px]">
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <FormField
+                          control={form.control}
+                          name="firstName"
+                          render={({ field }) => (
+                            <FormItem className="w-full sm:w-1/2">
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  className="border border-dashed border-black h-12 text-[32px] museo font-medium text-center"
+                                  placeholder="First name"
                                 />
-                              </PopoverContent>
-                            </Popover>
-                          </FormItem>
-                        )}
-                      />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
 
-                      <FormField
-                        control={form.control}
-                        name="deathDate"
-                        render={({ field }) => (
-                          <FormItem className="w-full sm:w-1/2">
-                            <FormLabel className="text-base font-light">
-                              Death
-                            </FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant="outline"
-                                    className={cn(
-                                      "w-full justify-between text-left font-normal h-14",
-                                      !field.value && "text-muted-foreground"
-                                    )}
-                                  >
-                                    {field.value instanceof Date &&
-                                    !isNaN(field.value.getTime())
-                                      ? format(field.value, "MMMM d, yyyy")
-                                      : "Pick a date"}
-                                    <IconCalendar className="ml-auto h-6 w-6" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value || undefined}
-                                  onSelect={field.onChange}
-                                  disabled={(date) =>
-                                    date > new Date() ||
-                                    date < new Date("1900-01-01")
-                                  }
+                        <FormField
+                          control={form.control}
+                          name="lastName"
+                          render={({ field }) => (
+                            <FormItem className="w-full sm:w-1/2">
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  className="border border-dashed border-black h-12 text-[32px] museo font-medium text-center"
+                                  placeholder="Last name"
                                 />
-                              </PopoverContent>
-                            </Popover>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* Quote Section */}
-                <FormObituary
-                  title="Quote"
-                  name="quote"
-                  show={showQuote}
-                  setShow={setShowQuote}
-                  form={form} // Pass the form instance
-                  placeholder="Quote/Saying"
-                />
-
-                {/* Words From Family Section */}
-                <FormObituary
-                  title="Words from family"
-                  name="wordsFromFamily"
-                  show={showWords}
-                  setShow={setShowWords}
-                  form={form} // Pass the form instance
-                  placeholder="Quote/Saying"
-                />
-
-                {/* Life Story Section */}
-                <FormObituary
-                  title="Life story"
-                  name="lifeStory"
-                  subtitleButtonLabel="How to write an obituary"
-                  show={showLifeStory}
-                  setShow={setShowLifeStory}
-                  form={form} // Pass the form instance
-                  placeholder="Quote/Saying"
-                />
-
-                {/* Family Tree Section */}
-                <FamilyTreeSection
-                  showFamilyTree={showFamilyTree}
-                  setShowFamilyTree={setShowFamilyTree}
-                  categories={categories}
-                  setCategories={setCategories}
-                />
-
-                {/* */}
-                <FavoritesObituary
-                  show={showFavorites}
-                  setShow={setShowFavorites}
-                  favorites={favorites}
-                  setFavorites={setFavorites}
-                  favoriteTypes={favoriteTypes}
-                  addFavorite={addFavorite}
-                />
-
-                {/* Time Line */}
-                <TimelineObituary
-                  showTimeline={showTimeline}
-                  setShowTimeline={setShowTimeline}
-                  timelineEvents={timeLine}
-                  setTimelineEvents={setTimeline}
-                  addTimelineEvent={addTimelineEvent}
-                />
-
-                {/* Event */}
-                <h3 className="text-[32px] font-medium museo">Event</h3>
-                <FormProvider {...form}>
-                  <Event height="auto" setEvents={setEvents} events={events} />
-                </FormProvider>
-
-                {/*Form RSVP */}
-                <FormRSVP obituaryId={obituary?._id || ""} />
-
-                {/* Gallery Section */}
-                <Gallery
-                  id={id}
-                  showGallery={showGallery}
-                  setShowGallery={setShowGallery}
-                  allowVisitorPhotos={allowVisitorPhotos}
-                  setAllowVisitorPhotos={setAllowVisitorPhotos}
-                  moderationType={moderationType}
-                  setModerationType={setModerationType}
-                  requireEmail={requireEmail}
-                  setRequireEmail={setRequireEmail}
-                  galleryOldImages={galleryOldImages}
-                  galleryImages={galleryImages}
-                  handleGalleryFilesChange={handleGalleryFilesChange}
-                  handleRemoveGalleryImage={handleRemoveGalleryImage}
-                  addGalleryFolder={addGalleryFolder}
-                />
-
-                {/* Videos Section */}
-                <div className="flex flex-col gap-8 sm:gap-10">
-                  {/* Header */}
-                  <div className="flex sm:flex-row items-center justify-between gap-3">
-                    <h3 className="text-[28px] sm:text-[32px] font-medium museo">
-                      Videos
-                    </h3>
-                    <Switch
-                      checked={showVideos}
-                      onCheckedChange={setShowVideos}
-                    />
-                  </div>
-
-                  {/* Video Content */}
-                  {showVideos && (
-                    <div className="flex flex-col items-center gap-6 sm:gap-10">
-                      {/* Video Preview */}
-                      <div className="w-full max-w-[519px] aspect-video relative rounded overflow-hidden">
-                        <Image
-                          src="/img/video.png"
-                          alt="video"
-                          fill
-                          className="object-cover rounded"
+                              </FormControl>
+                            </FormItem>
+                          )}
                         />
                       </div>
 
-                      {/* Upload Button */}
-                      <Button
-                        type="button"
-                        onClick={() => setOpenVideoWall(true)}
-                        className="w-full sm:w-[162px] h-12 bg-[#699D99] rounded px-7 py-2 text-base museo text-white hover:bg-[#4e7c7a]"
-                      >
-                        Upload Videos
-                      </Button>
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <FormField
+                          control={form.control}
+                          name="birthDate"
+                          render={({ field }) => (
+                            <FormItem className="w-full sm:w-1/2">
+                              <FormLabel className="text-base font-light">
+                                Born
+                              </FormLabel>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <FormControl>
+                                    <Button
+                                      variant="outline"
+                                      className={cn(
+                                        "w-full justify-between text-left font-normal h-14",
+                                        !field.value && "text-muted-foreground"
+                                      )}
+                                    >
+                                      {field.value instanceof Date &&
+                                      !isNaN(field.value.getTime())
+                                        ? format(field.value, "MMMM d, yyyy")
+                                        : "Pick a date"}
+                                      <IconCalendar className="ml-auto h-6 w-6" />
+                                    </Button>
+                                  </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                  className="w-auto p-0"
+                                  align="start"
+                                >
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value || undefined}
+                                    onSelect={field.onChange}
+                                    disabled={(date) =>
+                                      date > new Date() ||
+                                      date < new Date("1900-01-01")
+                                    }
+                                  />
+                                </PopoverContent>
+                              </Popover>
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="deathDate"
+                          render={({ field }) => (
+                            <FormItem className="w-full sm:w-1/2">
+                              <FormLabel className="text-base font-light">
+                                Death
+                              </FormLabel>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <FormControl>
+                                    <Button
+                                      variant="outline"
+                                      className={cn(
+                                        "w-full justify-between text-left font-normal h-14",
+                                        !field.value && "text-muted-foreground"
+                                      )}
+                                    >
+                                      {field.value instanceof Date &&
+                                      !isNaN(field.value.getTime())
+                                        ? format(field.value, "MMMM d, yyyy")
+                                        : "Pick a date"}
+                                      <IconCalendar className="ml-auto h-6 w-6" />
+                                    </Button>
+                                  </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                  className="w-auto p-0"
+                                  align="start"
+                                >
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value || undefined}
+                                    onSelect={field.onChange}
+                                    disabled={(date) =>
+                                      date > new Date() ||
+                                      date < new Date("1900-01-01")
+                                    }
+                                  />
+                                </PopoverContent>
+                              </Popover>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                     </div>
-                  )}
-                </div>
-
-                {openVideoWall && (
-                  <VideoWall
-                    obituaryId={id}
-                    open={openVideoWall}
-                    onClose={() => setOpenVideoWall(false)}
+                  </div>
+                  {/* Quote Section */}
+                  <FormObituary
+                    title="Quote"
+                    name="quote"
+                    show={showQuote}
+                    setShow={setShowQuote}
+                    form={form} // Pass the form instance
+                    placeholder="Quote/Saying"
                   />
-                )}
 
-                {/* Guest Book */}
-                <GuestBook condolences={condolences || []} />
+                  {/* Words From Family Section */}
+                  <FormObituary
+                    title="Words from family"
+                    name="wordsFromFamily"
+                    show={showWords}
+                    setShow={setShowWords}
+                    form={form} // Pass the form instance
+                    placeholder="Quote/Saying"
+                  />
+
+                  {/* Life Story Section */}
+                  <FormObituary
+                    title="Life story"
+                    name="lifeStory"
+                    subtitleButtonLabel="How to write an obituary"
+                    show={showLifeStory}
+                    setShow={setShowLifeStory}
+                    form={form} // Pass the form instance
+                    placeholder="Quote/Saying"
+                  />
+
+                  {/* Family Tree Section */}
+                  <FamilyTreeSection
+                    showFamilyTree={showFamilyTree}
+                    setShowFamilyTree={setShowFamilyTree}
+                    categories={categories}
+                    setCategories={setCategories}
+                  />
+
+                  {/* */}
+                  <FavoritesObituary
+                    show={showFavorites}
+                    setShow={setShowFavorites}
+                    favorites={favorites}
+                    setFavorites={setFavorites}
+                    favoriteTypes={favoriteTypes}
+                    addFavorite={addFavorite}
+                  />
+
+                  {/* Time Line */}
+                  <TimelineObituary
+                    showTimeline={showTimeline}
+                    setShowTimeline={setShowTimeline}
+                    timelineEvents={timeLine}
+                    setTimelineEvents={setTimeline}
+                    addTimelineEvent={addTimelineEvent}
+                  />
+
+                  {/* Event */}
+                  <h3 className="text-[32px] font-medium museo">Event</h3>
+                  <FormProvider {...form}>
+                    <Event
+                      height="auto"
+                      setEvents={setEvents}
+                      events={events}
+                    />
+                  </FormProvider>
+
+                  {/*Form RSVP */}
+                  <FormRSVP obituaryId={obituary?._id || ""} />
+
+                  {/* Gallery Section */}
+                  <Gallery
+                    id={id}
+                    showGallery={showGallery}
+                    setShowGallery={setShowGallery}
+                    allowVisitorPhotos={allowVisitorPhotos}
+                    setAllowVisitorPhotos={setAllowVisitorPhotos}
+                    moderationType={moderationType}
+                    setModerationType={setModerationType}
+                    requireEmail={requireEmail}
+                    setRequireEmail={setRequireEmail}
+                    galleryOldImages={galleryOldImages}
+                    galleryImages={galleryImages}
+                    handleGalleryFilesChange={handleGalleryFilesChange}
+                    handleRemoveGalleryImage={handleRemoveGalleryImage}
+                    addGalleryFolder={addGalleryFolder}
+                  />
+
+                  {/* Videos Section */}
+                  <div className="flex flex-col gap-8 sm:gap-10">
+                    {/* Header */}
+                    <div className="flex sm:flex-row items-center justify-between gap-3">
+                      <h3 className="text-[28px] sm:text-[32px] font-medium museo">
+                        Videos
+                      </h3>
+                      <Switch
+                        checked={showVideos}
+                        onCheckedChange={setShowVideos}
+                      />
+                    </div>
+
+                    {/* Video Content */}
+                    {showVideos && (
+                      <div className="flex flex-col items-center gap-6 sm:gap-10">
+                        {/* Video Preview */}
+                        <div className="w-full max-w-[519px] aspect-video relative rounded overflow-hidden">
+                          <Image
+                            src="/img/video.png"
+                            alt="video"
+                            fill
+                            className="object-cover rounded"
+                          />
+                        </div>
+
+                        {/* Upload Button */}
+                        <Button
+                          type="button"
+                          onClick={() => setOpenVideoWall(true)}
+                          className="w-full sm:w-[162px] h-12 bg-[#699D99] rounded px-7 py-2 text-base museo text-white hover:bg-[#4e7c7a]"
+                        >
+                          Upload Videos
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  {openVideoWall && (
+                    <VideoWall
+                      obituaryId={id}
+                      open={openVideoWall}
+                      onClose={() => setOpenVideoWall(false)}
+                    />
+                  )}
+
+                  {/* Guest Book */}
+                  <GuestBook condolences={condolences || []} />
+                </div>
               </div>
             </div>
-          </div>
-          {/* Submit Button */}
-          <div className="flex justify-center mb-10">
-            <Button
-              type="submit"
-              className="bg-[#133C4C] hover:bg-[#0f2f3c] museo text-white px-6 py-2"
-            >
-              Publish page
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+            {/* Submit Button */}
+            <div className="flex justify-center mb-10">
+              <Button
+                type="submit"
+                className="bg-[#133C4C] hover:bg-[#0f2f3c] museo text-white px-6 py-2"
+              >
+                Publish page
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </ProtectedRoute>
   );
 }

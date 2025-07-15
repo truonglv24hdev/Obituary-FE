@@ -20,7 +20,6 @@ import { useRouter } from "next/navigation";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import { cn } from "@/lib/utils";
-import { IconCalendar } from "../icons";
 import { format } from "date-fns";
 
 const formSchema = z.object({
@@ -40,7 +39,12 @@ const formSchema = z.object({
   slug: z.string().optional(),
 });
 
-const CreateMemorial = () => {
+interface CreateMemorialProps {
+  firstName?: string;
+  lastName?: string;
+}
+
+const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,6 +59,11 @@ const CreateMemorial = () => {
       slug: "",
     },
   });
+
+  useEffect(() => {
+    if (firstName) form.setValue("first_name", firstName);
+    if (lastName) form.setValue("last_name", lastName);
+  }, [firstName, lastName, form]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

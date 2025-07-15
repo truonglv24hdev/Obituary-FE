@@ -10,21 +10,35 @@ import PricingSection from "../components/layout/PricingSection";
 import Footer from "@/components/layout/Footer";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Button } from "@/components/ui/button";
-import { getMemorialBySearch } from "@/lib/memorialAPI";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
   const [searchFirstName, setSearchFirstName] = useState("");
   const [searchLastName, setSearchLastName] = useState("");
+  const [startFirstName, setStartFirstName] = useState("");
+  const [startLastName, setStartLastName] = useState("");
 
   const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await getMemorialBySearch(searchFirstName, searchLastName);
-    if (res.obituaryId) {
-      router.push(`/memorial/${res.obituaryId}`);
+    if (searchFirstName || searchLastName) {
+      router.push(
+        `/search?firstName=${searchFirstName}&lastName=${searchLastName}`
+      );
     }
   };
+
+  const handleStartFree = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (startFirstName && startLastName) {
+      router.push(
+        `/my-memorial?firstName=${startFirstName}&lastName=${startLastName}`
+      );
+    } else {
+      router.push("/my-memorial");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Heading className="bg-[#699D99]" />
@@ -97,24 +111,30 @@ export default function Home() {
                   <h2 className="text-[18px] md:text-[20px] museo font-semibold text-white text-center md:text-center">
                     Share memories of
                   </h2>
-                  <div className="flex flex-col md:flex-row gap-3">
-                    <input
-                      type="text"
-                      placeholder="First name"
-                      className="w-full md:w-[217px] h-13 md:h-13 px-3 py-2 museo rounded-md border border-gray-200 bg-white placeholder:text-black"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Last name"
-                      className="w-full md:w-[217px] h-13 px-3 py-2 museo rounded-md border border-gray-200 bg-white placeholder:text-black"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full cursor-pointer md:w-[447px] rounded-lg h-13 bg-[#6ea09e] text-white py-2 font-light museo text-base flex justify-center items-center"
-                  >
-                    Start for Free
-                  </Button>
+                  <form onSubmit={handleStartFree}>
+                    <div className="flex flex-col md:flex-row gap-3">
+                      <input
+                        type="text"
+                        placeholder="First name"
+                        value={startFirstName}
+                        onChange={(e) => setStartFirstName(e.target.value)}
+                        className="w-full md:w-[217px] h-13 md:h-13 px-3 py-2 museo rounded-md border border-gray-200 bg-white placeholder:text-black"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Last name"
+                        value={startLastName}
+                        onChange={(e) => setStartLastName(e.target.value)}
+                        className="w-full md:w-[217px] h-13 px-3 py-2 museo rounded-md border border-gray-200 bg-white placeholder:text-black"
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      className="w-full mt-3 cursor-pointer md:w-[447px] rounded-lg h-13 bg-[#6ea09e] text-white py-2 font-light museo text-base flex justify-center items-center"
+                    >
+                      Start for Free
+                    </Button>
+                  </form>
                 </div>
               </div>
             </div>

@@ -44,6 +44,7 @@ const FormObituary = ({
             <Button
               variant="outline"
               size="sm"
+              type="button"
               className="hidden sm:block h-10 museo text-base"
               onClick={onSubtitleClick}
             >

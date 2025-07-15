@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const HeroSection = () => {
@@ -25,9 +26,9 @@ const HeroSection = () => {
           Honor your loved ones by creating a lasting tribute. Share stories,
           photos, and memories that keep their legacy alive.
         </p>
-        <Button className="w-fit cursor-pointer px-6 py-2 h-11 rounded-lg bg-[#E5F6EC] text-[#293548] font-light text-sm sm:text-[16px] hover:bg-[#E5F6EC]">
+        <Link href={"/my-memorial"} className="w-fit cursor-pointer px-6 py-2 h-11 rounded-lg bg-[#E5F6EC] text-[#293548] font-light text-sm sm:text-[16px] hover:bg-[#E5F6EC]">
           Get started free
-        </Button>
+        </Link>
       </div>
     </div>
   );

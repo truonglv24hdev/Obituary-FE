@@ -6,7 +6,7 @@ declare module "axios" {
 }
 
 const instance = axios.create({
-  baseURL: "https://obituary-be-production.up.railway.app",
+  baseURL: "http://localhost:5000",
   headers: {
     "Content-Type": "application/json",
   },

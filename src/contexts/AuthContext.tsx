@@ -51,3 +51,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
+
+export function isTokenExpired(token: string): boolean {
+  try {
+    const [, payload] = token.split(".");
+    const decoded = JSON.parse(atob(payload));
+    const now = Math.floor(Date.now() / 1000);
+    return decoded.exp < now;
+  } catch (err) {
+    return true;
+  }
+}
