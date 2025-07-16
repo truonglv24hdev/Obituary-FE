@@ -14,6 +14,7 @@ export async function updateProfile(data: {
   country?: string;
   code?: string;
   premium?: boolean;
+  deleted?: boolean;
 }) {
   const res = await axios.put(
     "/api/user",
@@ -25,6 +26,20 @@ export async function updateProfile(data: {
       requiresAuth: true,
     }
   );
+  return res.data;
+}
+
+export async function updateUserByAdmin(id: string) {
+  const res = await axios.put(`/api/user/${id}`, {
+    requiresAuth: true,
+  });
+  return res.data;
+}
+
+export async function getUserByAdmin(id: string) {
+  const res = await axios.get(`/api/user/${id}`, {
+    requiresAuth: true,
+  });
   return res.data;
 }
 

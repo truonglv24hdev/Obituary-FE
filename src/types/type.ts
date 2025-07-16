@@ -7,8 +7,8 @@ export type TUser = {
   address: string;
   country: string;
   code: string;
-  memorials: TMemorial[]
-  deleted:boolean
+  memorials: TMemorial[];
+  deleted: boolean;
 };
 
 export type TMemorial = {
@@ -31,6 +31,8 @@ export type TMemorial = {
   require_email: boolean;
   moderation: string;
   add_photos: boolean;
+  user: TUser;
+  deleted: boolean;
 };
 
 export type TRSVP = {

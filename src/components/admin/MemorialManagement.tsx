@@ -17,43 +17,70 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-
-interface Memorial {
-  id: number;
-  name: string;
-  creator: string;
-  status: string;
-  views: number;
-}
+import { TMemorial } from "@/types/type";
+import Image from "next/image";
+import { updateStatusMemorial } from "@/lib/memorialAPI";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  memorials: Memorial[];
+  memorials: TMemorial[];
   getStatusColor: (status: string) => string;
+  getPremiumColor: (status: string) => string;
 }
 
-export default function MemorialTable({ memorials, getStatusColor }: Props) {
+export default function MemorialTable({
+  memorials,
+  getStatusColor,
+  getPremiumColor,
+}: Props) {
+  const router = useRouter();
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Memorial Name</TableHead>
-          <TableHead>Creator</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Views</TableHead>
-          <TableHead>Actions</TableHead>
+          <TableHead className="w-[400px] museo text-2xl">
+            Memorial Name
+          </TableHead>
+          <TableHead className="w-[250px] museo text-2xl">Creator</TableHead>
+          <TableHead className="museo text-2xl">Status</TableHead>
+          <TableHead className="museo text-2xl">Premium</TableHead>
+          <TableHead className="museo text-2xl">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {memorials.map((memorial) => (
-          <TableRow key={memorial.id}>
-            <TableCell className="font-medium">{memorial.name}</TableCell>
-            <TableCell>{memorial.creator}</TableCell>
+          <TableRow key={memorial._id} className="h-20">
+            <TableCell className="font-medium flex gap-2 items-center text-xl">
+              <Image
+                src={`http://localhost:5000${memorial.picture}`}
+                alt="1"
+                width={80}
+                height={80}
+                className="w-20 h-20"
+              />
+              {memorial.first_name} {memorial.last_name}
+            </TableCell>
+            <TableCell className="text-xl">
+              {memorial?.user?.first_name} {memorial?.user?.last_name}
+            </TableCell>
             <TableCell>
-              <Badge className={getStatusColor(memorial.status)}>
-                {memorial.status}
+              <Badge
+                className={getStatusColor(
+                  memorial.deleted ? "banned" : "active"
+                )}
+              >
+                {memorial.deleted ? "deleted" : "active"}
               </Badge>
             </TableCell>
-            <TableCell>{memorial.views.toLocaleString()}</TableCell>
+            <TableCell>
+              <Badge
+                className={getPremiumColor(
+                  memorial.premium ? "premium" : "free"
+                )}
+              >
+                {memorial.premium ? "premium" : "free"}
+              </Badge>
+            </TableCell>
             <TableCell>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -61,12 +88,37 @@ export default function MemorialTable({ memorials, getStatusColor }: Props) {
                     <MoreHorizontal className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>View Memorial</DropdownMenuItem>
-                  <DropdownMenuItem>Edit Memorial</DropdownMenuItem>
-                  <DropdownMenuItem>Approve</DropdownMenuItem>
-                  <DropdownMenuItem className="text-red-600">
-                    Delete
+                <DropdownMenuContent
+                  side="bottom"
+                  align="start"
+                  className="w-49 h-34 flex flex-col gap-1"
+                >
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/memorial/${memorial.obituaryId}`)}
+                    className="text-base hover:bg-gray-500 "
+                  >
+                    View Memorial
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="text-base hover:bg-gray-500 ">
+                    Edit Memorial
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      try {
+                        await updateStatusMemorial(memorial._id);
+                        window.location.reload();
+                       router.refresh()
+                      } catch (err) {
+                        console.error("Update failed:", err);
+                      }
+                    }}
+                    className={`${
+                      memorial.deleted ? "text-green-600" : "text-red-600"
+                    } text-base hover:bg-gray-200`}
+                  >
+                    {memorial.deleted
+                      ? "Undeleted Memorial"
+                      : "Deleted Memorial"}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
