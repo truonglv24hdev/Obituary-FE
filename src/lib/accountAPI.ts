@@ -36,6 +36,26 @@ export async function updateUserByAdmin(id: string) {
   return res.data;
 }
 
+export async function updateUser(
+  id: string,
+  data: {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    password?: string;
+    address?: string;
+    country?: string;
+    code?: string;
+    premium?: boolean;
+    deleted?: boolean;
+  }
+) {
+  const res = await axios.put(`/api/user/edit/${id}`, {...data} ,{
+    requiresAuth: true,
+  });
+  return res.data;
+}
+
 export async function getUserByAdmin(id: string) {
   const res = await axios.get(`/api/user/${id}`, {
     requiresAuth: true,

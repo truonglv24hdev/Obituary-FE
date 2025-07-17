@@ -33,6 +33,7 @@ export type TMemorial = {
   add_photos: boolean;
   user: TUser;
   deleted: boolean;
+  createdAt: Date;
 };
 
 export type TRSVP = {

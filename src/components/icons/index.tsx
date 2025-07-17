@@ -23,3 +23,4 @@ export { default as IconLock } from "./IconLock";
 export { default as IconShare } from "./IconShare";
 export { default as IconDelete } from "./IconDelete";
 export { default as IconCancel } from "./IconCancel";
+export { default as IconWorld } from "./IconWorld";

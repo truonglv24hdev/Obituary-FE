@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "../ui/button";
@@ -9,10 +8,19 @@ import ActiveLink from "../common/ActiveLink";
 import { menuItems } from "@/constants/header";
 import { IconUser } from "../icons";
 import { Menu, X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 const Heading = ({ className }: { className?: string }) => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
+  console.log(user?.role);
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <header
@@ -54,13 +62,46 @@ const Heading = ({ className }: { className?: string }) => {
               >
                 Logout
               </Button>
-              <Link
-                href="/account"
-                className="bg-[#E5F6EC] w-[177px] museo h-11 text-[#222222] flex items-center justify-center gap-3 rounded-sm font-light text-[18px] leading-[24px]"
-              >
-                <IconUser className="w-5 h-5" />
-                My account
-              </Link>
+              {user?.role === "ADMIN" ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className="bg-[#E5F6EC] w-[177px] museo h-11 text-[#222222] flex items-center justify-center gap-3 rounded-sm font-light text-[18px] leading-[24px]"
+                      variant="ghost"
+                      size="sm"
+                    >
+                      <IconUser className="w-5 h-5" />
+                      My account
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    side="bottom"
+                    align="start"
+                    className="w-[177px] h-22 flex flex-col gap-1"
+                  >
+                    <DropdownMenuItem
+                      onClick={() => router.push(`/account`)}
+                      className="text-base hover:bg-gray-500 "
+                    >
+                      My account
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => router.push(`/admin`)}
+                      className="text-base hover:bg-gray-500 "
+                    >
+                      Dashboard
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link
+                  href="/account"
+                  className="bg-[#E5F6EC] w-[177px] museo h-11 text-[#222222] flex items-center justify-center gap-3 rounded-sm font-light text-[18px] leading-[24px]"
+                >
+                  <IconUser className="w-5 h-5" />
+                  My account
+                </Link>
+              )}
             </>
           ) : (
             <>
@@ -93,11 +134,7 @@ const Heading = ({ className }: { className?: string }) => {
         <div className="md:hidden bg-white/90 backdrop-blur-md text-black rounded-md px-4 py-4 mt-2">
           <nav className="flex flex-col gap-4">
             {menuItems.map((menu) => (
-              <ActiveLink
-                key={menu.url}
-                url={menu.url}
-                // onClick={() => setMenuOpen(false)}
-              >
+              <ActiveLink key={menu.url} url={menu.url}>
                 {menu.title}
               </ActiveLink>
             ))}
@@ -115,14 +152,47 @@ const Heading = ({ className }: { className?: string }) => {
                 >
                   Logout
                 </Button>
-                <Link
-                  href="/account"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 bg-[#E5F6EC] px-4 py-2 rounded museo font-light text-[#222222] w-full"
-                >
-                  <IconUser className="w-5 h-5" />
-                  My account
-                </Link>
+                {user?.role === "ADMIN" ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="bg-[#E5F6EC] w-full museo h-11 text-[#222222] flex items-center justify-center gap-3 rounded-sm font-light text-[18px] leading-[24px]"
+                        variant="ghost"
+                        size="sm"
+                      >
+                        <IconUser className="w-5 h-5" />
+                        My account
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      side="bottom"
+                      align="start"
+                      className="w-49 h-22 flex flex-col gap-1"
+                    >
+                      <DropdownMenuItem
+                        onClick={() => router.push(`/account`)}
+                        className="text-base hover:bg-gray-500 "
+                      >
+                        My account
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => router.push(`/admin`)}
+                        className="text-base hover:bg-gray-500 "
+                      >
+                        Dashboard
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link
+                    href="/account"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 bg-[#E5F6EC] px-4 py-2 rounded museo font-light text-[#222222] w-full"
+                  >
+                    <IconUser className="w-5 h-5" />
+                    My account
+                  </Link>
+                )}
               </>
             ) : (
               <>

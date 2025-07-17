@@ -62,6 +62,11 @@ export async function getMemorialById(id: string) {
   return res.data;
 }
 
+export async function getMemorials(id: string) {
+  const res = await axios.get(`/api/memorial/user/${id}`);
+  return res.data;
+}
+
 export async function putMemorial(id: string, formData: FormData) {
   const res = await axios.put(`/api/memorial/${id}`, formData, {
     headers: {
