@@ -10,10 +10,10 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div className="w-full bg-[#699D99] text-white flex flex-col py-10 px-6 md:px-25 gap-11">
-      <div className="max-w-[1240px] mx-auto museo flex flex-col md:flex-row gap-10 md:gap-[140px]">
+    <div className="w-full bg-[#699D99] text-white flex flex-col py-10 px-6 lg:px-25 gap-11">
+      <div className="max-w-[1240px] mx-auto museo flex flex-col md:flex-row gap-10 lg:gap-[140px]">
         {/* Logo & Description */}
-        <div className="w-full md:w-[360px] flex flex-col gap-8">
+        <div className="w-full lg:w-[360px] flex flex-col gap-8">
           <div className="w-[253px] h-[107px]">
             <Link
               href="/"
@@ -70,7 +70,7 @@ const Footer = () => {
         </div>
 
         {/* Links */}
-        <div className="w-full md:w-[657px] flex flex-col md:flex-row gap-10 md:gap-15">
+        <div className="w-full lg:w-[657px] flex flex-col lg:flex-row gap-10 md:gap-15">
           {[
             {
               title: "Product",
@@ -84,7 +84,7 @@ const Footer = () => {
             { title: "Help", links: ["Contact us", "FAQs", "Blog"] },
             { title: "Company", links: ["About us", "Partner with us"] },
           ].map((section, idx) => (
-            <div key={idx} className="w-full md:w-[179px] flex flex-col gap-7">
+            <div key={idx} className="w-full lg:w-[179px] flex flex-col gap-7">
               <h3 className="font-semibold text-xl leading-7">
                 {section.title}
               </h3>
@@ -101,7 +101,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Text */}
-      <div className="mt-8 text-center font-light museo text-[14px] text-white/80 w-full px-4 md:w-[507px] mx-auto">
+      <div className="mt-8 text-center font-light museo text-[14px] text-white/80 w-full px-4 lg:w-[507px] mx-auto">
         Copyright © Les Prestataires. All Rights Reserved. |{" "}
         <a href="#" className="underline">
           Privacy Policy

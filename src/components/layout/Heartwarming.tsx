@@ -19,10 +19,10 @@ const Testimonial = () => {
   const testimonial = testimonials[current];
 
   return (
-    <div className="w-full h-[600px] md:h-[690px] bg-[#f7fbf8] relative flex flex-col px-4 md:px-[153px] py-10 justify-between">
+    <div className="w-full h-[600px] lg:h-[690px] bg-[#f7fbf8] relative flex flex-col px-4 lg:px-[153px] py-10 justify-between">
       {/* Title */}
-      <div className="w-full md:w-[625px] mx-auto h-auto flex-col flex gap-4 text-center">
-        <h2 className="font-medium text-[28px] md:text-[40px] leading-tight md:leading-12">
+      <div className="w-full lg:w-[625px] mx-auto h-auto flex-col flex gap-4 text-center">
+        <h2 className="font-medium text-[28px] lg:text-[40px] leading-tight lg:leading-12">
           Heartwarming user reviews
         </h2>
         <p className="font-light museo text-base md:text-xl leading-6">
@@ -37,18 +37,18 @@ const Testimonial = () => {
         alt="Logo"
         width={86}
         height={69}
-        className="hidden md:block absolute left-10 md:left-60 2xl:left-110 top-40 opacity-50"
+        className="hidden md:block absolute left-10 lg:left-60 2xl:left-110 top-40 opacity-50"
       />
 
       {/* Testimonial content */}
-      <div className="w-full md:w-[838px] mx-auto py-7 px-4 md:px-12 transition-all duration-500 ease-in-out">
-        <div className="w-full md:w-[742px] h-auto">
-          <p className="font-light museo text-base md:text-xl leading-7 md:leading-9">
+      <div className="w-full lg:w-[838px] mx-auto py-7 px-4 lg:px-12 transition-all duration-500 ease-in-out">
+        <div className="w-full lg:w-[742px] h-auto">
+          <p className="font-light museo text-base lg:text-xl leading-7 lg:leading-9">
             {testimonial.quote}
           </p>
           <hr className="my-6 border-gray-300" />
           <div className="text-left flex flex-col gap-2">
-            <p className="text-xl md:text-[28px] leading-7 md:leading-8 font-medium">
+            <p className="text-xl lg:text-[28px] leading-7 lg:leading-8 font-medium">
               {testimonial.name}
             </p>
             <p className="font-light museo text-base md:text-xl leading-6">
@@ -65,8 +65,8 @@ const Testimonial = () => {
             key={i}
             className={`rounded-full cursor-pointer transition-all duration-300 ${
               i === current
-                ? "w-4 h-4 md:w-5 md:h-5 bg-green-700"
-                : "w-2.5 h-2.5 md:w-3 md:h-3 bg-green-300"
+                ? "w-4 h-4 lg:w-5 lg:h-5 bg-green-700"
+                : "w-2.5 h-2.5 lg:w-3 lg:h-3 bg-green-300"
             }`}
             onClick={() => setCurrent(i)}
           />

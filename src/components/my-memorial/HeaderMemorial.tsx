@@ -7,8 +7,8 @@ const HeaderMemorial = () => {
   const isActive = "/memorial" === pathName;
   return (
     <div>
-      <div className="w-full md:w-[540px] h-full md:h-28 flex flex-col gap-4">
-        <h1 className="h-auto md:h-12 text-[40px] font-medium">
+      <div className="w-full lg:w-[540px] h-full lg:h-28 flex flex-col gap-4">
+        <h1 className="h-auto lg:h-12 text-[40px] font-medium">
           Create memorial website
         </h1>
         <p className="font-light text-2xl">
@@ -20,7 +20,7 @@ const HeaderMemorial = () => {
       {/* Stepper */}
       <div className="relative mt-6 mb-10">
         {/* Line + Circles */}
-        <div className="flex ml-5 items-center justify-between w-[294px] md:w-[994px]">
+        <div className="flex ml-5 items-center justify-between w-auto lg:w-[994px]">
           {/* Step 1 */}
           <div className="relative flex flex-col items-center">
             <div className="w-6 h-6 rounded-full border-4 border-gray-400 bg-white z-10" />

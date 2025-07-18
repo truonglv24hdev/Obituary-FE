@@ -26,6 +26,8 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TUser } from "@/types/type";
 import { getUserByAdmin, updateUser } from "@/lib/accountAPI";
+import Heading from "@/components/layout/Heading";
+import Footer from "@/components/layout/Footer";
 
 const formSchema = z.object({
   first_name: z.string().min(1, "Full name is required"),
@@ -105,6 +107,8 @@ export default function EditUserForm({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Heading className="bg-[#699D99]" />
+
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -278,6 +282,7 @@ export default function EditUserForm({
           </CardContent>
         </Card>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -27,8 +27,15 @@ import { getUserByAdmin } from "@/lib/accountAPI";
 import { TMemorial, TUser } from "@/types/type";
 import { getMemorials, updateStatusMemorial } from "@/lib/memorialAPI";
 import { IconWorld } from "@/components/icons";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import Heading from "@/components/layout/Heading";
+import Footer from "@/components/layout/Footer";
 
 export default function UserProfileView({
   params,
@@ -74,6 +81,8 @@ export default function UserProfileView({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
+      <Heading className="bg-[#699D99]" />
+
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -95,8 +104,11 @@ export default function UserProfileView({
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Link href={`/user/edit/${id}`} className="flex items-center border rounded p-2">
+            <div className="hidden sm:flex items-center space-x-2">
+              <Link
+                href={`/user/edit/${id}`}
+                className="flex items-center border rounded p-2"
+              >
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Profile
               </Link>
@@ -289,6 +301,7 @@ export default function UserProfileView({
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

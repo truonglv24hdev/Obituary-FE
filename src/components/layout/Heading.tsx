@@ -46,7 +46,7 @@ const Heading = ({ className }: { className?: string }) => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center text-white font-medium museo gap-10 px-7 py-3 rounded-lg bg-white/10 h-[60px]">
+        <nav className="hidden lg:flex items-center text-white font-medium museo gap-10 px-7 py-3 rounded-lg bg-white/10 h-[60px]">
           {menuItems.map((menu) => (
             <MenuItem key={menu.url} url={menu.url} title={menu.title} />
           ))}
@@ -122,7 +122,7 @@ const Heading = ({ className }: { className?: string }) => {
         </div>
 
         {/* Mobile Toggle */}
-        <div className="md:hidden flex items-center">
+        <div className="lg:hidden flex items-center">
           <button onClick={() => setMenuOpen(!menuOpen)} className="text-white">
             {menuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
@@ -131,7 +131,7 @@ const Heading = ({ className }: { className?: string }) => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white/90 backdrop-blur-md text-black rounded-md px-4 py-4 mt-2">
+        <div className="lg:hidden bg-white/90 backdrop-blur-md text-black rounded-md px-4 py-4 mt-2">
           <nav className="flex flex-col gap-4">
             {menuItems.map((menu) => (
               <ActiveLink key={menu.url} url={menu.url}>

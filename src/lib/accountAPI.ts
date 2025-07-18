@@ -63,7 +63,11 @@ export async function getUserByAdmin(id: string) {
   return res.data;
 }
 
-export async function getAllUser() {
-  const res = await axios.get("/api/user");
+export async function getAllUser(user?:string) {
+  const res = await axios.get("/api/user",{
+    params:{
+      user
+    }
+  });
   return res.data;
 }

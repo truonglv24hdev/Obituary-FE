@@ -121,17 +121,17 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
 
   return (
     <div>
-      <div className="w-full max-w-[1500px] mx-auto min-h-screen px-4 md:px-[229px] py-10 md:py-20 flex flex-col gap-10 md:gap-13">
+      <div className="w-full max-w-[1500px] mx-auto min-h-screen px-4 lg:px-[229px] py-10 md:py-20 flex flex-col gap-10 lg:gap-13">
         <HeaderMemorial />
 
-        <div className="bg-green-50 p-4 md:p-8 rounded-lg shadow-sm">
+        <div className="bg-green-50 p-4 lg:p-8 rounded-lg shadow-sm">
           <h2 className="text-lg font-medium mb-6">
             This memorial is dedicated to:
           </h2>
 
-          <div className="flex flex-col md:flex-row gap-4 md:gap-45 mb-6 md:mb-5">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-45 mb-6 lg:mb-5">
             <p className="font-medium">Picture</p>
-            <div className="relative w-32 h-40 rounded shadow-md overflow-hidden bg-white">
+            <div className="relative w-32 h-40 rounded shadow-lg overflow-hidden bg-white">
               {selectedFile && (
                 <Image
                   src={URL.createObjectURL(selectedFile)}
@@ -156,7 +156,7 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-7 w-full md:w-[918px]"
+              className="flex flex-col gap-7 w-full lg:w-[918px]"
             >
               {[
                 {
@@ -176,13 +176,13 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
                   control={form.control}
                   name={field.name as keyof z.infer<typeof formSchema>}
                   render={({ field: f }) => (
-                    <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
-                      <FormLabel className="w-full md:w-21 font-light text-base">
+                    <FormItem className="flex flex-col lg:flex-row gap-2 lg:gap-37 h-auto lg:h-12 items-start lg:items-center">
+                      <FormLabel className="w-full lg:w-21 font-light text-base">
                         {field.label}
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="w-full h-12 md:w-[400px] border-none bg-white rounded"
+                          className="w-full h-12 lg:w-[400px] border-none bg-white rounded"
                           placeholder={field.placeholder}
                           {...f}
                         />
@@ -198,8 +198,8 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
                 control={form.control}
                 name="gender"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
-                    <FormLabel className="w-full md:w-21 font-light text-base">
+                  <FormItem className="flex flex-col lg:flex-row gap-2 lg:gap-37 h-auto lg:h-12 items-start lg:items-center">
+                    <FormLabel className="w-full lg:w-21 font-light text-base">
                       Gender
                     </FormLabel>
                     <FormControl>
@@ -235,8 +235,8 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
                   control={form.control}
                   name={fieldName as "born" | "death"}
                   render={({ field }) => (
-                    <FormItem className="flex flex-col md:flex-row gap-2 md:gap-37 h-auto md:h-12 items-start md:items-center">
-                      <FormLabel className="w-full md:w-21 font-light text-base">
+                    <FormItem className="flex flex-col lg:flex-row gap-2 lg:gap-37 h-auto lg:h-12 items-start lg:items-center">
+                      <FormLabel className="w-full lg:w-21 font-light text-base">
                         {fieldName === "born" ? "Born" : "Death"}
                       </FormLabel>
                       <Popover>
@@ -245,7 +245,7 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
                             <Button
                               variant="outline"
                               className={cn(
-                                "w-full md:w-[400px] border-none justify-between text-left font-normal h-12",
+                                "w-full lg:w-[400px] border-none justify-between text-left font-normal h-12",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -278,7 +278,7 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
               ))}
 
               {/* Slug label */}
-              <label className="block text-xl md:text-2xl font-light text-gray-700">
+              <label className="block text-xl lg:text-2xl font-light text-gray-700">
                 Memorial web address:
               </label>
 
@@ -287,13 +287,13 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
                 name="slug"
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-2">
-                    <div className="flex flex-col md:flex-row gap-2 md:gap-3 items-start md:items-center">
-                      <FormLabel className="font-light text-base w-full md:w-[80px]">
+                    <div className="flex flex-col lg:flex-row gap-2 lg:gap-3 items-start lg:items-center">
+                      <FormLabel className="font-light text-base w-full lg:w-[80px]">
                         https://
                       </FormLabel>
-                      <FormControl className="ml-0 md:ml-35">
+                      <FormControl className="ml-0 lg:ml-35">
                         <Input
-                          className="w-full h-12 md:w-[400px] bg-white rounded"
+                          className="w-full h-12 lg:w-[400px] bg-white rounded"
                           placeholder="john-doe"
                           {...field}
                         />
@@ -305,7 +305,7 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
                     <FormMessage />
 
                     {slugSuggestions.length > 0 && (
-                      <div className="text-sm text-gray-600 ml-0 md:ml-58 mt-2 mb-6">
+                      <div className="text-sm text-gray-600 ml-0 lg:ml-58 mt-2 mb-6">
                         <p className="text-xl text-black museo mb-3">
                           Suggestions:
                         </p>
@@ -329,7 +329,7 @@ const CreateMemorial = ({ firstName, lastName }: CreateMemorialProps) => {
               {/* Submit button */}
               <div className="col-span-2 text-right">
                 <Button
-                  className="h-11 w-full md:w-[125px] inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-[#699D99] hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                  className="h-11 w-full lg:w-[125px] inline-flex items-center justify-center text-center border text-base font-light rounded text-white bg-[#699D99] hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                   type="submit"
                 >
                   Continue

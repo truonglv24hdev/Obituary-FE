@@ -23,29 +23,33 @@ const HaveMemorials = ({
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="bg-[#E5F6EC80] p-4 rounded-t-lg flex justify-between items-center">
+      <div className="bg-[#E5F6EC80] p-4 rounded-t-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
         <h1 className="text-2xl font-light text-gray-800 museo">
           My Memorials
         </h1>
-        <div className="text-base font-light text-gray-600 flex items-center gap-2">
-          <button
-            className="hover:underline museo disabled:text-gray-300"
-            onClick={() => onPageChange(page - 1)}
-            disabled={page <= 1}
-          >
-            &lt; Previous
-          </button>
-          <span className="text-gray-400">|</span>
-          <button
-            className="hover:underline museo disabled:text-gray-300"
-            onClick={() => onPageChange(page + 1)}
-            disabled={page >= totalPages}
-          >
-            Next &gt;
-          </button>
+
+        <div className="text-base font-light text-gray-600 flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-2">
+          <div className="flex items-center gap-2">
+            <button
+              className="hover:underline museo disabled:text-gray-300"
+              onClick={() => onPageChange(page - 1)}
+              disabled={page <= 1}
+            >
+              &lt; Previous
+            </button>
+            <span className="text-gray-400 hidden md:inline">|</span>
+            <button
+              className="hover:underline museo disabled:text-gray-300"
+              onClick={() => onPageChange(page + 1)}
+              disabled={page >= totalPages}
+            >
+              Next &gt;
+            </button>
+          </div>
+
           <Link
             href={"/my-memorial"}
-            className="ml-5 text-base museo bg-[#699D99] flex items-center text-white justify-center h-10 w-[178px] rounded"
+            className="text-base museo bg-[#699D99] flex items-center text-white justify-center h-10 w-full md:w-[178px] rounded"
           >
             Create Memorial
           </Link>

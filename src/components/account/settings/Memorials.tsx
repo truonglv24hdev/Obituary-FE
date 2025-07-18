@@ -43,21 +43,21 @@ const Memorials = () => {
   const isActive = pathname === "/account/memorials";
 
   return (
-    <div className="w-full min-h-screen flex justify-center px-4 md:px-[229px] py-10 md:py-20">
-      <div className="w-full max-w-[982px] flex flex-col">
+    <div className="w-full  lg:h-[650px] flex justify-center px-4 lg:px-[229px] py-10 lg:py-20">
+      <div className="w-full max-w-[982px] lg:h-[400px] flex flex-col">
         <HeaderAccount showUpgrade={isActive && memorials.length > 0} />
 
         <div className="border-b border-gray-200 mb-6">
-        <nav className="flex flex-col md:flex-row gap-4 md:gap-15 h-auto md:h-12">
+          <nav className="flex flex-col lg:flex-row gap-4 lg:gap-15 h-auto lg:h-12">
             <Link
               href="/account"
-              className="museo border-b border-transparent py-2 md:py-4 px-1 text-lg md:text-xl font-semibold text-gray-500 hover:border-gray-300 hover:text-gray-700"
+              className="museo border-b border-transparent py-2 lg:py-4 px-1 text-lg lg:text-xl font-semibold text-gray-500 hover:border-gray-300 hover:text-gray-700"
             >
               Basic Information
             </Link>
             <Link
               href="/account/memorials"
-              className="border-b border-black py-2 md:py-4 px-1 text-lg md:text-xl font-semibold text-black"
+              className="border-b border-black py-2 lg:py-4 px-1 text-lg lg:text-xl font-semibold text-black"
             >
               My Memorials
             </Link>

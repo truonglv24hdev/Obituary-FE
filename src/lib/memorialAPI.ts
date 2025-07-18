@@ -52,8 +52,12 @@ export async function getMemorialByUser(page: number = 1, limit: number = 4) {
   return res.data;
 }
 
-export async function getAllMemorial() {
-  const res = await axios.get(`/api/memorial/all`);
+export async function getAllMemorial(memorial?:string) {
+  const res = await axios.get(`/api/memorial/all`,{
+    params:{
+      memorial
+    }
+  });
   return res.data;
 }
 

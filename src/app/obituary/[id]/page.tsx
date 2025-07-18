@@ -64,7 +64,6 @@ const formSchema = z.object({
 });
 
 export default function page({ params }: { params: Promise<{ id: string }> }) {
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) router.replace("/sign-in");
@@ -136,13 +135,16 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
         form.reset({
           firstName: data.memorial.first_name,
           lastName: data.memorial.last_name,
-          birthDate: data.memorial.born ? new Date(data.memorial.born) : null,
-          deathDate: data.memorial.death ? new Date(data.memorial.death) : null,
+          birthDate: data.memorial.born
+            ? parse(data.memorial.born, "dd/MM/yyyy", new Date())
+            : null,
+          deathDate: data.memorial.born
+            ? parse(data.memorial.death, "dd/MM/yyyy", new Date())
+            : null,
           quote: data.quote,
           wordsFromFamily: data.wordsFromFamily,
           lifeStory: data.lifeStory,
         });
-        console.log(data);
 
         setObituary(data);
         setCategories(data.familyTree ?? []);
@@ -659,7 +661,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
             <div className="flex justify-center mb-10">
               <Button
                 type="submit"
-                className="bg-[#133C4C] hover:bg-[#0f2f3c] museo text-white px-6 py-2"
+                className="bg-[#133C4C] hover:bg-gray-400 museo text-white px-6 py-2"
               >
                 Publish page
               </Button>
